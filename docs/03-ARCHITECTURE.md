@@ -1,12 +1,11 @@
 # HashNomads V1 — System Architecture
 
 ## Architecture goals
-Traceability, provider portability, non-custodial reward flow, strong tenant isolation, financial precision, deterministic sandboxing and operational observability.
+Traceability, provider portability, non-custodial reward flow, crypto-native commerce, strong tenant isolation, financial precision, deterministic sandboxing and operational observability.
 
 ## Logical architecture
 ```text
 Browser
-  │
   ├── Public Web
   ├── Customer Portal
   └── Admin Console
@@ -14,11 +13,9 @@ Browser
           ▼
      Application/API
           │
-  ┌───────┼──────────────────────────────────────┐
-  │       │       │        │        │            │
-Identity Orders Ownership Deployment Billing   Support
-  │       │       │        │        │            │
-  └───────┴───────┴────────┴────────┴────────────┘
+  ┌───────┼────────────────────────────────────────────────┐
+Identity Orders Payments Ownership Deployment Billing Wallets Support
+  └───────┴────────────────────────────────────────────────┘
           │
           ├── PostgreSQL
           ├── Queue/Jobs
@@ -26,70 +23,57 @@ Identity Orders Ownership Deployment Billing   Support
           └── Audit/Event Log
                   │
        Integration Adapter Layer
-   ┌────────┬────────┬────────┬──────────┐
-   KYC    Payment   Pool   Facility   Notifications
-   └────────┴────────┴────────┴──────────┘
+   ┌───────┬────────────┬────────┬──────────┬─────────────┐
+   KYC  Crypto Payment  Pool   Facility   Notifications  Market Data
 ```
 
 ## Deployment shape
-Prefer a monorepo:
-```text
-apps/
-  web/              # public + customer portal
-  admin/            # operations UI (may share Next app initially)
-  worker/           # durable async jobs
-packages/
-  domain/           # state machines, calculations, invariants
-  db/               # schema/migrations/repositories
-  integrations/     # provider interfaces + adapters
-  ui/               # design system
-  config/            # typed configuration
-  testkit/           # fixtures/sandbox utilities
-```
-A single web application may host public/customer/admin routes in V1 if authorization boundaries remain explicit. Domain code must not depend on UI framework code.
+Prefer monorepo: `apps/web`, `apps/admin`, `apps/worker`, with `packages/domain`, `db`, `integrations`, `ui`, `config`, `testkit`. Domain code must not depend on UI framework code.
 
 ## Provider interfaces
-Define contracts for:
-- `KycProvider`
-- `PaymentProvider`
-- `MiningPoolProvider`
-- `MinerTelemetryProvider`
-- `FacilityProvider`
-- `NotificationProvider`
-- `MarketDataProvider`
+Define `KycProvider`, `PaymentProvider`/`CryptoPaymentProvider`, `MiningPoolProvider`, `MinerTelemetryProvider`, `FacilityProvider`, `NotificationProvider`, `MarketDataProvider`. Each receives deterministic sandbox adapter and later production adapters.
 
-Each gets a deterministic sandbox adapter and later one or more production adapters.
+## Two distinct value flows
+### Commerce/payment flow
+```text
+Customer
+  → HashNomads quote/order/hosting invoice
+  → Crypto Payment Provider
+  → blockchain/payment network
+  → verified provider webhook
+  → HashNomads Payment + Settlement Ledger
+  → HashNomads business settlement destination
+```
+HashNomads records accounting currency independently from payment asset. Provider invoice, rate lock/expiry, network, tx references, settlement and reconciliation are traceable. Proposed first production adapter is BitPay, subject to approval; provider substitution must not require domain rewrite.
+
+### Mining reward flow
+```text
+Customer-owned ASIC → Mining Pool → Customer-controlled BTC wallet
+                            │
+                            └→ Pool API → HashNomads reporting ledger
+```
+The flows must never be conflated. HashNomads receiving payment for hardware/hosting does not mean it should custody mining rewards.
+
+## Wallet boundary
+V1 `WalletDestination` is a public payout address record, not a hosted balance or private-key vault. No seed/private key may cross the application API. A future self-custody wallet must isolate cryptographic key generation/storage to the client/device and undergo separate threat modeling/security approval.
 
 ## Event model
-Important transitions emit domain events: customer KYC changed, payment confirmed, miner assigned, deployment changed, telemetry stale, miner offline, reward reported, invoice issued/overdue, wallet changed, incident opened/resolved. Jobs consume events idempotently.
+Important transitions emit domain events: KYC changed, payment invoice created/confirmed/expired/refunded, settlement reported/reconciled, miner assigned, deployment changed, telemetry stale/offline, reward reported/paid, payout destination changed, hosting invoice issued/overdue/paid, incident opened/resolved. Consumers are idempotent.
 
 ## Data provenance
-Telemetry/reward records carry `source_provider`, `source_reference`, `observed_at`, `ingested_at`, and environment. Customer UI displays freshness. Raw provider payloads may be retained selectively/redacted according to privacy/security policy.
-
-## Reward flow
-Preferred production model:
-```text
-ASIC → Mining Pool → Customer-controlled BTC wallet
-             │
-             └→ Pool API → HashNomads reporting ledger
-```
-HashNomads reporting must not imply custody when it merely mirrors provider data.
+Telemetry/reward/payment/settlement records carry source provider/reference, observed/event timestamps and environment. Customer UI displays freshness. Provider payload retention is selective/redacted.
 
 ## Sandbox
-`APP_ENV=sandbox` (or equivalent) selects sandbox adapters. Sandbox IDs are namespaced. Sandbox cannot call production payout/mining mutations. UI shows a persistent sandbox indicator.
+Sandbox adapters simulate crypto invoice creation, rate locking, webhook signatures/events, settlement, pool rewards and telemetry. Sandbox IDs are namespaced; production financial/mining mutations are impossible from sandbox; UI has persistent indicator.
 
 ## Reliability
-- Retry transient provider failures with bounded exponential backoff.
-- Dead-letter failed async jobs.
-- Circuit-break/degrade external integrations where useful.
-- Health checks distinguish app/database/queue/provider status.
-- Stale telemetry is a first-class state.
+Bounded exponential retry, dead-letter queue, provider degradation/circuit breaking where useful, component/provider health checks and first-class stale states. Payment webhooks are replay-safe and reconciliation jobs detect missing/divergent settlements.
 
 ## Financial precision
-Store fiat monetary amounts in minor units or fixed precision with currency. Store BTC amounts as satoshis where possible; conversions retain explicit rate source/time. Never use JavaScript floating point for authoritative financial totals.
+Fiat/accounting amounts use minor units or fixed precision plus currency. BTC uses satoshis where possible. Stablecoin/token amounts use asset-specific integer precision. Every conversion stores explicit source/rate/timestamp. Never use JavaScript floating point for authoritative totals.
 
 ## Authorization
-Roles: customer, support, operations, finance_compliance, admin. Permissions are capability-based. Customer resource ownership is verified server-side on every protected query/mutation.
+Roles: customer, support, operations, finance_compliance, admin. Capability-based permissions; resource ownership checked server-side. Wallet changes, refunds and settlement adjustments are privileged/audited operations.
 
 ## Environments
-Local → CI/Test → Sandbox/Staging → Production. Production activation is blocked until Phase 2 and compliance gates are satisfied.
+Local → CI/Test → Sandbox/Staging → Production. Production activation blocked until Phase 2/compliance gates are satisfied.
