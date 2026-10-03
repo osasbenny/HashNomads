@@ -1,74 +1,77 @@
 # HashNomads V1 — API & Integration Strategy
 
 ## API principles
-Typed contracts, explicit versioning, server-side authorization, idempotency for mutations, pagination for collections, stable error envelopes and source provenance for externally derived data.
+Typed contracts, explicit versioning, server-side authorization, idempotency for mutations, pagination, stable errors and provenance for external data.
 
 ## Representative routes
 ```text
 GET    /api/v1/catalog/asics
-GET    /api/v1/catalog/asics/:id
 GET    /api/v1/facilities
 POST   /api/v1/calculator/scenario
-GET    /api/v1/me
 POST   /api/v1/kyc/session
-GET    /api/v1/kyc/status
 POST   /api/v1/orders
 GET    /api/v1/orders/:id
 POST   /api/v1/orders/:id/checkout
+GET    /api/v1/payments/:id
+POST   /api/v1/payments/:id/refresh
+GET    /api/v1/payments/:id/settlement
 GET    /api/v1/miners
-GET    /api/v1/miners/:id
 GET    /api/v1/miners/:id/telemetry
 GET    /api/v1/rewards
 GET    /api/v1/invoices
+POST   /api/v1/invoices/:id/checkout
+GET    /api/v1/wallets
 POST   /api/v1/wallets
-PATCH  /api/v1/wallets/:id
+POST   /api/v1/wallets/:id/verify
+POST   /api/v1/wallets/:id/activate
+POST   /api/v1/wallets/:id/deactivate
 POST   /api/v1/support/cases
 ```
-Admin routes live under a separate protected namespace and permission model.
+Admin routes use separate protected namespace/permissions.
 
 ## Webhooks
-`/api/webhooks/{provider}` must:
-1. read/verify provider signature using raw body where required;
-2. reject invalid timestamp/signature;
-3. persist unique provider event ID;
-4. return safely on duplicate delivery;
-5. enqueue domain processing;
-6. log correlation ID without sensitive payload leakage.
+`/api/webhooks/{provider}` must verify raw-body signature/timestamp as required, persist unique provider event ID, be safely idempotent, enqueue domain processing and use correlation IDs without leaking secrets. Browser redirects never establish paid state.
 
-## MiningPoolProvider contract
-Capabilities should be discoverable because pools differ.
+## Crypto Payment Provider
+Provider-neutral interface. Proposed first production adapter: **BitPay**, subject to merchant approval and jurisdiction/commercial/compliance review. Sandbox supports representative BTC, Lightning, USDC and USDT scenarios; production assets/networks are capability/config driven.
+
 ```ts
-interface MiningPoolProvider {
-  capabilities(): PoolCapabilities;
-  getWorkers(accountRef: string): Promise<Worker[]>;
-  getWorkerHashrate(workerRef: string, range: TimeRange): Promise<HashratePoint[]>;
-  getRewards(accountRef: string, range: TimeRange): Promise<RewardRecord[]>;
-  getPayments(accountRef: string): Promise<PoolPayment[]>;
-  configurePayoutDestination?(input: PayoutDestinationInput): Promise<ProviderChangeRequest>;
+interface CryptoPaymentProvider {
+  capabilities(): Promise<PaymentCapabilities>;
+  createInvoice(input: CreateCryptoInvoiceInput): Promise<CryptoInvoice>;
+  getInvoice(providerInvoiceRef: string): Promise<CryptoInvoice>;
+  verifyWebhook(input: RawWebhookInput): Promise<VerifiedProviderEvent>;
+  getPaymentStatus(providerInvoiceRef: string): Promise<PaymentStatus>;
+  getSettlement?(providerInvoiceRef: string): Promise<SettlementRecord[]>;
+  requestRefund?(input: RefundRequest): Promise<ProviderChangeRequest>;
 }
 ```
-Production payout changes may require provider-side approval and must never be assumed instantaneous.
+
+Provider adapter must expose accounting currency, payment asset/network, requested crypto amount when available, locked rate/expiry, provider invoice ID, payment/transaction references, settlement asset/amount/fees/status. Never assume every provider supports every asset, refund or settlement feature.
+
+## MiningPoolProvider
+Provider-neutral workers/hashrate/rewards/payments and optional payout-destination change request. Pool payout changes may require provider-side approval and are never assumed instantaneous.
+
+## Wallet API boundary
+Wallet endpoints register/manage **public payout destinations only**. They must never accept seed phrases, mnemonics, private keys, keystore files or signing secrets. Network-aware address validation is required. Activation/change requires configured step-up authentication and audit. Future self-custody wallet cryptography must live client/device-side behind a separate approved design.
 
 ## MinerTelemetryProvider
-Separate direct/facility telemetry from pool telemetry. Temperature/fan/power values must not be inferred from pool hashrate.
+Separate direct/facility telemetry from pool telemetry. Do not infer temperature/fan/power from hashrate.
 
 ## MarketDataProvider
-Provides BTC reference price and mining-network/hashprice inputs for calculators. Every quote stores source/time. Calculator remains usable with manual assumptions when market data is unavailable.
-
-## PaymentProvider
-Provider-agnostic checkout, payment status, refund/adjustment references and signed webhooks. Production provider selection follows jurisdiction/business approval.
+BTC reference price and mining-network/hashprice inputs. Every quote stores source/time; calculator supports manual assumptions if unavailable.
 
 ## KycProvider
-Create verification session, query status, process webhook. Application stores minimum required metadata rather than duplicating sensitive identity evidence.
+Create verification session, query status, process webhook; application stores minimum required metadata.
 
 ## FacilityProvider
-V1 sandbox contract covers facility capacity/status, deployment request/status and facility telemetry if offered. Phase 2 determines actual operator API/SFTP/manual integration.
+Sandbox covers capacity/status/deployment request/status/facility telemetry where offered. Phase 2 determines real API/SFTP/manual integration.
 
 ## NotificationProvider
-Email first; optional SMS/WhatsApp later for high-value operational alerts subject to consent and provider policy.
+Email first; optional SMS/WhatsApp later for high-value alerts subject to consent/provider policy.
 
-## Error envelope
-Return stable machine-readable code, human-safe message, correlation ID and optional field errors. Never expose stack traces/provider secrets.
+## Payment reconciliation jobs
+Scheduled/triggered jobs compare internal payment state with provider invoices, transactions and settlements. Divergence creates a finance exception rather than silently mutating history. Webhook + polling/reconciliation provides defense against missed provider events.
 
-## Rate limits
-Stricter limits for auth, KYC session creation, wallet changes, checkout, admin mutations and calculator abuse. Read-heavy telemetry endpoints use caching/pagination.
+## Error envelope and rate limits
+Stable code, safe message, correlation ID, optional field errors; no stack traces/secrets. Strict limits for auth, KYC, wallet changes, checkout/refunds/admin mutations; telemetry uses caching/pagination.
