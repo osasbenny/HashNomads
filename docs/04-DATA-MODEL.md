@@ -2,86 +2,74 @@
 
 ## Core entities
 
-### User / Role
-`User(id, email, status, emailVerifiedAt, createdAt)`
-`Role(id, key)` and role assignments/permissions.
+### Identity / customer / KYC
+`User(id, email, status, emailVerifiedAt, createdAt)`; roles/permissions; `Customer(id, userId, type, legalName, country, status, createdAt)`; `KycCase(...)`; `ConsentRecord(...)`. Do not duplicate unnecessary identity documents.
 
-### Customer
-`Customer(id, userId, type, legalName, country, status, createdAt)`
-
-### KycCase
-`KycCase(id, customerId, provider, providerRef, status, submittedAt, decidedAt, environment)`
-Do not store unnecessary raw identity documents in the application database.
-
-### ConsentRecord
-`ConsentRecord(id, customerId, documentType, version, acceptedAt, ipMetadataRef)`
-
-### AsicModel
+### ASIC / facility / hosting
 `AsicModel(id, manufacturer, model, algorithm, nominalHashrateTHs, nominalPowerW, efficiencyJTH, status)`
-
-### AsicUnit
 `AsicUnit(id, asicModelId, serialNumber, serialKind, inventoryStatus, environment)`
-`serialKind = physical | simulated`. Simulated serials must use an unmistakable prefix.
-
-### Facility
 `Facility(id, name, country, region, status, environment)`
-Public data may intentionally omit precise physical address for security.
-
-### HostingPlan
 `HostingPlan(id, facilityId, name, tariffType, rate, currency, setupFee, billingCadence, effectiveFrom, effectiveTo)`
 
 ### Order / OrderLine
-Order contains customer, currency, totals and lifecycle status. Lines snapshot SKU/pricing terms at purchase time; catalogue changes cannot rewrite historical orders.
+Order stores customer, accounting currency, totals and lifecycle. Lines snapshot SKU/pricing terms so catalogue changes never rewrite history.
 
-### Payment
-`Payment(id, orderId, provider, providerRef, amountMinor, currency, status, idempotencyKey)`
+### PaymentIntent / CryptoInvoice
+`PaymentIntent(id, orderId?, invoiceId?, customerId, provider, providerInvoiceRef, accountingCurrency, accountingAmountMinor, paymentAsset, paymentNetwork, requestedCryptoAmountAtomic?, rate, rateSource, rateLockedAt, rateExpiresAt, status, idempotencyKey, environment, createdAt)`
 
-### OwnershipAssignment
-`OwnershipAssignment(id, customerId, asicUnitId, orderLineId, effectiveFrom, effectiveTo, status)`
-Only one active owner assignment per ASIC unit.
+A payment intent must reference exactly one payable business object (order or hosting/service invoice) according to domain rules. Production provider availability is configuration-driven.
 
-### Deployment
-`Deployment(id, asicUnitId, facilityId, hostingPlanId, workerName, status, deployedAt, endedAt)`
-Only one active deployment per ASIC unit.
+### PaymentTransaction
+`PaymentTransaction(id, paymentIntentId, providerTxRef, blockchainTxHash?, asset, network, amountAtomic, confirmations?, status, observedAt)`
+Provider/network metadata is evidence; never infer final payment solely from a client redirect.
+
+### Settlement
+`Settlement(id, paymentIntentId, providerSettlementRef, settlementAsset, settlementNetwork?, grossAmountAtomic, feeAmountAtomic?, netAmountAtomic, status, expectedAt?, settledAt?, destinationRefRedacted, reconciliationStatus)`
+Settlement destination secrets/private keys are never stored here.
+
+### Refund / PaymentAdjustment
+Append-only references for refund/underpayment/overpayment/manual reconciliation adjustments; original payment history remains intact.
+
+### OwnershipAssignment / Deployment
+One active owner and one active deployment per ASIC. Deployment links ASIC, facility, hosting plan, worker identity and lifecycle.
 
 ### TelemetrySample
 `TelemetrySample(id, deploymentId, metric, valueDecimal, unit, sourceProvider, sourceRef, observedAt, ingestedAt)`
 
 ### WalletDestination
-`WalletDestination(id, customerId, network, address, label, status, verifiedAt, createdAt)`
-Wallet changes require strong authentication/reconfirmation and audit.
+`WalletDestination(id, customerId, asset, network, address, label, purpose, status, verificationMethod, verifiedAt, activatedAt, deactivatedAt, createdAt)`
+Purpose includes `mining_payout`. Store public addresses only. Wallet changes require step-up authentication/reconfirmation and audit.
+
+### WalletChangeRequest
+`WalletChangeRequest(id, customerId, walletDestinationId?, proposedAddress, network, status, requestedAt, verifiedAt, activatedAt, riskReviewRef?)`
+Supports cooling-off/manual review without destructive edits.
 
 ### RewardEntry
 `RewardEntry(id, customerId, deploymentId, poolProvider, periodStart, periodEnd, amountSats, status, sourceRef, paidTxRef, observedAt)`
-Statuses distinguish estimated/reported/paid/reversed.
+Statuses distinguish estimated/reported/paid/reversed. This is reporting/accounting, not a custodial customer balance.
 
 ### Invoice / InvoiceLine
-Hosting invoices snapshot tariff/usage basis and totals. Corrections use adjustments/credit records rather than destructive rewrites.
+Hosting/service invoices snapshot tariff/usage basis and totals. They may have one or more payment intents over their lifecycle. Corrections use adjustments/credits.
 
-### Incident
-`Incident(id, scopeType, scopeId, severity, status, openedAt, resolvedAt, customerVisible, summary)`
-
-### SupportCase
-Customer support workflow separate from infrastructure incidents but linkable.
-
-### AuditEvent
-`AuditEvent(id, actorType, actorId, action, resourceType, resourceId, metadataRedacted, createdAt)`
-Append-only at application level.
-
-### IntegrationEvent
-Stores webhook/provider event identity, processing state and idempotency metadata.
+### Incident / SupportCase / AuditEvent / IntegrationEvent
+Operational/support/audit entities remain append-oriented. IntegrationEvent stores webhook identity, signature verification result, processing state and idempotency metadata.
 
 ## Critical invariants
-1. A physical serial number is globally unique.
-2. Simulated units can never be silently promoted to physical units; conversion requires explicit replacement/assignment workflow.
-3. One active owner per ASIC unit.
-4. One active deployment per ASIC unit.
-5. Paid order state comes from authoritative payment confirmation, not browser redirect alone.
-6. Reward amounts cannot be overwritten without a traceable adjustment.
-7. Wallet address changes are audited.
-8. Production records cannot reference sandbox providers/resources.
-9. All customer-owned resources are tenant-scoped.
-10. Time-series data records observation time separately from ingestion time.
+1. Physical serial globally unique.
+2. Simulated unit never silently becomes physical.
+3. One active owner per ASIC.
+4. One active deployment per ASIC.
+5. Paid state comes from authoritative server-side provider confirmation/reconciliation, not browser redirect.
+6. Provider event IDs and payment idempotency keys are unique within provider/environment scope.
+7. Historical quote/payment rate snapshots are immutable.
+8. Settlement adjustments are append-only/auditable.
+9. Reward amounts are never silently overwritten.
+10. Wallet changes are audited and require configured security controls.
+11. HashNomads stores no customer private keys/seed phrases in V1.
+12. Production records cannot reference sandbox providers/resources.
+13. Customer resources are tenant-scoped.
+14. Observation/event time is distinct from ingestion/processing time.
+15. Payment/settlement ledgers and mining-reward ledger remain conceptually separate.
 
 ## Indexing priorities
-Customer/resource foreign keys, serial number, provider references, worker name + provider, telemetry deployment/time, reward customer/time, invoice customer/status, integration event provider/event ID, audit resource/time.
+Customer/resource FKs, serial number, provider invoice/event/transaction/settlement references, payment status/time, wallet customer/status, worker/provider, telemetry deployment/time, reward customer/time, invoice customer/status, audit resource/time.
