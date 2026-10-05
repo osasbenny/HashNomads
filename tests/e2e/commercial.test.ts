@@ -154,6 +154,21 @@ const routes = [
   "/contact",
   "/resources",
 ];
+test("unhydrated forms cannot submit credentials or contact data through the URL", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  for (const route of ["/account/verify", "/contact", "/"]) {
+    await page.goto(route);
+    const form = page.locator("form").first();
+    await expect(form).toHaveAttribute("method", "post");
+    await expect(
+      form.locator('button[type="submit"], button:not([type])').first(),
+    ).toBeDisabled();
+  }
+  await context.close();
+});
 test("public content contains no demo language or invented prices", async ({
   page,
 }) => {

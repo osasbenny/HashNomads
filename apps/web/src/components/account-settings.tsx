@@ -33,6 +33,7 @@ export function AccountSettings({
       <details>
         <summary>Profile & password</summary>
         <form
+          method="post"
           onSubmit={(e) => {
             e.preventDefault();
             const d = new FormData(e.currentTarget);
@@ -50,6 +51,7 @@ export function AccountSettings({
           </button>
         </form>
         <form
+          method="post"
           onSubmit={(e) => {
             e.preventDefault();
             const d = new FormData(e.currentTarget);
@@ -95,6 +97,7 @@ export function AccountSettings({
         <p>Add an authenticator app to protect sign-in with a second factor.</p>
         {!setup && (
           <form
+            method="post"
             onSubmit={async (e) => {
               e.preventDefault();
               const password = String(
@@ -136,6 +139,7 @@ export function AccountSettings({
               Open in an authenticator app
             </a>
             <form
+              method="post"
               onSubmit={(e) => {
                 e.preventDefault();
                 const code = String(new FormData(e.currentTarget).get("code"));

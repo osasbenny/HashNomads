@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { useHydrated } from "@/lib/use-hydrated";
 export default function Page() {
+  const ready = useHydrated();
   const [backup, setBackup] = useState(false),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
@@ -10,6 +12,7 @@ export default function Page() {
       <span className="eyebrow">ACCOUNT SECURITY</span>
       <h1>Verify your sign-in.</h1>
       <form
+        method="post"
         className="panel"
         onSubmit={async (e) => {
           e.preventDefault();
@@ -39,7 +42,7 @@ export default function Page() {
             maxLength={30}
           />
         </label>
-        <button className="button primary" disabled={busy}>
+        <button className="button primary" disabled={!ready || busy}>
           {busy ? "Verifying…" : "Verify sign-in"}
         </button>
         <button
@@ -55,6 +58,7 @@ export default function Page() {
           </p>
         )}
       </form>
+      <noscript>Enable JavaScript to verify your sign-in securely.</noscript>
     </div>
   );
 }

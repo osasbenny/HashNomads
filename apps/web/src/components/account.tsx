@@ -1,9 +1,11 @@
 "use client";
 import { authClient } from "@/lib/auth-client";
 import { AccountSettings } from "@/components/account-settings";
+import { useHydrated } from "@/lib/use-hydrated";
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
 export function Account() {
+  const ready = useHydrated();
   const { data: session, isPending } = authClient.useSession();
   const [mode, setMode] = useState<"signin" | "signup">("signin"),
     [busy, setBusy] = useState(false),
@@ -112,7 +114,7 @@ export function Account() {
           ? "Back to your infrastructure."
           : "Start your mining journey."}
       </h2>
-      <form onSubmit={submit}>
+      <form method="post" onSubmit={submit}>
         {mode === "signup" && (
           <label>
             Name
@@ -151,7 +153,7 @@ export function Account() {
             <a href="/legal">website terms and privacy information</a>.
           </label>
         )}
-        <button className="button primary full" disabled={busy}>
+        <button className="button primary full" disabled={!ready || busy}>
           {busy
             ? "Please wait…"
             : mode === "signin"

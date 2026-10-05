@@ -27,6 +27,7 @@ export default function Page() {
         </div>
       ) : (
         <form
+          method="post"
           className="panel"
           onSubmit={async (e) => {
             e.preventDefault();

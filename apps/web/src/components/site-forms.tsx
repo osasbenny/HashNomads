@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useHydrated } from "@/lib/use-hydrated";
 type Result = { message?: string; unsubscribeToken?: string };
 export function EnquiryForm({ topic = "general" }: { topic?: string }) {
+  const ready = useHydrated();
   const [busy, setBusy] = useState(false),
     [result, setResult] = useState<Result>(),
     [error, setError] = useState("");
@@ -50,7 +52,7 @@ export function EnquiryForm({ topic = "general" }: { topic?: string }) {
       </div>
     );
   return (
-    <form className="panel enquiry-form" onSubmit={submit}>
+    <form method="post" className="panel enquiry-form" onSubmit={submit}>
       <h2>Tell us what you have in mind.</h2>
       <div className="form-grid">
         <label>
@@ -105,7 +107,7 @@ export function EnquiryForm({ topic = "general" }: { topic?: string }) {
         can use my details to handle this enquiry.{" "}
         <Link href="/legal">Privacy information</Link>
       </label>
-      <button className="button primary" disabled={busy}>
+      <button className="button primary" disabled={!ready || busy}>
         {busy ? "Sending…" : "Send enquiry"}
       </button>
       <p className="form-note">
@@ -120,6 +122,7 @@ export function EnquiryForm({ topic = "general" }: { topic?: string }) {
   );
 }
 export function Newsletter() {
+  const ready = useHydrated();
   const [busy, setBusy] = useState(false),
     [result, setResult] = useState<Result>(),
     [error, setError] = useState("");
@@ -161,7 +164,7 @@ export function Newsletter() {
       </div>
     );
   return (
-    <form className="newsletter-form" onSubmit={submit}>
+    <form method="post" className="newsletter-form" onSubmit={submit}>
       <label>
         Email address
         <input
@@ -182,7 +185,7 @@ export function Newsletter() {
         I’d like to receive HashNomads news by email.{" "}
         <Link href="/legal">Privacy information</Link>
       </label>
-      <button className="button primary" disabled={busy}>
+      <button className="button primary" disabled={!ready || busy}>
         {busy ? "Saving…" : "Subscribe"}
       </button>
       {error && (
