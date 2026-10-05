@@ -1,0 +1,8 @@
+.env*
+node_modules
+apps/web/.next
+work
+outputs
+test-results
+playwright-report
+coverage

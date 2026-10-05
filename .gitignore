@@ -9,3 +9,5 @@ test-results/
 *.tsbuildinfo
 work/
 outputs/
+
+.vercel
