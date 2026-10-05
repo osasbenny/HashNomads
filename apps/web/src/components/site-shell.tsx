@@ -105,7 +105,6 @@ export function SiteFooter() {
         <div className="footer-bottom">
           <span>© {year} HashNomads. All rights reserved.</span>
           <span>Design & Developed By Cactus Digital Media</span>
-          <span className="mono">PHASE 01 / SANDBOX</span>
         </div>
       </div>
     </footer>

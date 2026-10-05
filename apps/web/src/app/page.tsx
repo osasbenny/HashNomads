@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Cpu,
   Fingerprint,
@@ -7,7 +8,6 @@ import {
   Wallet,
   Globe2,
 } from "lucide-react";
-import { HeroVisual } from "@/components/hero-visual";
 export default function Home() {
   return (
     <>
@@ -37,11 +37,21 @@ export default function Home() {
           </div>
           <div className="hero-footnote">
             <ShieldCheck size={16} /> No custody. No guaranteed returns.
-            <br />
-            Explore the sandbox before anything goes live.
           </div>
         </div>
-        <HeroVisual />
+        <figure className="hero-photograph">
+          <Image
+            src="/images/mining-infrastructure.webp"
+            alt="Rows of ASIC mining equipment and copper-toned infrastructure from the HashNomads pitch deck"
+            fill
+            sizes="(max-width: 800px) calc(100vw - 40px), (max-width: 1440px) 48vw, 600px"
+            preload
+          />
+          <figcaption>
+            <span className="eyebrow">ENGINEERED FOR MINING</span>
+            <span>Hardware. Energy. Infrastructure.</span>
+          </figcaption>
+        </figure>
       </section>
       <section className="principle-strip">
         <div className="container three-grid">
@@ -122,21 +132,15 @@ export default function Home() {
         </div>
       </section>
       <section className="container section hardware-feature">
-        <div className="hardware-visual">
-          <Cpu size={84} strokeWidth={0.7} />
-          <span className="eyebrow">SHA–256 / AIR COOLED</span>
-          <div className="feature-big-number">
-            234<span>TH/s</span>
-          </div>
-          <div className="spec-rule">
-            <span>Nominal efficiency</span>
-            <b>15 J/TH</b>
-          </div>
-          <div className="spec-rule">
-            <span>Nominal power</span>
-            <b>3,510 W</b>
-          </div>
-        </div>
+        <figure className="hardware-photograph">
+          <Image
+            src="/images/asic-detail.webp"
+            alt="Close-up of an ASIC cooling fan, metal chassis, and hardware fasteners from the HashNomads pitch deck"
+            fill
+            sizes="(max-width: 800px) calc(100vw - 40px), 46vw"
+          />
+          <figcaption>Ownership starts with identifiable hardware.</figcaption>
+        </figure>
         <div>
           <span className="eyebrow">PURPOSE-BUILT HARDWARE</span>
           <h2>
@@ -156,6 +160,34 @@ export default function Home() {
             Explore the S21 Pro
           </Link>
         </div>
+      </section>
+      <section className="container section infrastructure-feature">
+        <div>
+          <span className="eyebrow">
+            UNITED STATES + CANADA / INITIAL MARKET FOCUS
+          </span>
+          <h2>
+            Launch local.
+            <br />
+            Architect global.
+          </h2>
+          <p>
+            Designed around the hardware, energy, and operational detail that
+            mining demands. Starting with the United States and Canada, with an
+            architecture built for eligible markets around the world.
+          </p>
+          <Link className="button secondary" href="/facilities">
+            Explore infrastructure
+          </Link>
+        </div>
+        <figure className="network-photograph">
+          <Image
+            src="/images/north-america-network.webp"
+            alt="Illustration of North America with orange network connections from the HashNomads pitch deck"
+            fill
+            sizes="(max-width: 800px) calc(100vw - 40px), 48vw"
+          />
+        </figure>
       </section>
       <section className="container section">
         <div className="section-heading">

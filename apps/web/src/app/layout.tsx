@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s | HashNomads",
   },
   description:
-    "An ownership-first Bitcoin mining infrastructure platform. Explore the clearly labelled sandbox. Customers control Bitcoin.",
+    "An ownership-first Bitcoin mining infrastructure platform. Identifiable hardware, transparent infrastructure, and customer-controlled Bitcoin.",
   robots: { index: false, follow: false },
   icons: { icon: "/favicon.svg" },
 };
@@ -22,11 +22,6 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <div className="sandbox-bar">
-          <span className="sandbox-dot" /> SANDBOX ENVIRONMENT{" "}
-          <span className="bar-divider">/</span> Simulated infrastructure. No
-          live purchases or mining.
-        </div>
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />

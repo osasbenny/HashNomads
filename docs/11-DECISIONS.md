@@ -63,3 +63,12 @@ Reviewed the five owner-supplied reference repositories. React Three Fiber is us
 Liquid Glass JS, Scroll World, Liquid Logo and Shader Gradient are not installed at this savepoint: continuous distortion, scroll choreography and multiple overlapping GPU effects are unnecessary for the core financial interface. Reassess them only for a concrete visual requirement and measured performance budget. The supplied Liquid Glass URL uses `dasherstw`; the discoverable project is `dashersw/liquid-glass-js`. No package or code was taken from the misspelled location.
 
 Reference links: https://github.com/pmndrs/react-three-fiber, https://github.com/dashersw/liquid-glass-js, https://github.com/oso95/scroll-world, https://github.com/paper-design/liquid-logo, https://github.com/ruucm/shadergradient.
+
+## ADR-011 — Production brand presentation and pitch-deck imagery
+**Status:** Accepted — 2026-10-05, explicit owner instruction
+
+The owner identifies HashNomads as a live production project and requests removal of the global sandbox announcement and `PHASE 01 / SANDBOX` footer label. Both are removed, along with the redundant homepage sandbox footnote. Public metadata now describes the brand without environment language. Copyright/year refresh and Cactus Digital Media credit remain.
+
+Three optimized WebP assets are extracted from the owner-supplied compliance pitch-deck video: mining infrastructure (slide 2, 6 seconds), ASIC close-up (slide 5, 21 seconds), and North America network illustration (slide 12, 56 seconds). Crops exclude slide text and deck furniture. Assets are used as brand/editorial imagery, not verified facility capacity, real inventory proof, or a manufacturer-specific product photograph. The photographic hero replaces the homepage 3D preview; the hardware detail retains its illustrative 3D visual. Responsive image sizes, lazy loading for secondary assets, alt text and mobile layouts are provided through Next Image.
+
+This changes brand presentation; it does not establish that unfinished services, fixture prices, accounts or payment integrations have passed production acceptance. Runtime payment/financial gates and contextual fixture disclosures remain until actual implementation and activation. Production provider credentials or fabricated physical capacity are not introduced.

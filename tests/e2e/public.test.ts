@@ -8,7 +8,6 @@ test("public journey connects hardware, assumptions and disclosures", async ({
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Own the machine.",
   );
-  await expect(page.getByText("SANDBOX ENVIRONMENT")).toBeVisible();
   await page
     .getByRole("link", { name: "Explore hardware", exact: true })
     .click();

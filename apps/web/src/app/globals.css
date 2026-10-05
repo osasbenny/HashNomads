@@ -1302,6 +1302,108 @@ input:not([type="checkbox"]) {
     font-size: 2rem;
   }
 }
+.hero-photograph,
+.hardware-photograph,
+.network-photograph {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-elevated);
+}
+.hero-photograph {
+  height: 550px;
+  box-shadow: 0 24px 70px #0006;
+}
+.hero-photograph img,
+.hardware-photograph img,
+.network-photograph img {
+  object-fit: cover;
+}
+.hero-photograph::after,
+.hardware-photograph::after {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, #080d0cf2);
+  pointer-events: none;
+}
+.hero-photograph figcaption,
+.hardware-photograph figcaption {
+  position: absolute;
+  bottom: 28px;
+  left: 30px;
+  right: 30px;
+  z-index: 1;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+.hero-photograph .eyebrow {
+  margin-bottom: 10px;
+}
+.hardware-photograph {
+  height: 440px;
+}
+.hardware-photograph img {
+  object-position: 28% center;
+}
+.infrastructure-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 90px;
+}
+.infrastructure-feature h2 {
+  margin-bottom: 25px;
+}
+.infrastructure-feature p {
+  font-size: 0.9375rem;
+  line-height: 1.9;
+  margin-bottom: 30px;
+}
+.network-photograph {
+  height: 460px;
+}
+@media (max-width: 1100px) {
+  .infrastructure-feature {
+    gap: 40px;
+  }
+  .hero-photograph {
+    height: 500px;
+  }
+}
+@media (max-width: 800px) {
+  .hero-photograph {
+    height: 440px;
+  }
+  .infrastructure-feature {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .hardware-photograph {
+    height: 400px;
+  }
+  .network-photograph {
+    height: auto;
+    aspect-ratio: 1.2;
+  }
+}
+@media (max-width: 480px) {
+  .hero-photograph {
+    height: 425px;
+  }
+  .hardware-photograph {
+    height: 320px;
+  }
+  .hero-photograph figcaption,
+  .hardware-photograph figcaption {
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

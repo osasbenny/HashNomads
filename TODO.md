@@ -101,3 +101,11 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - No customer KYC/order/payment/wallet/miner/reward/billing lifecycle or operations console is claimed complete.
 - Next work: persisted customer onboarding/consents, KYC sandbox, tenant-scoped order and checkout services, durable signed-webhook handling and payment reconciliation, with adversarial integration/E2E tests.
 - See `docs/14-STARTER-SAVEPOINT.md`; the final V1 implementation report is reserved until all acceptance criteria pass.
+
+## Savepoint 2 — Brand imagery and requested label removal
+
+- [x] Remove global sandbox banner and phase/sandbox footer label per owner direction.
+- [x] Replace homepage hero with pitch-deck infrastructure imagery; add ASIC close-up and North America network illustration.
+- [x] Preserve automated copyright year and Cactus Digital Media design credit.
+- Contextual test-data disclosures and backend activation gates remain tied to actual implementation status. See ADR-011 for the distinction between production brand intent and service readiness.
+- Validation: production build and formatting pass; all 13 existing browser/accessibility tests pass, including five responsive widths. Three pitch-deck images are confirmed loaded, both requested labels are absent, and no browser errors were recorded. Existing in-app preview refreshed.
