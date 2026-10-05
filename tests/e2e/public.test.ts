@@ -17,6 +17,10 @@ test("public journey connects hardware, assumptions and disclosures", async ({
   );
   await page.getByRole("link", { name: "Model this ASIC" }).click();
   await page.getByLabel("Assumed uptime").fill("100");
+  await page.getByLabel("Assumed hashprice").fill("50");
+  await page.getByLabel("Electricity tariff").fill("0.065");
+  await page.getByLabel("Pool fee").fill("2");
+  await page.getByLabel("Monthly service fee").fill("15");
   await expect(page.locator(".result-number")).toHaveText("$164.72");
   await page.getByLabel("Electricity tariff").fill("0.150");
   await expect(page.locator(".result-number")).toHaveText("$-50.10");
@@ -42,6 +46,10 @@ for (const width of [360, 390, 768, 1024, 1440]) {
       "/transparency",
     ]) {
       await page.goto(route);
+      for (const image of await page.locator("img").all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate((element: HTMLImageElement) => element.decode());
+      }
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= window.innerWidth + 1,
@@ -67,7 +75,7 @@ test("mobile navigation and reduced-motion fallback", async ({ page }) => {
     page.getByRole("button", { name: "Open navigation" }),
   ).toBeVisible();
 });
-test("sandbox account survives refresh and logout revokes session", async ({
+test("account survives refresh and logout revokes session", async ({
   page,
 }) => {
   const email = `sandbox-${Date.now()}@example.com`;
@@ -81,7 +89,10 @@ test("sandbox account survives refresh and logout revokes session", async ({
     .getByLabel("Password", { exact: true })
     .fill("Synthetic-Test-Only-2026!");
   await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Create sandbox account" }).click();
+  await page
+    .getByRole("button", { name: "Create account", exact: true })
+    .last()
+    .click();
   await expect(
     page.getByRole("heading", { name: "Welcome, Sandbox Test." }),
   ).toBeVisible();

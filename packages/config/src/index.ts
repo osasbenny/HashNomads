@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const environmentSchema = z.object({
-  HASHNOMADS_ENV: z.literal("sandbox"),
+  HASHNOMADS_ENV: z.enum(["development", "production", "test"]),
   DATABASE_URL: z
     .string()
     .url()
@@ -9,7 +9,6 @@ export const environmentSchema = z.object({
     ),
   BETTER_AUTH_URL: z.string().url(),
   BETTER_AUTH_SECRET: z.string().min(32),
-  SANDBOX_WEBHOOK_SECRET: z.string().min(32),
 });
 export function readEnvironment(source: Record<string, string | undefined>) {
   return environmentSchema.parse(source);

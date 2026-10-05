@@ -12,7 +12,7 @@ import {
   BTCPaySandboxAdapter,
   CryptomusAdapter,
   BitPayAdapter,
-} from "../../packages/integrations/src/payments";
+} from "../fixtures/payments";
 import { environmentSchema } from "../../packages/config/src";
 describe("financial precision", () => {
   it("round-trips amounts above safe JS integer limits", () => {
@@ -76,10 +76,19 @@ describe("authorization and lifecycle", () => {
       "offline",
     );
   });
-  it("refuses production configuration", () =>
+  it("requires complete account configuration for production", () => {
     expect(
       environmentSchema.safeParse({ HASHNOMADS_ENV: "production" }).success,
-    ).toBe(false));
+    ).toBe(false);
+    expect(
+      environmentSchema.safeParse({
+        HASHNOMADS_ENV: "production",
+        DATABASE_URL: "postgresql://localhost/test",
+        BETTER_AUTH_URL: "https://hashnomads.vercel.app",
+        BETTER_AUTH_SECRET: "x".repeat(32),
+      }).success,
+    ).toBe(true);
+  });
 });
 describe("sandbox payment contract", () => {
   const adapter = new BTCPaySandboxAdapter(

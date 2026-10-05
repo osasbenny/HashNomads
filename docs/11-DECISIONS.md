@@ -72,3 +72,11 @@ The owner identifies HashNomads as a live production project and requests remova
 Three optimized WebP assets are extracted from the owner-supplied compliance pitch-deck video: mining infrastructure (slide 2, 6 seconds), ASIC close-up (slide 5, 21 seconds), and North America network illustration (slide 12, 56 seconds). Crops exclude slide text and deck furniture. Assets are used as brand/editorial imagery, not verified facility capacity, real inventory proof, or a manufacturer-specific product photograph. The photographic hero replaces the homepage 3D preview; the hardware detail retains its illustrative 3D visual. Responsive image sizes, lazy loading for secondary assets, alt text and mobile layouts are provided through Next Image.
 
 This changes brand presentation; it does not establish that unfinished services, fixture prices, accounts or payment integrations have passed production acceptance. Runtime payment/financial gates and contextual fixture disclosures remain until actual implementation and activation. Production provider credentials or fabricated physical capacity are not introduced.
+
+## ADR-012 — Commercial release and native checkout direction
+
+**Status:** Accepted — 2026-10-05, explicit owner instruction
+
+The owner requires a customer-facing production website without artificial data or development language, confirms common ownership with Sazmining and authorizes its published information as a reference. This supersedes the initial environment/public-copy decisions. The public release replaces invented facilities and pricing with source-attributed information and quote enquiries. Runtime account/form persistence uses production configuration; financial generators are isolated in tests.
+
+The owner will provide HashNomads' own checkout configuration. Do not redirect purchases to Sazmining or invent available equipment, purchase prices, transactions, mining charts or earnings. Sazmining source links and advisor booking remain clearly identified. Native operational and mail integrations are outstanding, as documented in the current release record. Owner-designated addresses are info@hashnomads.com and admin@hashnomads.com. Administrator setup uses a private expiring invitation and requires MFA for customer data access.

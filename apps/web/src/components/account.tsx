@@ -1,8 +1,8 @@
 "use client";
-import { createAuthClient } from "better-auth/react";
+import { authClient } from "@/lib/auth-client";
+import { AccountSettings } from "@/components/account-settings";
 import { useState } from "react";
 import { ShieldCheck } from "lucide-react";
-const authClient = createAuthClient();
 export function Account() {
   const { data: session, isPending } = authClient.useSession();
   const [mode, setMode] = useState<"signin" | "signup">("signin"),
@@ -45,22 +45,33 @@ export function Account() {
       <div className="panel account-panel">
         <ShieldCheck className="text-accent" size={32} />
         <h2>Welcome, {session.user.name}.</h2>
-        <p>You’re signed in to the HashNomads sandbox.</p>
+        <p>You’re signed in to HashNomads.</p>
         <dl className="spec-list">
           <div>
             <dt>Email</dt>
             <dd>{session.user.email}</dd>
           </div>
           <div>
-            <dt>Environment</dt>
-            <dd>Sandbox</dd>
+            <dt>Account</dt>
+            <dd>Customer</dd>
           </div>
         </dl>
         <div className="callout">
-          Account authentication is available. Profile/KYC, orders, wallets, and
-          the customer portal are still under implementation. No live services
-          are available.
+          Planning your mining setup? Contact an advisor to discuss equipment,
+          hosting and your purchase requirements.
         </div>
+        <a className="button primary" href="/contact">
+          Talk to an advisor
+        </a>
+        <AccountSettings
+          name={session.user.name}
+          twoFactorEnabled={session.user.twoFactorEnabled ?? false}
+        />
+        {session.user.role === "admin" && (
+          <a className="button secondary" href="/operations">
+            Open administrator dashboard
+          </a>
+        )}
         <button
           className="button secondary"
           disabled={busy}
@@ -99,7 +110,7 @@ export function Account() {
       <h2>
         {mode === "signin"
           ? "Back to your infrastructure."
-          : "Start your sandbox journey."}
+          : "Start your mining journey."}
       </h2>
       <form onSubmit={submit}>
         {mode === "signup" && (
@@ -132,12 +143,12 @@ export function Account() {
           />
         </label>
         <p className="form-note">
-          At least 12 characters. Use synthetic details for sandbox testing.
+          Use at least 12 characters and a unique password.
         </p>
         {mode === "signup" && (
           <label className="checkbox-label">
-            <input type="checkbox" required />I understand this is a sandbox and
-            have read the <a href="/legal">development disclosures</a>.
+            <input type="checkbox" required />I have read the{" "}
+            <a href="/legal">website terms and privacy information</a>.
           </label>
         )}
         <button className="button primary full" disabled={busy}>
@@ -145,7 +156,7 @@ export function Account() {
             ? "Please wait…"
             : mode === "signin"
               ? "Sign in"
-              : "Create sandbox account"}
+              : "Create account"}
         </button>
         {message && (
           <p className="error-message" role="alert">
@@ -154,8 +165,7 @@ export function Account() {
         )}
       </form>
       <p className="form-note">
-        Never share a Bitcoin private key or recovery phrase. Production email
-        verification, recovery, and MFA are not yet enabled.
+        Never share a Bitcoin private key or recovery phrase.
       </p>
     </div>
   );

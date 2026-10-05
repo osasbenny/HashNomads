@@ -1,4 +1,4 @@
-name: Sandbox validation
+name: Application validation
 on:
   push:
   pull_request:
@@ -19,11 +19,10 @@ jobs:
           --health-cmd "pg_isready -U hashnomads"
           --health-interval 5s --health-timeout 5s --health-retries 10
     env:
-      HASHNOMADS_ENV: sandbox
+      HASHNOMADS_ENV: test
       DATABASE_URL: postgresql://hashnomads:ci_synthetic_database_only@localhost:5432/hashnomads
       BETTER_AUTH_URL: http://localhost:3000
       BETTER_AUTH_SECRET: ci_synthetic_auth_secret_never_use_outside_ci_123456
-      SANDBOX_WEBHOOK_SECRET: ci_synthetic_webhook_secret_never_use_outside_ci_123456
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -118,3 +118,16 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - [x] Verify all 13 browser/accessibility checks against the published site, including persisted signup/session/logout.
 - [x] Confirm database health and all three homepage images.
 - Live payment/mining activation, custom domain mapping, full transactional lifecycle and preview database setup remain pending. See `docs/15-VERCEL-DEPLOYMENT.md`.
+
+## Savepoint 4 — Commercial site and enquiry operations
+
+- [x] Replace customer-facing development language and artificial prices/facilities.
+- [x] Expand the sales journey around the Sazmining reference, with original HashNomads presentation and explicit source attribution.
+- [x] Add persisted enquiries, newsletter consent/unsubscribe and public enquiry email.
+- [x] Add profile/password management and authenticator MFA.
+- [x] Add a protected enquiry inbox, subscriber export and one-use admin setup for admin@hashnomads.com.
+- [x] Apply hosted production migrations and remove the old validation account.
+- [ ] Connect the owner's HashNomads checkout information.
+- [ ] Connect verified mail delivery for notifications, verification, recovery and newsletters.
+- [ ] Integrate the native operational lifecycle described above; actual fleet/financial data is required.
+- See `docs/16-COMMERCIAL-RELEASE.md` for precise scope, sources, validation and remaining work.

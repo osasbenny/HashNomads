@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { FAQ } from "@/components/faq";
+import { commercial } from "@/lib/commercial";
 const content: Record<
   string,
   {
@@ -10,30 +12,26 @@ const content: Record<
   }
 > = {
   "how-it-works": {
-    title: "From identity to hashrate.",
-    eyebrow: "THE CUSTOMER JOURNEY",
+    title: "Your machine. A clear path.",
+    eyebrow: "HOW IT WORKS",
     intro:
-      "A transparent operating model connects hardware ownership, infrastructure, and pool reporting.",
+      "Make informed decisions about your equipment, hosting and Bitcoin ownership.",
     sections: [
       {
-        title: "01 / Create an account & verify",
-        body: "Create a secure account, complete your profile, and follow the sandbox KYC workflow. Production onboarding will require approved jurisdiction and compliance controls.",
+        title: "01 / Choose your hardware",
+        body: "Review the manufacturer specifications and request a quote. Consider the machine’s efficiency, power requirements and expected operating costs alongside its purchase price.",
       },
       {
-        title: "02 / Choose hardware & infrastructure",
-        body: "Review manufacturer specifications, choose a compatible hosting configuration, and run a scenario using explicit assumptions.",
+        title: "02 / Confirm hosting and terms",
+        body: "Discuss your preferred location with an advisor. Your agreement should confirm capacity, electricity pricing, service fees, maintenance responsibilities and deployment expectations.",
       },
       {
-        title: "03 / Pay through crypto checkout",
-        body: "Commerce payments use provider-generated invoices and server-verified events. Browser redirects never mark an order paid. Live checkout is disabled.",
+        title: "03 / Purchase and deploy",
+        body: "Review the final quote and purchase terms before making payment. Confirm the equipment identity and commissioning milestones as your mining equipment is installed.",
       },
       {
-        title: "04 / Follow assignment & deployment",
-        body: "The completed sandbox workflow will connect a SIM-prefixed ASIC identity, an ownership record, a deployment, and a worker. A simulation is never physical proof.",
-      },
-      {
-        title: "05 / Monitor & control",
-        body: "Source timestamps distinguish fresh, stale, and offline telemetry. Pool-reported rewards belong to a separate ledger and reference your customer-controlled payout destination.",
+        title: "04 / Manage your mining",
+        body: "Use the customer platform associated with your service agreement to monitor equipment and payouts. Keep your Bitcoin recovery phrase and private keys secure.",
       },
     ],
   },
@@ -41,86 +39,86 @@ const content: Record<
     title: "Trust starts with clarity.",
     eyebrow: "TRANSPARENCY & RISK",
     intro:
-      "HashNomads V1 is a digital sandbox. No live capacity, physical miner inventory, payments, or rewards are offered.",
+      "Understand the equipment, the costs and the risks before making a commitment.",
     sections: [
       {
-        title: "What is simulated",
-        body: "Catalogue prices, reference facilities, energy tariffs, inventory identities, payment invoices, and future mining telemetry are explicitly labelled sandbox fixtures. Manufacturer ASIC specifications have a linked source.",
+        title: "Know your equipment",
+        body: "Hardware specifications link to the manufacturer. Published nominal performance can differ from measured operation because of configuration, temperature and operating conditions.",
       },
       {
         title: "No guaranteed returns",
-        body: "Mining outcomes depend on Bitcoin price, network difficulty, hashprice, uptime, energy costs, pool fees, and hardware performance. The calculator shows a scenario using manual assumptions and excludes hardware cost, taxes, and other unspecified expenses.",
+        body: "Bitcoin price, mining difficulty, network fees, energy costs, equipment reliability and downtime affect results. Mining can make a loss. Calculator outputs are estimates from your inputs, not a promise of income.",
       },
       {
-        title: "Customers control Bitcoin",
-        body: "HashNomads manages public payout destinations and pool reporting. We never need a recovery phrase or private key. Commerce payments and mining reward reporting are separate.",
+        title: "Know the full cost",
+        body: "Review hardware, installation, electricity, hosting, repair, pool fees and taxes. Your written quote and service agreement establish the applicable commercial terms.",
       },
       {
-        title: "Production remains gated",
-        body: "Live sales require supplier and hosting agreements, verified capacity, payment and KYC activation, legal and compliance review, operational readiness, and acceptance evidence. No facility shown here is available for paid deployment.",
+        title: "Keep control of your keys",
+        body: "Only a public address is required to receive Bitcoin. Never share a recovery phrase, private key or wallet password with an advisor or in a contact form.",
+      },
+      {
+        title: "Sources and availability",
+        body: "Our facility directory cites Sazmining’s published locations and tariffs with a review date. Confirm availability and the terms of your own purchase with an advisor; directory information can change.",
       },
     ],
   },
   about: {
-    title: "Infrastructure for ownership.",
+    title: "Ownership, with intention.",
     eyebrow: "ABOUT HASHNOMADS",
     intro:
-      "HashNomads is building an ownership-first Bitcoin mining platform, starting with the United States and Canada.",
+      "HashNomads brings hardware, hosting information and human guidance together to help you make informed Bitcoin mining decisions.",
     sections: [
       {
-        title: "Own the machine. We run the infrastructure.",
-        body: "The platform is designed around identifiable ASIC hardware, transparent hosting obligations, source-backed performance, and customer-controlled Bitcoin payout destinations.",
+        title: "A practical approach to Bitcoin",
+        body: "Start with the machine, understand the energy requirements, and evaluate the costs. Ownership deserves clear information and a conversation about your goals.",
       },
       {
-        title: "Build the digital lifecycle first",
-        body: "Phase 1 establishes and validates a complete sandbox operating system. Physical hosting partnerships and commercial activation belong to a separate Phase 2 readiness process.",
+        title: "Connected expertise",
+        body: "HashNomads and Sazmining share ownership. We draw on Sazmining’s published operating network and mining expertise while building a distinct HashNomads customer experience.",
+      },
+      {
+        title: "Your decision, supported",
+        body: "Discuss your hardware and hosting requirements with an advisor. Get a written quote and review the agreement before buying. Keep your Bitcoin wallet under your control.",
       },
     ],
   },
   faq: {
     title: "Clear answers. No hype.",
     eyebrow: "FREQUENTLY ASKED QUESTIONS",
-    intro: "Understand the product and the current sandbox boundary.",
-    sections: [
-      {
-        title: "Can I buy a real miner today?",
-        body: "No. This is a development sandbox. Catalogue prices are fixtures and no physical capacity, inventory, or live checkout is offered.",
-      },
-      {
-        title: "Do you hold my mined Bitcoin?",
-        body: "The architecture favors direct mining-pool payments to a customer-controlled Bitcoin wallet. HashNomads records pool reporting rather than a custodial customer balance.",
-      },
-      {
-        title: "Will you ask for my recovery phrase?",
-        body: "Never. Payout destination registration uses only a public Bitcoin address. Do not send private keys, seed phrases, or recovery material.",
-      },
-      {
-        title: "Are calculator results a forecast?",
-        body: "No. They are scenarios based on your inputs. Mining economics can deteriorate, and a loss is possible.",
-      },
-      {
-        title: "Are the facilities real partners?",
-        body: "No. Facility names and tariffs are simulated reference configurations. Production partners must pass physical and commercial validation.",
-      },
-    ],
+    intro:
+      "Understand hardware ownership, hosting costs and the decisions involved in mining Bitcoin.",
+    sections: [],
   },
   legal: {
-    title: "A clear sandbox boundary.",
-    eyebrow: "LEGAL & PRIVACY / DRAFT",
+    title: "Clear terms. Better decisions.",
+    eyebrow: "LEGAL & PRIVACY",
     intro:
-      "These development disclosures are not final customer contracts. Production legal documents require qualified review before live use.",
+      "Information about using this website, your account and the information you share with us.",
     sections: [
       {
-        title: "Sandbox use",
-        body: "This application is for evaluation of a simulated digital platform. It does not offer investments, guaranteed returns, production mining services, or available hosting capacity.",
+        title: "Website information",
+        body: "Site content provides general information about Bitcoin mining. It is not investment, tax or legal advice. Hardware specifications and sourced facility information do not reserve equipment or capacity. A written quote and accepted service agreement govern any purchase.",
       },
       {
-        title: "Data minimization",
-        body: "Use synthetic information while testing. Account registration stores email, name, a password hash, and session metadata. Never submit financial secrets, identity documents, recovery phrases, or private keys.",
+        title: "Accounts and security",
+        body: "Provide accurate account information and keep your password secure. Do not use another person’s account or interfere with the service. Never submit private keys, wallet recovery phrases or payment credentials through enquiry forms.",
       },
       {
-        title: "Production documents outstanding",
-        body: "Reviewed terms of service, privacy policy, retention policy, hosting contract, risk disclosures, refund policy, and jurisdiction-specific compliance obligations remain production dependencies.",
+        title: "Personal information",
+        body: "Account registration stores your name, email address and a password hash. Sessions use cookies and may record connection metadata. Enquiry forms store your submitted contact details and message so your request can be handled. Newsletter forms store your email address, consent version and subscription status.",
+      },
+      {
+        title: "Cookies and service providers",
+        body: "Authentication uses essential cookies. The site and database are hosted by Vercel and Prisma Postgres. Contact-form rate limiting uses a keyed hash of the connection address rather than storing the address in the form-submission record. This site does not install advertising or analytics cookies.",
+      },
+      {
+        title: "Your choices",
+        body: "Newsletter consent is separate from making an enquiry. You can unsubscribe using the link displayed when subscribing. Contact us to request access, correction or deletion of your personal information. We retain information for the purpose for which it was collected and applicable service or legal obligations.",
+      },
+      {
+        title: "External services and agreements",
+        body: "Booking and source links identify external services, which have their own terms and privacy policies. Review the relevant hosting agreement and purchase documents for pricing, payments, deployment, maintenance, cancellations and refunds before placing an order.",
       },
     ],
   },
@@ -138,25 +136,54 @@ export default async function Page({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params,
-    c = content[slug];
+  const { slug } = await params;
+  const c = content[slug];
   if (!c) notFound();
   return (
     <div className="container page editorial">
       <span className="eyebrow">{c.eyebrow}</span>
       <h1>{c.title}</h1>
       <p className="page-intro">{c.intro}</p>
-      <div className="editorial-sections">
-        {c.sections.map((s) => (
-          <section key={s.title}>
-            <h2>{s.title}</h2>
-            <p>{s.body}</p>
-          </section>
-        ))}
+      {slug === "faq" ? (
+        <FAQ />
+      ) : (
+        <div className="editorial-sections">
+          {c.sections.map((s) => (
+            <section key={s.title}>
+              <h2>{s.title}</h2>
+              <p>{s.body}</p>
+            </section>
+          ))}
+        </div>
+      )}
+      {slug === "legal" && (
+        <div className="button-row">
+          <a
+            className="button secondary"
+            href={commercial.terms}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sazmining service terms ↗
+          </a>
+          <a
+            className="button secondary"
+            href={commercial.privacy}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sazmining privacy policy ↗
+          </a>
+        </div>
+      )}
+      <div className="button-row">
+        <Link className="button primary" href="/contact">
+          Talk to an advisor
+        </Link>
+        <Link className="button secondary" href="/marketplace">
+          Explore hardware
+        </Link>
       </div>
-      <Link className="button secondary" href="/marketplace">
-        Explore the sandbox catalogue
-      </Link>
     </div>
   );
 }

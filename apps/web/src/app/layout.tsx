@@ -8,7 +8,17 @@ export const metadata: Metadata = {
   },
   description:
     "An ownership-first Bitcoin mining infrastructure platform. Identifiable hardware, transparent infrastructure, and customer-controlled Bitcoin.",
-  robots: { index: false, follow: false },
+  metadataBase: new URL("https://hashnomads.vercel.app"),
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "HashNomads — Own your Bitcoin mining",
+    description:
+      "Explore mining hardware, hosting locations, and the economics of Bitcoin ownership.",
+    type: "website",
+    images: [
+      { url: "/images/mining-infrastructure.webp", width: 830, height: 1080 },
+    ],
+  },
   icons: { icon: "/favicon.svg" },
 };
 export default function RootLayout({

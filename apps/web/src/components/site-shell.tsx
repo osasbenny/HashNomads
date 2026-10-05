@@ -19,6 +19,7 @@ const navigation = [
   { href: "/facilities", label: "Infrastructure" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/calculator", label: "Calculator" },
+  { href: "/contact", label: "Talk to an advisor" },
 ];
 export function SiteHeader() {
   const pathname = usePathname(),
@@ -85,12 +86,15 @@ export function SiteFooter() {
             <Link href="/marketplace">Hardware</Link>
             <Link href="/facilities">Infrastructure</Link>
             <Link href="/calculator">Mining calculator</Link>
+            <Link href="/resources">Mining resources</Link>
           </div>
           <div>
             <span className="eyebrow">Company</span>
             <Link href="/transparency">Transparency & risk</Link>
             <Link href="/about">About HashNomads</Link>
             <Link href="/faq">Frequently asked questions</Link>
+            <Link href="/contact">Contact HashNomads</Link>
+            <a href="mailto:info@hashnomads.com">info@hashnomads.com</a>
           </div>
           <div>
             <span className="eyebrow">Your Bitcoin. Your control.</span>
@@ -100,6 +104,7 @@ export function SiteFooter() {
               or recovery phrase.
             </p>
             <Link href="/legal">Legal & privacy</Link>
+            <Link href="/account">Your account</Link>
           </div>
         </div>
         <div className="footer-bottom">

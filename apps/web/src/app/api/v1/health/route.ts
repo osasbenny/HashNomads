@@ -4,16 +4,14 @@ export async function GET() {
     await db.$queryRaw`SELECT 1`;
     return Response.json({
       status: "ok",
-      environment: "sandbox",
-      productionEnabled: false,
+      environment: process.env.HASHNOMADS_ENV,
     });
   } catch {
     return Response.json(
       {
         status: "degraded",
         database: "unavailable",
-        environment: "sandbox",
-        productionEnabled: false,
+        environment: process.env.HASHNOMADS_ENV,
       },
       { status: 503 },
     );

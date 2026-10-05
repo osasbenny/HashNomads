@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 const config: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.sazmining.com",
+        pathname: "/images/**",
+      },
+    ],
+  },
   transpilePackages: [
     "@hashnomads/domain",
     "@hashnomads/db",

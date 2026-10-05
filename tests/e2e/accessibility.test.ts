@@ -6,6 +6,9 @@ for (const route of [
   "/marketplace",
   "/facilities",
   "/account",
+  "/contact",
+  "/resources",
+  "/faq",
 ]) {
   test(`WCAG checks on ${route}`, async ({ page }) => {
     await page.goto(route);

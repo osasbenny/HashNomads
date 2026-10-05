@@ -4,15 +4,8 @@ import { randomUUID } from "node:crypto";
 const db = new PrismaClient();
 afterAll(() => db.$disconnect());
 describe("PostgreSQL foundation", () => {
-  it("has all domain tables and seeded SIM-only inventory", async () => {
+  it("has sourced specifications and all domain tables", async () => {
     expect(await db.asicModel.count()).toBeGreaterThan(0);
-    const units = await db.asicUnit.findMany();
-    expect(units.length).toBeGreaterThan(0);
-    expect(
-      units.every(
-        (u) => u.serialNumber.startsWith("SIM-") && u.environment === "sandbox",
-      ),
-    ).toBe(true);
     const tables = await db.$queryRaw<
       { tablename: string }[]
     >`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
@@ -28,13 +21,13 @@ describe("PostgreSQL foundation", () => {
       ]),
     );
   });
-  it("rejects a physical serial in the sandbox", async () => {
+  it("rejects artificial inventory identities", async () => {
     await expect(
       db.asicUnit.create({
         data: {
           asicModelId: "s21-pro",
-          serialNumber: `PHYSICAL-${randomUUID()}`,
-          serialKind: "physical",
+          serialNumber: `SIM-${randomUUID()}`,
+          serialKind: "simulated",
         },
       }),
     ).rejects.toThrow();

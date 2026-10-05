@@ -39,7 +39,7 @@ export default async function Page({
               ["Hashrate", `${m.hashrateTH} TH/s`],
               ["Power", `${m.powerW.toLocaleString("en-US")} W`],
               ["Efficiency", `${m.efficiency} J/TH`],
-              ["Catalogue price", "$4,800 / sandbox fixture"],
+              ["Hardware pricing", "Request a quote"],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt>{k}</dt>
@@ -48,7 +48,10 @@ export default async function Page({
             ))}
           </dl>
           <div className="button-row">
-            <Link className="button primary" href="/calculator">
+            <Link className="button primary" href="/contact?topic=hardware">
+              Request pricing
+            </Link>
+            <Link className="button secondary" href="/calculator">
               Model this ASIC
             </Link>
             <Link className="button secondary" href="/facilities">
@@ -56,8 +59,8 @@ export default async function Page({
             </Link>
           </div>
           <div className="callout">
-            Physical availability, procurement, and live checkout are pending
-            supplier and infrastructure validation.
+            Your written quote confirms the hardware price, availability,
+            hosting location and commercial terms before purchase.
           </div>
           <a
             className="text-link"

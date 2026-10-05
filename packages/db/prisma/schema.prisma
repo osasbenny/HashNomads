@@ -1,12 +1,39 @@
 generator client {
   provider = "prisma-client-js"
 }
+
+model SiteEnquiry {
+  id String @id @default(cuid())
+  name String
+  email String
+  topic String
+  message String
+  status String @default("new")
+  consentVersion String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}
+
+model NewsletterSubscription {
+  id String @id @default(cuid())
+  email String @unique
+  consentVersion String
+  subscribedAt DateTime @default(now())
+  unsubscribedAt DateTime?
+}
+
+model SiteRateLimit {
+  key String @id
+  count Int @default(1)
+  expiresAt DateTime
+  @@index([expiresAt])
+}
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
 }
 enum Environment {
-  sandbox
+  production
 }
 enum Role {
   customer
@@ -27,6 +54,26 @@ model User {
   sessions Session[]
   accounts Account[]
   customer Customer?
+  twoFactorEnabled Boolean @default(false)
+  twoFactors TwoFactor[]
+}
+model TwoFactor {
+  id String @id
+  secret String
+  backupCodes String
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  verified Boolean @default(true)
+  failedVerificationCount Int @default(0)
+  lockedUntil DateTime?
+  @@index([secret])
+  @@index([userId])
+}
+model RateLimit {
+  id String @id
+  key String @unique
+  count Int
+  lastRequest BigInt
 }
 model Session {
   id String @id
@@ -74,7 +121,7 @@ model Customer {
   legalName String
   country String
   status String @default("onboarding")
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   kycCases KycCase[]
   consents ConsentRecord[]
@@ -95,7 +142,7 @@ model KycCase {
   provider String
   sourceRef String @unique
   status String @default("pending")
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   reviewedAt DateTime?
   @@index([customerId,status])
@@ -117,7 +164,7 @@ model AsicModel {
   nominalHashrateTHs Decimal @db.Decimal(12,3)
   nominalPowerW Int
   efficiencyJTH Decimal @db.Decimal(12,3)
-  priceMinor BigInt
+  priceMinor BigInt?
   specificationSource String
   units AsicUnit[]
 }
@@ -126,9 +173,9 @@ model AsicUnit {
   asicModelId String
   asicModel AsicModel @relation(fields:[asicModelId],references:[id])
   serialNumber String @unique
-  serialKind String @default("simulated")
+  serialKind String @default("physical")
   inventoryStatus String @default("inventory")
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   ownerships OwnershipAssignment[]
   deployments Deployment[]
   @@index([inventoryStatus])
@@ -138,8 +185,8 @@ model Facility {
   name String
   country String
   region String
-  status String @default("simulated")
-  environment Environment @default(sandbox)
+  status String @default("available")
+  environment Environment @default(production)
   plans HostingPlan[]
   orders Order[]
   deployments Deployment[]
@@ -168,7 +215,7 @@ model Order {
   accountingCurrency String @default("USD")
   totalMinor BigInt
   quoteExpiresAt DateTime
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   lines OrderLine[]
   payments PaymentIntent[]
@@ -206,7 +253,7 @@ model PaymentIntent {
   rateExpiresAt DateTime
   status String @default("pending")
   idempotencyKey String
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   cryptoInvoice CryptoInvoice?
   transactions PaymentTransaction[]
@@ -285,7 +332,7 @@ model Deployment {
   hostingPlan HostingPlan @relation(fields:[hostingPlanId],references:[id])
   workerIdentity String @unique
   status String @default("deployment_pending")
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   scheduledAt DateTime
   activatedAt DateTime?
   endedAt DateTime?
@@ -353,7 +400,7 @@ model RewardEntry {
   status String
   paidTxRef String?
   observedAt DateTime
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   @@index([customerId,periodEnd])
 }
 model HostingInvoice {
@@ -370,7 +417,7 @@ model HostingInvoice {
   totalMinor BigInt
   accountingCurrency String @default("USD")
   status String @default("issued")
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   dueAt DateTime
   createdAt DateTime @default(now())
   lines InvoiceLine[]
@@ -391,7 +438,7 @@ model Incident {
   severity String
   status String @default("open")
   sourceRef String?
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   resolvedAt DateTime?
 }
@@ -417,7 +464,7 @@ model IntegrationEvent {
   id String @id @default(cuid())
   provider String
   eventRef String
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   signatureVerified Boolean
   status String
   correlationId String
@@ -432,7 +479,7 @@ model AuditEvent {
   resourceType String
   resourceId String
   metadata Json
-  environment Environment @default(sandbox)
+  environment Environment @default(production)
   createdAt DateTime @default(now())
   @@index([resourceType,resourceId,createdAt])
 }

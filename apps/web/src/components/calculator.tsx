@@ -4,11 +4,11 @@ import { scenario, formatFixed, type ScenarioInput } from "@hashnomads/domain";
 const defaults: ScenarioInput = {
   hashrateTH: "234",
   powerW: "3510",
-  hashpriceUsdPerPHDay: "50",
-  electricityUsdPerKwh: "0.065",
-  uptimePercent: "97",
-  poolFeePercent: "2",
-  serviceUsdPerMonth: "15",
+  hashpriceUsdPerPHDay: "",
+  electricityUsdPerKwh: "",
+  uptimePercent: "",
+  poolFeePercent: "",
+  serviceUsdPerMonth: "",
 };
 const fields: {
   key: keyof ScenarioInput;
@@ -79,8 +79,9 @@ export function Calculator() {
           ))}
         </div>
         <p className="form-note">
-          Manual reference assumptions. Hashprice is not a live market feed.
-          Electricity is estimated from nominal power × uptime × 720 hours.
+          S21 Pro manufacturer specifications are prefilled. Enter hashprice,
+          uptime and fees from your research and energy costs from your quote.
+          Electricity uses nominal power × uptime × 720 hours.
         </p>
       </div>
       <div className="panel scenario-result" aria-live="polite">

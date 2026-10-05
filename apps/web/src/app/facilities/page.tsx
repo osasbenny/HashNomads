@@ -1,50 +1,82 @@
 import Link from "next/link";
-import { MapPin, Layers3 } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Globe2, ArrowUpRight } from "lucide-react";
 import { facilities } from "@hashnomads/domain";
-export const metadata = { title: "Infrastructure" };
+import { commercial } from "@/lib/commercial";
+export const metadata = { title: "Hosting locations" };
 export default function Page() {
   return (
     <div className="container page">
-      <span className="eyebrow">INFRASTRUCTURE / US & CANADA</span>
+      <span className="eyebrow">HOSTING / THE SAZMINING NETWORK</span>
       <h1>
-        Global by architecture.
+        Energy matters.
         <br />
-        <span className="text-muted">Grounded in evidence.</span>
+        <span className="text-accent">Location does, too.</span>
       </h1>
       <p className="page-intro">
-        Explore reference hosting configurations for the initial target markets.
-        These are simulated facilities, with no contracted capacity.
+        Explore published hosting locations across three continents. Confirm
+        capacity, tariffs and service terms with an advisor before selecting
+        your location.
       </p>
       <div className="two-grid">
-        {facilities.map((f, i) => (
+        {facilities.map((f) => (
           <article className="facility-card" key={f.id}>
-            <div className="facility-top">
-              <Layers3 size={42} strokeWidth={1} />
-              <span className="mono">SIM / 0{i + 1}</span>
+            <div
+              className={`facility-image ${f.image ? "" : "facility-map-art"}`}
+            >
+              {f.image ? (
+                <Image
+                  src={f.image}
+                  alt={`${f.name} Sazmining facility`}
+                  fill
+                  sizes="(max-width: 800px) 100vw, 48vw"
+                />
+              ) : (
+                <>
+                  <Globe2 size={92} strokeWidth={0.6} />
+                  <span>{f.country}</span>
+                </>
+              )}
             </div>
-            <span className="pill">Simulated facility</span>
+            <span className="pill">{f.status}</span>
             <h2>{f.name}</h2>
             <p>
               <MapPin size={16} />
               {f.region}
             </p>
             <div className="spec-rule">
-              <span>Reference electricity tariff</span>
-              <b>${f.rate}/kWh</b>
+              <span>Published electricity tariff</span>
+              <b>{f.rate ? `$${f.rate}/kWh` : "Ask an advisor"}</b>
             </div>
             <div className="spec-rule">
-              <span>Configuration</span>
-              <b>Air cooled</b>
+              <span>Energy & infrastructure</span>
+              <b>{f.climate}</b>
             </div>
-            <div className="callout">
-              Names, tariffs, and configurations are test fixtures. They do not
-              represent partners, reserved capacity, or commercial pricing.
-            </div>
-            <Link className="button secondary" href="/calculator">
-              Model a hosting scenario
+            <Link
+              className="button secondary"
+              href={`/contact?topic=hosting&location=${f.id}`}
+            >
+              Discuss this location <ArrowUpRight size={16} />
             </Link>
           </article>
         ))}
+      </div>
+      <div className="source-note">
+        <p>
+          Source: Sazmining’s published facility directory. Checked{" "}
+          {commercial.checkedAt}. These are Sazmining’s published tariffs and
+          status; your HashNomads quote confirms the terms applicable to your
+          purchase.
+        </p>
+        <a
+          className="text-link"
+          href={commercial.facilitiesSource}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View facility information & service agreements{" "}
+          <ArrowUpRight size={16} />
+        </a>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import "server-only";
 import { betterAuth } from "better-auth";
+import { twoFactor } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "@hashnomads/db";
 import { readEnvironment } from "@hashnomads/config";
@@ -8,6 +9,7 @@ export function getAuth() {
   return betterAuth({
     database: prismaAdapter(db, { provider: "postgresql" }),
     secret: env.BETTER_AUTH_SECRET,
+    plugins: [twoFactor({ issuer: "HashNomads" })],
     baseURL: env.BETTER_AUTH_URL,
     trustedOrigins: [env.BETTER_AUTH_URL],
     emailAndPassword: {
@@ -16,7 +18,7 @@ export function getAuth() {
       maxPasswordLength: 128,
     },
     session: { expiresIn: 60 * 60 * 24, updateAge: 60 * 60 },
-    rateLimit: { enabled: true, window: 60, max: 30 },
+    rateLimit: { enabled: true, window: 60, max: 30, storage: "database" },
     user: {
       additionalFields: {
         role: { type: "string", defaultValue: "customer", input: false },

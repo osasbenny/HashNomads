@@ -131,27 +131,6 @@ p {
 .skip-link:focus {
   top: 10px;
 }
-.sandbox-bar {
-  font-family: Consolas, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  text-align: center;
-  padding: 9px 20px;
-  background: #1f2119;
-  color: #d9caa7;
-  border-bottom: 1px solid #ecc2741a;
-}
-.sandbox-dot {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  background: var(--accent-bitcoin);
-  margin: 0 9px 2px 0;
-}
-.bar-divider {
-  margin: 0 14px;
-  opacity: 0.4;
-}
 .site-header {
   position: sticky;
   top: 0;
@@ -1175,20 +1154,10 @@ input:not([type="checkbox"]) {
   .facility-card .spec-rule {
     font-size: 0.8125rem;
   }
-  .sandbox-bar {
-    font-size: 0.625rem;
-  }
-  .sandbox-bar .bar-divider {
-    margin: 0 5px;
-  }
 }
 @media (max-width: 480px) {
   .container {
     width: calc(100% - 36px);
-  }
-  .sandbox-bar {
-    padding: 8px 14px;
-    line-height: 1.7;
   }
   .brand {
     font-size: 1.25rem;
@@ -1417,5 +1386,627 @@ input:not([type="checkbox"]) {
   .button:hover,
   .journey-card:hover {
     transform: none;
+  }
+}
+
+/* Commercial experience: warm editorial panels, clear actions and varied rhythm. */
+.button {
+  gap: 10px;
+}
+.commercial-hero {
+  padding-bottom: 70px;
+}
+.commercial-hero h1 {
+  font-size: clamp(2.8rem, 5.2vw, 5rem);
+}
+.hero-checks {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 30px;
+  color: var(--text-secondary);
+  display: grid;
+  gap: 9px;
+}
+.hero-checks li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.hero-checks svg {
+  width: 16px;
+  color: var(--accent-bitcoin);
+}
+.hero-photograph {
+  overflow: visible;
+}
+.hero-photograph > img {
+  border-radius: inherit;
+}
+.hero-photo-badge {
+  position: absolute;
+  top: 30px;
+  left: -24px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #f4ecd9;
+  color: #26342d;
+  padding: 17px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 35px #0004;
+  transform: rotate(-3deg);
+}
+.hero-photo-badge small {
+  display: block;
+  color: #586158;
+  font-size: 12px;
+}
+.benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.benefit-card {
+  padding: 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.benefit-card > svg {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 25px;
+  color: var(--accent-bitcoin);
+}
+.benefit-card h3 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+.benefit-card h2 {
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+.benefit-card .text-link {
+  margin-top: 22px;
+}
+.detail-hardware-photo {
+  height: 520px;
+}
+.benefit-card p {
+  font-size: 14px;
+  line-height: 1.8;
+}
+.light-panel {
+  padding: 55px;
+  border-radius: 22px;
+  background: #eeeadd;
+  color: #233129;
+}
+.light-panel p {
+  color: #536055;
+}
+.light-panel .eyebrow {
+  color: #795223;
+}
+.light-panel .button.secondary {
+  color: #233129;
+  border-color: #23312933;
+}
+.light-panel .text-link {
+  color: #75501f;
+}
+.light-panel .hardware-photograph {
+  border-color: #23312922;
+}
+.light-panel.hardware-feature {
+  gap: 45px;
+}
+.hardware-numbers {
+  display: flex;
+  gap: 30px;
+  margin: 30px 0;
+}
+.hardware-numbers strong {
+  display: block;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+.hardware-numbers span {
+  display: block;
+  font-size: 11px;
+  color: #536055;
+}
+.network-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 55px;
+}
+.network-section h2 {
+  margin: 18px 0 24px;
+}
+.network-section p {
+  max-width: 470px;
+}
+.network-section .network-photograph {
+  height: 420px;
+  width: 100%;
+  max-width: 100%;
+}
+.location-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 28px 0;
+}
+.location-tags span {
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.advisor-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  padding: 60px;
+  border: 1px solid #eca14c26;
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 95% 10%, #4b372240, transparent 65%), #151c19;
+}
+.advisor-panel h2 {
+  margin: 18px 0 24px;
+}
+.advisor-panel .button {
+  margin-top: 25px;
+}
+.advisor-topics {
+  display: grid;
+  align-content: center;
+  gap: 17px;
+}
+.advisor-topics > div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 25px;
+  border-radius: 12px;
+  background: #ffffff05;
+  border: 1px solid var(--border);
+}
+.advisor-topics svg {
+  color: var(--accent-bitcoin);
+  flex-shrink: 0;
+}
+.advisor-topics small {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.economics-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 45px;
+  background: #1b2221;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.economics-band h3 {
+  margin: 15px 0;
+  font-size: 26px;
+}
+.economics-band p {
+  max-width: 650px;
+  font-size: 14px;
+}
+.trust-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  align-items: center;
+}
+.trust-section h2 {
+  margin: 18px 0 25px;
+}
+.trust-section > div > .button {
+  margin-top: 24px;
+}
+.trust-principles {
+  display: grid;
+  gap: 20px;
+}
+.trust-principles > div {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 8px 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trust-principles svg {
+  grid-row: span 2;
+  color: var(--accent-bitcoin);
+}
+.trust-principles p {
+  font-size: 13px;
+}
+.faq-section {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 60px;
+}
+.faq-section h2 {
+  margin: 18px 0 25px;
+}
+.faq-list {
+  display: grid;
+  gap: 12px;
+}
+.faq-list details {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+}
+.faq-list summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 22px 24px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+}
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.faq-list summary span {
+  color: var(--accent-bitcoin);
+  font-size: 22px;
+  font-weight: 400;
+}
+.faq-list p {
+  padding: 0 24px 24px;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.light-panel .faq-list details {
+  background: #fff9;
+  border-color: #23312914;
+}
+.light-panel .faq-list summary span {
+  color: #795223;
+}
+.newsletter-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+.newsletter-section h2 {
+  margin: 18px 0;
+}
+.newsletter-form {
+  padding: 30px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.newsletter-form label {
+  display: grid;
+  gap: 10px;
+}
+.newsletter-form .checkbox-label {
+  display: flex;
+  font-size: 12px;
+  margin: 16px 0 22px;
+}
+.newsletter-form .button {
+  width: 100%;
+}
+.product-photo {
+  position: relative;
+  overflow: hidden;
+}
+.product-photo img {
+  object-fit: cover;
+}
+.product-photo:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 55%, #0009);
+}
+.product-photo .mono {
+  position: absolute;
+  bottom: 18px;
+  left: 24px;
+  z-index: 1;
+  color: #faf4e9;
+}
+.selection-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+  margin: 30px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.selection-list li {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.selection-list svg {
+  width: 20px;
+  color: var(--accent-bitcoin);
+}
+.facility-image {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 25px;
+}
+.facility-image img {
+  object-fit: cover;
+}
+.facility-map-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  color: var(--accent-bitcoin);
+  background:
+    radial-gradient(circle at center, #eca14c18, transparent),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, #fff04 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, #fff04 40px);
+}
+.facility-map-art span {
+  font-size: 54px;
+  font-weight: 500;
+  color: #f1f0e999;
+}
+.facility-card .spec-rule {
+  gap: 25px;
+}
+.facility-card .spec-rule b {
+  text-align: right;
+  max-width: 60%;
+}
+.facility-card .button {
+  margin-top: 25px;
+}
+.source-note {
+  padding: 30px;
+  margin-top: 40px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.source-note p {
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  align-items: start;
+}
+.contact-grid h1 {
+  font-size: clamp(2.5rem, 4.4vw, 4.1rem);
+}
+.contact-booking {
+  margin-top: 45px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+.contact-booking h3 {
+  margin: 12px 0 16px;
+}
+.contact-booking p {
+  font-size: 13px;
+  margin-bottom: 23px;
+}
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  color: var(--accent-bitcoin);
+  font-size: 20px;
+}
+.enquiry-form {
+  display: grid;
+  gap: 22px;
+}
+.enquiry-form h2 {
+  font-size: 26px;
+  margin-bottom: 5px;
+}
+.enquiry-form label {
+  display: grid;
+  gap: 9px;
+  font-size: 13px;
+}
+.enquiry-form .checkbox-label {
+  display: flex;
+  font-size: 12px;
+}
+textarea,
+select {
+  font: inherit;
+  padding: 13px 15px;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  width: 100%;
+  min-width: 0;
+}
+textarea {
+  resize: vertical;
+}
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent-bitcoin);
+  outline-offset: 4px;
+}
+.form-trap {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  left: -10000px;
+  overflow: hidden;
+}
+.form-success h2 {
+  font-size: 28px;
+  margin: 15px 0 25px;
+}
+.form-success .button {
+  margin-top: 25px;
+}
+.enquiry-inbox {
+  display: grid;
+  gap: 20px;
+}
+.enquiry-inbox h2 {
+  margin: 15px 0;
+  font-size: 26px;
+}
+.enquiry-message {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 20px;
+}
+.account-settings {
+  margin-top: 25px;
+  border-top: 1px solid var(--border);
+}
+.account-settings details {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.account-settings summary {
+  cursor: pointer;
+}
+.account-settings form {
+  display: grid;
+  gap: 16px;
+  padding-top: 20px;
+}
+.account-settings label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+.account-settings p {
+  margin-top: 15px;
+  font-size: 13px;
+}
+.mfa-setup {
+  margin-top: 20px;
+}
+.mfa-setup > code {
+  display: block;
+  margin: 15px 0;
+  overflow-wrap: anywhere;
+}
+.backup-codes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 18px 0;
+}
+.account-panel > .button {
+  margin-top: 22px;
+}
+.editorial .button-row {
+  margin-top: 30px;
+}
+.editorial .faq-list {
+  margin-top: 35px;
+}
+@media (max-width: 1100px) {
+  .site-nav {
+    gap: 16px;
+  }
+  .site-nav a {
+    font-size: 12px;
+  }
+  .advisor-panel,
+  .light-panel {
+    padding: 35px;
+  }
+  .hardware-numbers {
+    gap: 22px;
+  }
+}
+@media (max-width: 800px) {
+  .benefit-grid,
+  .network-section,
+  .advisor-panel,
+  .trust-section,
+  .faq-section,
+  .newsletter-section,
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .light-panel,
+  .advisor-panel {
+    padding: 28px;
+  }
+  .hero-photo-badge {
+    left: 20px;
+  }
+  .network-section .network-photograph {
+    height: 320px;
+  }
+  .economics-band {
+    flex-direction: column;
+    align-items: start;
+    padding: 28px;
+    gap: 25px;
+  }
+  .commercial-hero {
+    padding-bottom: 40px;
+  }
+  .newsletter-section h2 {
+    font-size: 34px;
+  }
+  .light-panel.hardware-feature {
+    gap: 30px;
+  }
+}
+@media (max-width: 480px) {
+  .light-panel,
+  .advisor-panel {
+    padding: 22px;
+  }
+  .hardware-numbers {
+    gap: 16px;
+  }
+  .hardware-numbers strong {
+    font-size: 23px;
+  }
+  .hero-checks li {
+    font-size: 12px;
+  }
+  .benefit-card {
+    padding: 25px;
+  }
+  .faq-list summary {
+    padding: 20px;
   }
 }
