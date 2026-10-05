@@ -1,0 +1,8 @@
+node_modules
+.next
+package-lock.json
+packages/db/prisma/migrations
+work
+README.md
+TODO.md
+docs

@@ -18,27 +18,27 @@
 - [ ] Phase 2 hosting partner plan (after profit model/V1 evidence)
 
 ## Phase 1A — Foundation
-- [ ] Initialize TypeScript monorepo
+- [x] Initialize TypeScript monorepo
 - [ ] Configure lint/format/typecheck/test
-- [ ] CI workflow
-- [ ] Typed environment validation
-- [ ] PostgreSQL schema + migrations
-- [ ] Seed deterministic sandbox data
+- [x] CI workflow
+- [x] Typed environment validation
+- [x] PostgreSQL schema + migrations
+- [x] Seed deterministic sandbox data
 - [ ] Auth + session management
 - [ ] RBAC authorization matrix
 - [ ] Audit event service
-- [ ] Base design tokens/components
+- [x] Base design tokens/components
 
 ## Phase 1B — Public experience
-- [ ] Homepage
-- [ ] How It Works
+- [x] Homepage
+- [x] How It Works
 - [ ] ASIC catalogue
 - [ ] ASIC detail
 - [ ] Facility sandbox catalogue
-- [ ] Mining scenario calculator UI
-- [ ] Transparency/risk page
-- [ ] FAQ/About/Legal shells
-- [ ] Motion + claymorphism implementation
+- [x] Mining scenario calculator UI
+- [x] Transparency/risk page
+- [x] FAQ/About/Legal shells
+- [x] Motion + claymorphism implementation
 - [ ] Reduced-motion/performance pass
 
 ## Phase 1C — Onboarding/commerce
@@ -91,3 +91,13 @@
 
 ## Rule
 Never mark an item complete because a UI mock exists. Completion requires the applicable backend/domain/persistence/authorization/error states/tests defined by the project documents.
+
+## Savepoint 1 — 2026-10-05
+
+- PostgreSQL migrations, idempotent seed, secure account/session library, exact-money scenario engine, permission predicates, and sandbox payment contract are implemented and tested.
+- Public hardware/detail/facility screens use documented reference fixtures; persisted catalogue APIs/admin management remain pending, so their full checklist entries remain open.
+- Auth/session baseline is tested for signup, reload and logout. Verification, recovery, MFA and step-up remain pending; the overall auth/security checklist remains open.
+- CI and initial unit/integration/browser/accessibility tests exist. Full V1 tests are still pending; partial coverage does not close Phase 1F.
+- No customer KYC/order/payment/wallet/miner/reward/billing lifecycle or operations console is claimed complete.
+- Next work: persisted customer onboarding/consents, KYC sandbox, tenant-scoped order and checkout services, durable signed-webhook handling and payment reconciliation, with adversarial integration/E2E tests.
+- See `docs/14-STARTER-SAVEPOINT.md`; the final V1 implementation report is reserved until all acceptance criteria pass.

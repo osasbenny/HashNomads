@@ -1,0 +1,451 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+enum Environment {
+  sandbox
+}
+enum Role {
+  customer
+  support
+  operations
+  finance_compliance
+  admin
+}
+model User {
+  id String @id
+  name String
+  email String @unique
+  emailVerified Boolean @default(false)
+  image String?
+  role Role @default(customer)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sessions Session[]
+  accounts Account[]
+  customer Customer?
+}
+model Session {
+  id String @id
+  token String @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@index([userId])
+}
+model Account {
+  id String @id
+  accountId String
+  providerId String
+  userId String
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  accessToken String?
+  refreshToken String?
+  idToken String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope String?
+  password String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([providerId,accountId])
+  @@index([userId])
+}
+model Verification {
+  id String @id
+  identifier String
+  value String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([identifier])
+}
+model Customer {
+  id String @id @default(cuid())
+  userId String @unique
+  user User @relation(fields:[userId],references:[id])
+  legalName String
+  country String
+  status String @default("onboarding")
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  kycCases KycCase[]
+  consents ConsentRecord[]
+  orders Order[]
+  payments PaymentIntent[]
+  ownerships OwnershipAssignment[]
+  wallets WalletDestination[]
+  walletChanges WalletChangeRequest[]
+  rewards RewardEntry[]
+  invoices HostingInvoice[]
+  supportCases SupportCase[]
+  notifications Notification[]
+}
+model KycCase {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  provider String
+  sourceRef String @unique
+  status String @default("pending")
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  reviewedAt DateTime?
+  @@index([customerId,status])
+}
+model ConsentRecord {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  document String
+  version String
+  acceptedAt DateTime @default(now())
+  @@unique([customerId,document,version])
+}
+model AsicModel {
+  id String @id
+  manufacturer String
+  model String
+  algorithm String @default("SHA-256")
+  nominalHashrateTHs Decimal @db.Decimal(12,3)
+  nominalPowerW Int
+  efficiencyJTH Decimal @db.Decimal(12,3)
+  priceMinor BigInt
+  specificationSource String
+  units AsicUnit[]
+}
+model AsicUnit {
+  id String @id @default(cuid())
+  asicModelId String
+  asicModel AsicModel @relation(fields:[asicModelId],references:[id])
+  serialNumber String @unique
+  serialKind String @default("simulated")
+  inventoryStatus String @default("inventory")
+  environment Environment @default(sandbox)
+  ownerships OwnershipAssignment[]
+  deployments Deployment[]
+  @@index([inventoryStatus])
+}
+model Facility {
+  id String @id
+  name String
+  country String
+  region String
+  status String @default("simulated")
+  environment Environment @default(sandbox)
+  plans HostingPlan[]
+  orders Order[]
+  deployments Deployment[]
+}
+model HostingPlan {
+  id String @id
+  facilityId String
+  facility Facility @relation(fields:[facilityId],references:[id])
+  name String
+  tariffUsdPerKwh Decimal @db.Decimal(12,6)
+  setupMinor BigInt
+  serviceMonthlyMinor BigInt
+  currency String @default("USD")
+  billingCadence String @default("monthly")
+  effectiveFrom DateTime
+  effectiveTo DateTime?
+  deployments Deployment[]
+}
+model Order {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  facilityId String
+  facility Facility @relation(fields:[facilityId],references:[id])
+  status String @default("pending_payment")
+  accountingCurrency String @default("USD")
+  totalMinor BigInt
+  quoteExpiresAt DateTime
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  lines OrderLine[]
+  payments PaymentIntent[]
+  ownerships OwnershipAssignment[]
+  @@index([customerId,createdAt])
+}
+model OrderLine {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields:[orderId],references:[id])
+  sku String
+  description String
+  quantity Int
+  unitMinor BigInt
+  totalMinor BigInt
+}
+model PaymentIntent {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  orderId String?
+  order Order? @relation(fields:[orderId],references:[id])
+  hostingInvoiceId String?
+  hostingInvoice HostingInvoice? @relation(fields:[hostingInvoiceId],references:[id])
+  provider String
+  providerInvoiceRef String
+  accountingCurrency String @default("USD")
+  accountingAmountMinor BigInt
+  paymentAsset String
+  paymentNetwork String
+  requestedAmountAtomic BigInt
+  rateUsdMinor BigInt
+  rateSource String
+  rateLockedAt DateTime
+  rateExpiresAt DateTime
+  status String @default("pending")
+  idempotencyKey String
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  cryptoInvoice CryptoInvoice?
+  transactions PaymentTransaction[]
+  settlements Settlement[]
+  adjustments PaymentAdjustment[]
+  @@unique([provider,environment,providerInvoiceRef])
+  @@unique([provider,environment,idempotencyKey])
+  @@index([customerId,status])
+}
+model CryptoInvoice {
+  id String @id @default(cuid())
+  paymentIntentId String @unique
+  paymentIntent PaymentIntent @relation(fields:[paymentIntentId],references:[id])
+  receivingReference String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+model PaymentTransaction {
+  id String @id @default(cuid())
+  paymentIntentId String
+  paymentIntent PaymentIntent @relation(fields:[paymentIntentId],references:[id])
+  providerTxRef String @unique
+  blockchainTxHash String?
+  asset String
+  network String
+  amountAtomic BigInt
+  confirmations Int?
+  status String
+  observedAt DateTime
+  createdAt DateTime @default(now())
+}
+model Settlement {
+  id String @id @default(cuid())
+  paymentIntentId String
+  paymentIntent PaymentIntent @relation(fields:[paymentIntentId],references:[id])
+  providerSettlementRef String @unique
+  asset String
+  grossAmountAtomic BigInt
+  feeAmountAtomic BigInt
+  netAmountAtomic BigInt
+  status String @default("pending")
+  reconciliationStatus String @default("pending")
+  destinationRefRedacted String
+  settledAt DateTime?
+  createdAt DateTime @default(now())
+}
+model PaymentAdjustment {
+  id String @id @default(cuid())
+  paymentIntentId String
+  paymentIntent PaymentIntent @relation(fields:[paymentIntentId],references:[id])
+  kind String
+  amountAtomic BigInt
+  reason String
+  actorId String
+  createdAt DateTime @default(now())
+}
+model OwnershipAssignment {
+  id String @id @default(cuid())
+  asicUnitId String
+  asicUnit AsicUnit @relation(fields:[asicUnitId],references:[id])
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  orderId String
+  order Order @relation(fields:[orderId],references:[id])
+  assignedAt DateTime @default(now())
+  endedAt DateTime?
+  @@index([customerId])
+}
+model Deployment {
+  id String @id @default(cuid())
+  asicUnitId String
+  asicUnit AsicUnit @relation(fields:[asicUnitId],references:[id])
+  facilityId String
+  facility Facility @relation(fields:[facilityId],references:[id])
+  hostingPlanId String
+  hostingPlan HostingPlan @relation(fields:[hostingPlanId],references:[id])
+  workerIdentity String @unique
+  status String @default("deployment_pending")
+  environment Environment @default(sandbox)
+  scheduledAt DateTime
+  activatedAt DateTime?
+  endedAt DateTime?
+  telemetry TelemetrySample[]
+  rewards RewardEntry[]
+  invoices HostingInvoice[]
+}
+model TelemetrySample {
+  id String @id @default(cuid())
+  deploymentId String
+  deployment Deployment @relation(fields:[deploymentId],references:[id])
+  metric String
+  value Decimal @db.Decimal(20,8)
+  unit String
+  sourceProvider String
+  sourceRef String @unique
+  observedAt DateTime
+  ingestedAt DateTime @default(now())
+  @@index([deploymentId,observedAt])
+}
+model WalletDestination {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  asset String @default("BTC")
+  network String
+  address String
+  label String
+  purpose String @default("mining_payout")
+  status String @default("pending")
+  verificationMethod String?
+  verifiedAt DateTime?
+  activatedAt DateTime?
+  deactivatedAt DateTime?
+  createdAt DateTime @default(now())
+  changes WalletChangeRequest[]
+  rewards RewardEntry[]
+  @@index([customerId,status])
+}
+model WalletChangeRequest {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  walletDestinationId String
+  walletDestination WalletDestination @relation(fields:[walletDestinationId],references:[id])
+  status String @default("pending")
+  requestedAt DateTime @default(now())
+  verifiedAt DateTime?
+  activatedAt DateTime?
+  riskReviewRef String?
+}
+model RewardEntry {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  deploymentId String
+  deployment Deployment @relation(fields:[deploymentId],references:[id])
+  walletDestinationId String
+  walletDestination WalletDestination @relation(fields:[walletDestinationId],references:[id])
+  poolProvider String
+  sourceRef String @unique
+  periodStart DateTime
+  periodEnd DateTime
+  amountSats BigInt
+  status String
+  paidTxRef String?
+  observedAt DateTime
+  environment Environment @default(sandbox)
+  @@index([customerId,periodEnd])
+}
+model HostingInvoice {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  deploymentId String
+  deployment Deployment @relation(fields:[deploymentId],references:[id])
+  periodStart DateTime
+  periodEnd DateTime
+  tariffSnapshot Decimal @db.Decimal(12,6)
+  usageKwh Decimal @db.Decimal(16,6)
+  usageSource String
+  totalMinor BigInt
+  accountingCurrency String @default("USD")
+  status String @default("issued")
+  environment Environment @default(sandbox)
+  dueAt DateTime
+  createdAt DateTime @default(now())
+  lines InvoiceLine[]
+  payments PaymentIntent[]
+  @@unique([deploymentId,periodStart,periodEnd])
+  @@index([customerId,status])
+}
+model InvoiceLine {
+  id String @id @default(cuid())
+  invoiceId String
+  invoice HostingInvoice @relation(fields:[invoiceId],references:[id])
+  description String
+  amountMinor BigInt
+}
+model Incident {
+  id String @id @default(cuid())
+  title String
+  severity String
+  status String @default("open")
+  sourceRef String?
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  resolvedAt DateTime?
+}
+model SupportCase {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  subject String
+  body String
+  status String @default("open")
+  createdAt DateTime @default(now())
+}
+model Notification {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId],references:[id])
+  kind String
+  message String
+  readAt DateTime?
+  createdAt DateTime @default(now())
+}
+model IntegrationEvent {
+  id String @id @default(cuid())
+  provider String
+  eventRef String
+  environment Environment @default(sandbox)
+  signatureVerified Boolean
+  status String
+  correlationId String
+  createdAt DateTime @default(now())
+  processedAt DateTime?
+  @@unique([provider,environment,eventRef])
+}
+model AuditEvent {
+  id String @id @default(cuid())
+  actorId String
+  action String
+  resourceType String
+  resourceId String
+  metadata Json
+  environment Environment @default(sandbox)
+  createdAt DateTime @default(now())
+  @@index([resourceType,resourceId,createdAt])
+}
+model Job {
+  id String @id @default(cuid())
+  kind String
+  resourceId String
+  idempotencyKey String @unique
+  status String @default("pending")
+  attempts Int @default(0)
+  availableAt DateTime @default(now())
+  lockedAt DateTime?
+  lastErrorCode String?
+  createdAt DateTime @default(now())
+  @@index([status,availableAt])
+}

@@ -1,0 +1,42 @@
+{
+  "name": "hashnomads",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @hashnomads/web",
+    "build": "npm run build -w @hashnomads/web",
+    "start": "npm run start -w @hashnomads/web",
+    "typecheck": "tsc --noEmit && npm run typecheck -w @hashnomads/web",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:generate": "prisma generate --schema packages/db/prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema packages/db/prisma/schema.prisma",
+    "db:seed": "node --env-file-if-exists=.env --import tsx packages/db/seed.ts",
+    "test:integration": "node --env-file-if-exists=.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^24.10.0",
+    "prettier": "^3.8.1",
+    "prisma": "6.19.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "overrides": {
+    "deepmerge-ts": "8.0.0"
+  }
+}

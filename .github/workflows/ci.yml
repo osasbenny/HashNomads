@@ -1,0 +1,50 @@
+name: Sandbox validation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: hashnomads
+          POSTGRES_USER: hashnomads
+          POSTGRES_PASSWORD: ci_synthetic_database_only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hashnomads"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      HASHNOMADS_ENV: sandbox
+      DATABASE_URL: postgresql://hashnomads:ci_synthetic_database_only@localhost:5432/hashnomads
+      BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ci_synthetic_auth_secret_never_use_outside_ci_123456
+      SANDBOX_WEBHOOK_SECRET: ci_synthetic_webhook_secret_never_use_outside_ci_123456
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run db:migrate
+      - run: npm run db:seed
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:integration
+      - run: npm audit --audit-level=high
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-evidence
+          path: test-results/
+          retention-days: 7

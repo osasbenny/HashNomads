@@ -1,0 +1,6 @@
+{
+  "name": "@hashnomads/integrations",
+  "private": true,
+  "type": "module",
+  "exports": "./src/payments.ts"
+}
