@@ -109,3 +109,12 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - [x] Preserve automated copyright year and Cactus Digital Media design credit.
 - Contextual test-data disclosures and backend activation gates remain tied to actual implementation status. See ADR-011 for the distinction between production brand intent and service readiness.
 - Validation: production build and formatting pass; all 13 existing browser/accessibility tests pass, including five responsive widths. Three pitch-deck images are confirmed loaded, both requested labels are absent, and no browser errors were recorded. Existing in-app preview refreshed.
+
+## Savepoint 3 — Vercel hosting and hosted accounts
+
+- [x] Configure Vercel monorepo build and server-side environment variables.
+- [x] Provision free Prisma Postgres database and apply both migrations.
+- [x] Publish https://hashnomads.vercel.app and connect GitHub for subsequent deployments.
+- [x] Verify all 13 browser/accessibility checks against the published site, including persisted signup/session/logout.
+- [x] Confirm database health and all three homepage images.
+- Live payment/mining activation, custom domain mapping, full transactional lifecycle and preview database setup remain pending. See `docs/15-VERCEL-DEPLOYMENT.md`.

@@ -79,6 +79,8 @@ Validation: `npm run format:check`, `npm run typecheck`, `npm test`, `npm run te
 
 ## Current routes
 
+The current site is deployed at https://hashnomads.vercel.app with hosted PostgreSQL accounts. See [deployment setup and verification](docs/15-VERCEL-DEPLOYMENT.md). GitHub pushes to `main` are connected to Vercel deployment.
+
 `/`, `/marketplace`, `/marketplace/s21-pro`, `/facilities`, `/calculator`, `/how-it-works`, `/transparency`, `/about`, `/faq`, `/legal`, `/account`, `/api/auth/*`, `/api/v1/health`.
 
 Accounts are persisted, but customer profile/KYC and transactional portal workflows are pending. Use synthetic account details. The schema, adapter boundaries, or a polished public page must not be interpreted as a completed backend lifecycle. The requested footer includes an automatically updating copyright year and Cactus Digital Media design credit.
