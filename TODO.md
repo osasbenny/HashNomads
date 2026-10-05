@@ -131,3 +131,11 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - [ ] Connect verified mail delivery for notifications, verification, recovery and newsletters.
 - [ ] Integrate the native operational lifecycle described above; actual fleet/financial data is required.
 - See `docs/16-COMMERCIAL-RELEASE.md` for precise scope, sources, validation and remaining work.
+
+## Savepoint 5 — About, contact widget and themes
+
+- [x] Add About us to desktop/mobile navigation and replace the editorial shell with a dedicated, image-led About page.
+- [x] Add a branded floating contact widget with enquiry, email and FAQ actions, keyboard focus handling and Escape dismissal.
+- [x] Add a light/dark switch with saved browser preference and matching palettes across public and account pages.
+- [ ] Connect a real-time chat provider and routing when the owner supplies the service configuration.
+- Scope estimate: 35% for the entire planned system, 45% for all frontend screens, 25% for the backend, and 80% for the public website. These are engineering estimates, not acceptance scores. Native commerce, KYC, mining operations, billing and operational hardening remain the major unfinished areas.

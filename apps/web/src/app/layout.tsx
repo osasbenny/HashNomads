@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
+import { ContactWidget } from "@/components/contact-widget";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
@@ -27,7 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('hashnomads-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
@@ -35,6 +43,7 @@ export default function RootLayout({
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <ContactWidget />
       </body>
     </html>
   );

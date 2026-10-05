@@ -9,6 +9,7 @@ for (const route of [
   "/contact",
   "/resources",
   "/faq",
+  "/about",
 ]) {
   test(`WCAG checks on ${route}`, async ({ page }) => {
     await page.goto(route);

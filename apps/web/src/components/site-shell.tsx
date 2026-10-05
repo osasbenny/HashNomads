@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Hexagon } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="HashNomads home">
@@ -19,6 +20,7 @@ const navigation = [
   { href: "/facilities", label: "Infrastructure" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/calculator", label: "Calculator" },
+  { href: "/about", label: "About us" },
   { href: "/contact", label: "Talk to an advisor" },
 ];
 export function SiteHeader() {
@@ -51,6 +53,7 @@ export function SiteHeader() {
         <Link className="button small header-account" href="/account">
           Your account
         </Link>
+        <ThemeToggle />
         <button
           className="menu-toggle"
           onClick={() => setOpen(!open)}
