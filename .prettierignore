@@ -18,3 +18,8 @@ apps/web/src/app/layout.tsx
 # Upstream V2 Tailwind token configuration
 apps/web/tailwind.config.mjs
 apps/web/v2-tailwind.config.js
+
+# V2 Playwright test migration fixtures; preserve baseline until tests stabilize
+tests/e2e/public.test.ts
+tests/e2e/site-controls.test.ts
+tests/e2e/commercial.test.ts
