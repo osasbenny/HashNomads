@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
 import { ContactWidget } from "@/components/contact-widget";
 import "./globals.css";
-import "../v2/index.css";
 import { DesignAwareChrome } from "@/components/v2-chrome";
 export const metadata: Metadata = {
   title: {
