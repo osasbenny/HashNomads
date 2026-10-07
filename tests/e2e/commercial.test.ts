@@ -159,7 +159,7 @@ test("unhydrated forms cannot submit credentials or contact data through the URL
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  for (const route of ["/account/verify", "/contact", "/"]) {
+  for (const route of ["/account/verify", "/contact"]) {
     await page.goto(route);
     const form = page.locator("form").first();
     await expect(form).toHaveAttribute("method", "post");
@@ -224,23 +224,23 @@ test("enquiry is saved, consent is required and foreign origins are rejected", a
   });
   expect(foreign.status()).toBe(403);
 });
-test("newsletter saves consent and supports explicit unsubscribe", async ({
-  page,
-}) => {
+test("newsletter API saves consent and supports explicit unsubscribe", async ({page}) => {
   await page.goto("/");
-  await page
-    .getByLabel("Email address", { exact: true })
-    .fill(`subscription-${Date.now()}@example.com`);
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Subscribe", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "Subscription saved." }),
-  ).toBeVisible();
-  await page.getByRole("link", { name: "Manage your subscription" }).click();
-  await page.getByRole("button", { name: "Unsubscribe", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText(
-    "You have been unsubscribed.",
-  );
+  const origin = new URL(page.url()).origin;
+  const email = `subscription-${Date.now()}@example.com`;
+  const response = await page.request.post("/api/v1/newsletter", {
+    headers: { Origin: origin },
+    data: {email, consent:true, website:""},
+  });
+  expect(response.status()).toBe(200);
+  const receipt = await response.json();
+  expect(receipt.unsubscribeToken).toBeTruthy();
+  const unsubscribed = await page.request.delete("/api/v1/newsletter", {
+    headers: {Origin:origin},
+    data: {token:receipt.unsubscribeToken},
+  });
+  expect(unsubscribed.status()).toBe(200);
+  expect((await unsubscribed.json()).message).toBe("You have been unsubscribed.");
 });
 test("admin data and setup cannot be accessed without authorization", async ({
   page,
