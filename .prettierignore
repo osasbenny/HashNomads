@@ -6,3 +6,11 @@ work
 README.md
 TODO.md
 docs
+
+# Imported immutable V2 design source (formatted by its original project)
+apps/web/src/v2/**
+# Integration layer to be formatted independently after functional validation
+apps/web/src/components/v2-*.tsx
+apps/web/src/app/api/v2/**
+apps/web/src/app/{login,signup,purchase,portal,admin}/**
+apps/web/src/app/layout.tsx
