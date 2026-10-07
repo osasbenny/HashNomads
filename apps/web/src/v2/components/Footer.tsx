@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Cpu, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { Cpu, Mail } from 'lucide-react';
+import { Twitter, Github, Linkedin } from '@v2/components/brand-icons';
 
 export function Footer() {
   const cols = [

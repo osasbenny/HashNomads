@@ -212,7 +212,7 @@ export function PortalOverview() {
   );
 }
 
-function StatCard({ icon: Icon, label, value, sub, color }: { icon: React.ElementType; label: string; value: string; sub: string; color: string }) {
+function StatCard({ icon: Icon, label, value, sub, color }: { icon: import("lucide-react").LucideIcon; label: string; value: string; sub: string; color: string }) {
   const colorMap: Record<string, string> = {
     gold: 'text-gold-400', success: 'text-success-400', orange: 'text-orange-400', accent: 'text-accent-400',
   };

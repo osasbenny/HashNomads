@@ -170,7 +170,7 @@ export function AdminDashboard() {
   );
 }
 
-function AdminStatCard({ label, value, icon: Icon, color }: { label: string; value: string; icon: React.ElementType; color: string }) {
+function AdminStatCard({ label, value, icon: Icon, color }: { label: string; value: string; icon: import("lucide-react").LucideIcon; color: string }) {
   const colors: Record<string, string> = { gold: 'text-gold-400', accent: 'text-accent-400', orange: 'text-orange-400', success: 'text-success-400' };
   return (
     <div className="clay-lg p-5">
