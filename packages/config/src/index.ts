@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const environmentSchema = z.object({
-  HASHNOMADS_ENV: z.enum(["development", "production", "test"]),
+  HASHNOMADS_ENV: z.enum(["development", "sandbox", "production", "test"]),
   DATABASE_URL: z
     .string()
     .url()
