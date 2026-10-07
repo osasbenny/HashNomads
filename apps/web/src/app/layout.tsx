@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
 import { ContactWidget } from "@/components/contact-widget";
 import "./globals.css";
+import "../v2/index.css";
+import { DesignAwareChrome } from "@/components/v2-chrome";
 export const metadata: Metadata = {
   title: {
     default: "HashNomads — Own the machine",
@@ -36,15 +38,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
-        <a className="skip-link" href="#main">
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="main">{children}</main>
-        <SiteFooter />
-        <ContactWidget />
-      </body>
+      <body><DesignAwareChrome>{children}</DesignAwareChrome></body>
     </html>
   );
 }
