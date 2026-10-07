@@ -116,6 +116,8 @@ model Verification {
 }
 model Customer {
   id String @id @default(cuid())
+  company String?
+  phone String?
   userId String @unique
   user User @relation(fields:[userId],references:[id])
   legalName String
