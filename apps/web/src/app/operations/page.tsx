@@ -4,6 +4,8 @@ import { db } from "@hashnomads/db";
 import { getAuth } from "@/lib/auth";
 import Link from "next/link";
 import { EnquiryStatus } from "@/components/enquiry-status";
+// Request-scoped authentication must never execute during static prerendering.
+export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Enquiry inbox",
   robots: { index: false, follow: false },
