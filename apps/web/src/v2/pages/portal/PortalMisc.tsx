@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { PortalLayout } from './PortalLayout';
 import { supabase } from '@v2/lib/supabase';
 import { useAuth } from '@v2/contexts/AuthContext';
@@ -135,14 +136,28 @@ export function PortalProfile() {
   const [country, setCountry] = useState(profile?.country || 'US');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  useEffect(() => {
+    if (!profile) return;
+    setFullName(profile.full_name || '');
+    setPhone(profile.phone || '');
+    setCompany(profile.company || '');
+    setCountry(profile.country || 'US');
+  }, [profile]);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    await supabase.from('profiles').update({
+    setSaveError(null);
+    const result = await supabase.from('profiles').update({
       full_name: fullName, phone, company, country, updated_at: new Date().toISOString(),
     }).eq('id', user.id);
+    if (result.error) {
+      setSaveError(result.error.message);
+      setSaving(false);
+      return;
+    }
     await refreshProfile();
     setSaving(false);
     setSaved(true);
@@ -195,6 +210,7 @@ export function PortalProfile() {
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
               {saved && <span className="text-sm text-success-400 flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> Saved</span>}
+              {saveError && <span role="alert" className="text-sm text-error-400">{saveError}</span>}
             </div>
           </form>
         </div>
@@ -216,13 +232,9 @@ export function PortalProfile() {
               </div>
             </div>
             {profile?.kyc_status !== 'verified' && (
-              <button className="clay-button-gold w-full text-sm" onClick={async () => {
-                if (!user) return;
-                await supabase.from('profiles').update({ kyc_status: 'verified', updated_at: new Date().toISOString() }).eq('id', user.id);
-                await refreshProfile();
-              }}>
-                <Shield className="w-4 h-4 inline mr-2" /> Complete KYC
-              </button>
+              <Link className="clay-button-gold w-full text-sm block text-center" to="/kyc-requirements">
+                <Shield className="w-4 h-4 inline mr-2" /> KYC Requirements
+              </Link>
             )}
           </div>
 

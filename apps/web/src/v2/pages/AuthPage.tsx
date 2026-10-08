@@ -22,23 +22,41 @@ export function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
     setError(null);
     setLoading(true);
 
-    if (isSignup && password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (isSignup && password.length < 12) {
+      setError('Password must be at least 12 characters');
       setLoading(false);
       return;
     }
 
-    const result = isSignup
-      ? await signUp(email, password, fullName)
-      : await signIn(email, password);
+    try {
+      const result = isSignup
+        ? await signUp(email, password, fullName)
+        : await signIn(email, password);
 
-    setLoading(false);
-
-    if (result.error) {
-      setError(result.error);
-    } else {
-      const from = (location.state as { from?: string })?.from || '/portal';
-      navigate(from);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        if (isSignup) {
+          // Country is the only extra profile field supported by the current production schema.
+          await fetch('/api/v2/data', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              table: 'profiles', operation: 'update', filters: [],
+              payload: { full_name: fullName, country, phone: '', company: '' },
+            }),
+          }).catch(() => null);
+        }
+        const from = (location.state as { from?: string })?.from || '/portal';
+        navigate(from);
+      }
+    } catch {
+      setError(isSignup
+        ? 'Unable to complete registration. If you already have an account, try signing in.'
+        : 'Unable to sign in. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 

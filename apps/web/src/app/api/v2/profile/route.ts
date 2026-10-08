@@ -8,8 +8,8 @@ export async function GET(request: Request) {
   if (!user) return Response.json({error:{message:"Account unavailable"}},{status:404});
   const status=user.customer?.kycCases[0]?.status;
   const profile={
-    id:user.id,email:user.email,full_name:user.name,company:user.customer?.company??null,
-    country:user.customer?.country??null,phone:user.customer?.phone??null,
+    id:user.id,email:user.email,full_name:user.name,company:null,
+    country:user.customer?.country??null,phone:null,
     role:user.role,kyc_status:status==="approved"||status==="verified"?"verified":status==="rejected"?"rejected":status==="submitted"?"submitted":"pending",
     created_at:user.createdAt.toISOString(),updated_at:user.updatedAt.toISOString()
   };

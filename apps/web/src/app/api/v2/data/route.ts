@@ -24,7 +24,7 @@ function serializeFacility(f:{id:string;name:string;country:string;region:string
 }
 function serializeUser(u:any) {
  const k=u.customer?.kycCases?.[0]?.status;
- return {id:u.id,email:u.email,full_name:u.name,company:u.customer?.company??null,phone:u.customer?.phone??null,
+ return {id:u.id,email:u.email,full_name:u.name,company:null,phone:null,
   country:u.customer?.country??null,role:u.role,kyc_status:k==="approved"||k==="verified"?"verified":k==="rejected"?"rejected":"pending",
   created_at:date(u.createdAt),updated_at:date(u.updatedAt)};
 }
@@ -149,11 +149,12 @@ export async function POST(request:Request){
     const company=String(q.payload.company??"").trim();
     if(fullName.length<2||fullName.length>150||!["US","CA"].includes(country)||phone.length>40||company.length>200)
       return fail("Invalid profile information");
+    if (phone || company) return fail("Phone and company updates require the upcoming customer-profile migration", 409);
     await db.$transaction(async(tx)=>{
       await tx.user.update({where:{id:user.id},data:{name:fullName}});
       await tx.customer.upsert({where:{userId:user.id},
-        create:{userId:user.id,legalName:fullName,country,phone:phone||null,company:company||null},
-        update:{legalName:fullName,country,phone:phone||null,company:company||null}});
+        create:{userId:user.id,legalName:fullName,country},
+        update:{legalName:fullName,country}});
     });
     return Response.json({data:{id:user.id}});
   }
