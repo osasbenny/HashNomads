@@ -109,6 +109,12 @@ The execution plan in document 18 and evidence register in document 19 supersede
 ## Rule
 Never mark an item complete because a UI mock exists. Completion requires the applicable backend/domain/persistence/authorization/error states/tests defined by the project documents.
 
+## Provider savepoint — Dojah, 2026-10-08
+
+- [x] Create a separate HashNomads app under the owner-approved business account, preserving existing provider apps and keys.
+- [x] Save an unpublished KYC draft with user details, document and liveness steps, manual review and restricted launch origin.
+- [ ] Verify global coverage and approve review/AML/retention rules, restricted credentials, server integration and authenticated callback delivery before publication. See `docs/23-DOJAH-PREFLIGHT.md`.
+
 ## Savepoint 1 — 2026-10-05
 
 - PostgreSQL migrations, idempotent seed, secure account/session library, exact-money scenario engine, permission predicates, and sandbox payment contract are implemented and tested.
