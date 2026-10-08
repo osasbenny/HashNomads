@@ -26,3 +26,6 @@ tests/e2e/commercial.test.ts
 
 # V2 footer navigation acceptance fixture
 tests/e2e/footer-pages.test.ts
+
+# Integration scenario fixture (browser execution remains enabled)
+tests/e2e/v2-auth.test.ts
