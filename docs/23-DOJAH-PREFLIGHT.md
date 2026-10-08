@@ -11,6 +11,7 @@
 - Draft uses manual review and restricted launch origin `hashnomads.vercel.app`. Saved edit-page settings confirm both. User/business notifications are not configured. No customer has been submitted for verification.
 - Existing three apps, three published workflows and three webhook subscriptions were inspected without edits. No existing key was regenerated or revealed. No existing webhook secret was accessed.
 - API Tokens initially lists no tokens. Prepared creation form for `HashNomads-KYC-Server` with only the HashNomads app selected; no final creation submitted. The form exposes app selection but no granular permissions or expiry controls. Effective isolation and compatibility with the required KYC endpoints remain to be verified after creation. Browser credential-creation policy requires confirmation at the final action.
+- Owner subsequently confirmed credential creation. Created `HashNomads-KYC-Server` with HashNomads selected; the token list now contains one masked token. No shared production key was rotated. Dojah requires the owner to enter the account password to reveal the token, so its value has not been retrieved and API authentication remains unverified. A private environment file outside the repository was prepared without a secret value. Evidence: `outputs/Dojah-HashNomads-token-created.jpg`.
 
 Evidence in workspace outputs: `Dojah-HashNomads-app-created.jpg`, `Dojah-HashNomads-draft-settings.jpg`, `Dojah-live-existing-workflows.jpg`, and `Dojah-HashNomads-token-proposal.jpg`. These are local evidence, not committed credentials or customer identity data.
 
@@ -31,3 +32,7 @@ References: [authentication](https://docs.dojah.io/api-reference/get-started/aut
 5. Verify negative cases and an owner-authorized real verification, including billing authorization and customer consent. Then approve flow publication and production eligibility enforcement.
 
 The provider draft is saved; website KYC is not enabled, callback subscription is not created and API authentication/delivery has not been verified. No production application environment variable or database was changed.
+
+## Next provider handoff
+
+Opened the official Crisp signup page for the owner while Dojah credential retrieval awaits password entry. Crisp account creation requires a password and acceptance of its terms/privacy policy. No Crisp account, subscription, website configuration or customer data transmission has been completed. HashNomads email addresses cannot yet receive signup verification because the domain remains unregistered; the owner must select an accessible account email.
