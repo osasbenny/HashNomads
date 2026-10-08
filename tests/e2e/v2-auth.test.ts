@@ -14,7 +14,27 @@ test("V2 signup creates an authenticated PostgreSQL-backed customer session", as
   await page.getByPlaceholder("you@example.com").fill(email);
   await page.getByPlaceholder("••••••••").fill("Synthetic-Login-Only-2026!");
   await page.getByRole("combobox").selectOption("CA");
+  const authResponses: Array<{ path: string; status: number }> = [];
+  page.on("response", (response) => {
+    if (response.url().includes("/api/auth/")) {
+      authResponses.push({
+        path: new URL(response.url()).pathname,
+        status: response.status(),
+      });
+    }
+  });
   await page.getByRole("button", { name: "Create Account" }).click();
+  await page.waitForTimeout(600);
+  const check = await page.request.get("/api/auth/get-session");
+  const checked = await check.json().catch(() => null);
+  const messages = await page.locator(".text-error-400").allTextContents();
+  console.log("V2_REGISTRATION_DIAGNOSTIC", JSON.stringify({
+    route: new URL(page.url()).pathname,
+    authResponses,
+    sessionStatus: check.status(),
+    hasSession: Boolean(checked?.user?.id),
+    errors: messages.map((x) => x.slice(0, 160)),
+  }));
 
   await expect(page).toHaveURL(/\/portal$/);
   await expect(
