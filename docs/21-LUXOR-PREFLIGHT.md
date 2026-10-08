@@ -15,6 +15,7 @@ A separate key creation form was prepared for owner review. The owner subsequent
 - Expiration: 31 October 2026.
 - The owner completed creation. The list labels its permissions `Custom`; the prepared form had Mining Pool Read Only and all other products No Access. Effective scope still requires API verification.
 - The success secret is no longer shown on the current page. Its private saved location has been requested; no credential has been read, copied, logged, committed or configured in Vercel.
+- The owner did not save the new key but reported copying the existing key. The browser clipboard exposed to automation was empty, so no secret was recovered. A private environment file outside the repository was prepared for owner entry. The preflight performs GET requests only even if supplied with the existing Read & Write key; that key's broader scope is not represented as least-privilege verification.
 
 ## Current official API contract
 
@@ -25,6 +26,10 @@ Keys are workspace-associated. The [workspace documentation](https://docs.luxor.
 Both key and workspace token-bucket limits can return HTTP 429. The adapter must distinguish unauthorized/forbidden, rate-limited and unavailable responses; use bounded retries, timeouts, source timestamps and stale-data handling. No provider response should become an operational status just because a credential exists.
 
 ## Not yet verified
+
+The read-only checker `scripts/luxor-preflight.mjs` uses only the official [subaccounts GET](https://docs.luxor.tech/platform/api/mining-pool/subaccounts/get-subaccounts) and [Bitcoin workers GET](https://docs.luxor.tech/platform/api/mining-pool/reporting/get-workers) contracts. It emits status, timestamp, record counts and pagination presence only; never raw bodies, workspace identifiers or secrets. Redirects are rejected so a credential cannot follow a redirect to another host. A failed request or unexpected response shape remains unverified.
+
+Run with Node.js 24 from the repository root using `node --env-file=../work/.env.luxor scripts/luxor-preflight.mjs`. The private file contains `LUXOR_API_KEY`, not customer wallet material. The checker does not load database credentials or mutate Luxor/HashNomads state. Successful reads do not prove effective write denial, physical deployment or pool payouts.
 
 - Actual authenticated backend REST request and least-privilege scope enforcement.
 - HashNomads subaccount/worker identifiers and physical ASIC mapping.
