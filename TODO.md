@@ -8,7 +8,8 @@ The execution plan in document 18 and evidence register in document 19 supersede
 - [x] Implement truthful public/admin/account states and remove unsafe financial/wallet client writes.
 - [x] Add authenticated escalation denial, cross-tenant reads and admin-MFA overview assertions.
 - [ ] Finish M0: all CI/security checks green, approved accessibility changes and reviewed visual evidence.
-- [ ] Validate Luxor read-only capabilities with actual account access.
+- [x] Validate actual Luxor GET connectivity and owner-created `hashnomads` subaccount (HTTP 200; zero workers).
+- [ ] Obtain production least-privilege credential, approved customer payout mapping and real physical worker evidence.
 - [ ] M1: Resend/Dojah account lifecycle and compatible profile migration.
 - [ ] M2: verified stock/hosting and transactional quotes/reservations; physical contracts remain Phase 2.
 - [ ] M3: merchant-approved Cryptomus/BTCPay and authentic settlement reconciliation.

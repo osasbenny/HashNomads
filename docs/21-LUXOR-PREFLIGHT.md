@@ -33,6 +33,10 @@ An initial Bitcoin workers request returned HTTP 400: Luxor requires one or more
 
 The owner subsequently authorized subaccount/setup creation. The actual Add Subaccount form is prepared with `hashnomads`; final creation is handed to the owner under the browser policy for financial-account creation. Luxor describes subaccounts as accounts where mining rewards are credited. No payout destination, worker ID, custody evidence or signed agreement is inferred.
 
+The owner completed creation. The dashboard confirms `hashnomads`, no linked site and payout status Not configured. Backend rerun at `2026-10-08T11:52:53Z` returned HTTP 200 for subaccounts (one record) and HTTP 200 for the scoped Bitcoin workers endpoint (zero records). Both read checks are verified. This confirms real API connectivity; there is no verified mining deployment or payout.
+
+The payout configuration UI requires an address name, public Bitcoin receiving address and frequency (the unsaved form defaults to Daily). No address was entered and no update was submitted. A company subaccount must not be silently used to collect customer mining rewards; approve the per-customer subaccount/address model before production payout configuration. A linked facility/site requires real hosting evidence.
+
 The read-only checker `scripts/luxor-preflight.mjs` uses only the official [subaccounts GET](https://docs.luxor.tech/platform/api/mining-pool/subaccounts/get-subaccounts) and [Bitcoin workers GET](https://docs.luxor.tech/platform/api/mining-pool/reporting/get-workers) contracts. It emits status, timestamp, record counts and pagination presence only; never raw bodies, workspace identifiers or secrets. Redirects are rejected so a credential cannot follow a redirect to another host. A failed request or unexpected response shape remains unverified.
 
 Run with Node.js 24 from the repository root using `node --env-file=../work/.env.luxor scripts/luxor-preflight.mjs`. The private file contains `LUXOR_API_KEY`, not customer wallet material. The checker does not load database credentials or mutate Luxor/HashNomads state. Successful reads do not prove effective write denial, physical deployment or pool payouts.
@@ -40,13 +44,13 @@ Run with Node.js 24 from the repository root using `node --env-file=../work/.env
 ## Not yet verified
 
 - Effective least-privilege scope enforcement; the existing credential is Read & Write, used for GET requests only.
-- HashNomads subaccount/worker identifiers and physical ASIC mapping.
+- Physical ASIC and worker mapping; the real HashNomads subaccount now exists but has no workers.
 - Per-customer direct payout-address rules, schedule/thresholds and wallet-change approval requirements.
 - Actual worker telemetry, reward statements, fees or payout transaction reconciliation.
 
 ## Next steps
 
-1. Owner completes the prepared subaccount's final Create step; verify its actual provider record before selecting it for worker reads.
+1. Subaccount creation and scoped API reads are complete. Retain the actual provider association and obtain physical worker/custody evidence when Phase 2 starts.
 2. Preserve existing keys and private credential storage. For production ingestion, obtain a securely retained Mining Pool read-only credential; do not recreate or revoke keys without specific authorization.
 3. Validate actual Bitcoin worker reads and effective least privilege. An empty resource list is a valid account result, not mining integration completion.
 4. Confirm subaccount and customer payout architecture before provisioning or changing financial settings. Physical miners, supplier/custody agreements and hosting remain Phase 2.
