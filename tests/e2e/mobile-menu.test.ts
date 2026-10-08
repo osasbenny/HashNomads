@@ -22,7 +22,10 @@ for (const width of [320, 375, 390, 430, 768]) {
         padding: getComputedStyle(parent).padding,
       };
     });
-    expect(size.width, "hamburger SVG must not collapse inside padded button").toBeGreaterThanOrEqual(19);
+    expect(
+      size.width,
+      "hamburger SVG must not collapse inside padded button",
+    ).toBeGreaterThanOrEqual(19);
     expect(size.height).toBeGreaterThanOrEqual(19);
     expect(size.padding).toBe("0px");
     expect(size.stroke).not.toBe("none");
@@ -38,7 +41,10 @@ for (const width of [320, 375, 390, 430, 768]) {
     await expect(menu).toHaveAttribute("aria-expanded", "false");
 
     await menu.click();
-    await page.locator("#hashnomads-mobile-menu").getByRole("link", { name: "Miners" }).click();
+    await page
+      .locator("#hashnomads-mobile-menu")
+      .getByRole("link", { name: "Miners" })
+      .click();
     await expect(page).toHaveURL(/#miners$/);
     await expect(page.locator("#hashnomads-mobile-menu")).toHaveCount(0);
   });
