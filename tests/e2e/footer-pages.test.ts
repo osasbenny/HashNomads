@@ -31,7 +31,7 @@ test("V2 footer links reach their dedicated routes", async ({ page }) => {
     "How It Works": "/how-it-works",
     Roadmap: "/roadmap",
     Documentation: "/documentation",
-    "Support Center": "/portal/support",
+    "Support Center": "/support",
     "API Reference": "/api-reference",
     "Status Page": "/status",
     "Terms of Service": "/terms",
