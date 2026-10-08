@@ -18,7 +18,18 @@ export function getAuth() {
       maxPasswordLength: 128,
     },
     session: { expiresIn: 60 * 60 * 24, updateAge: 60 * 60 },
-    rateLimit: { enabled: true, window: 60, max: 30, storage: "database" },
+    rateLimit: {
+      enabled: true,
+      window: 60,
+      max: 120,
+      storage: "database",
+      customRules: {
+        // Dashboard navigation and account hydration perform frequent session reads.
+        "/get-session": { window: 60, max: 360 },
+        "/sign-up/email": { window: 60, max: 6 },
+        "/sign-in/email": { window: 60, max: 12 },
+      },
+    },
     user: {
       additionalFields: {
         role: { type: "string", defaultValue: "customer", input: false },
