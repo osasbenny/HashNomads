@@ -49,6 +49,20 @@ test("V2 footer links reach their dedicated routes", async ({ page }) => {
     footer.getByRole("link", { name: "Cactus Digital Media" }),
   ).toHaveAttribute("href", "https://cactusdigitalmedia.ng");
   await expect(footer.getByText(/Copyright © \d{4} HashNomads/)).toBeVisible();
+  const footerLeft = footer.locator("div.mt-12 > p");
+  const footerCopyright = footer.locator("div.mt-12 > div > p").first();
+  const footerCredit = footer.locator("div.mt-12 > div > p").last();
+  const footerCreditLink = footer.getByRole("link", { name: "Cactus Digital Media" });
+  const visualStyle = async (locator: typeof footerLeft) =>
+    locator.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { color: style.color, fontFamily: style.fontFamily, fontSize: style.fontSize };
+    });
+  const baseline = await visualStyle(footerLeft);
+  expect(await visualStyle(footerCopyright)).toEqual(baseline);
+  expect(await visualStyle(footerCredit)).toEqual(baseline);
+  expect(await visualStyle(footerCreditLink)).toEqual(baseline);
+
 });
 
 for (const [path, heading] of publicDestinations) {
