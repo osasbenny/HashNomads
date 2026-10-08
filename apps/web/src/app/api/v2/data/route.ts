@@ -143,6 +143,8 @@ export async function POST(request:Request){
  if(!q||!q.table||!q.operation||!q.payload||typeof q.payload!=="object")return fail("Invalid request");
  try{
   if(q.table==="profiles"&&q.operation==="update"){
+    if (Object.keys(q.payload).some(key => !["full_name", "country", "phone", "company", "updated_at"].includes(key)))
+      return fail("This profile field cannot be changed through this endpoint", 403);
     const fullName=String(q.payload.full_name??"").trim();
     const country=String(q.payload.country??"US").trim();
     const phone=String(q.payload.phone??"").trim();

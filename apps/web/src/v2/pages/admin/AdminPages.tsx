@@ -97,32 +97,16 @@ export function AdminLayout({ children, title }: { children: ReactNode; title: s
 
 // ===================== ADMIN DASHBOARD =====================
 export function AdminDashboard() {
-  const [stats, setStats] = useState({
-    customers: 0, asicUnits: 0, orders: 0, onlineMiners: 0, totalHashrate: 0, revenue: 0,
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      const [customers, units, orders, onlineUnits] = await Promise.all([
-        supabase.from('profiles').select('*', { count: 'exact', head: true }),
-        supabase.from('asic_units').select('*', { count: 'exact', head: true }),
-        supabase.from('orders').select('*', { count: 'exact', head: true }),
-        supabase.from('asic_units').select('*').eq('state', 'online'),
-      ]);
-      setStats({
-        customers: customers.count || 0,
-        asicUnits: units.count || 0,
-        orders: orders.count || 0,
-        onlineMiners: (onlineUnits.data as any[])?.length || 0,
-        totalHashrate: 0,
-        revenue: 0,
-      });
-      setLoading(false);
-    })();
-  }, []);
-
+  const [overview, setOverview] = useState<{checkedAt:string;stats:{customers:number;asicUnits:number;orders:number;onlineMiners:null};services:{name:string;status:string;available:boolean}[];activity:{id:string;action:string;createdAt:string}[]} | null>(null);
+  const [loading,setLoading] = useState(true);
+  const [error,setError] = useState(false);
+  useEffect(() => {let active=true;fetch('/api/v1/operations/overview',{cache:'no-store'}).then(async response=>{
+    if(!response.ok)throw new Error('Unavailable'); const data=await response.json();if(active)setOverview(data);
+  }).catch(()=>{if(active)setError(true)}).finally(()=>{if(active)setLoading(false)});return()=>{active=false};},[]);
   if (loading) return <AdminLayout title="Dashboard"><div className="skeleton h-96" /></AdminLayout>;
+
+  if (error || !overview) return <AdminLayout title="Operations Dashboard"><div className="clay-lg p-6"><p role="alert" className="text-ink-300">Unable to verify operations data. Administrator MFA is required.</p></div></AdminLayout>;
+  const {stats,services,activity,checkedAt}=overview;
 
   return (
     <AdminLayout title="Operations Dashboard">
@@ -130,25 +114,19 @@ export function AdminDashboard() {
         <AdminStatCard label="Total Customers" value={String(stats.customers)} icon={Users} color="gold" />
         <AdminStatCard label="ASIC Units" value={String(stats.asicUnits)} icon={Cpu} color="accent" />
         <AdminStatCard label="Total Orders" value={String(stats.orders)} icon={CreditCard} color="orange" />
-        <AdminStatCard label="Online Miners" value={String(stats.onlineMiners)} icon={Activity} color="success" />
+        <AdminStatCard label="Online Miners" value={stats.onlineMiners === null ? '—' : String(stats.onlineMiners)} icon={Activity} color="success" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="clay-lg p-6">
-          <h3 className="font-display font-semibold text-lg text-white mb-4">System Status</h3>
+          <h3 className="font-display font-semibold text-lg text-white mb-4">System Status</h3><p className="text-xs text-ink-400 mb-4">Checked {new Date(checkedAt).toLocaleString()}</p>
           <div className="space-y-3">
-            {[
-              { name: 'Database', status: 'operational', color: 'success' },
-              { name: 'Auth Service', status: 'operational', color: 'success' },
-              { name: 'BTCPay Server', status: 'operational', color: 'success' },
-              { name: 'Mining Pool', status: 'operational', color: 'success' },
-              { name: 'Telemetry Service', status: 'operational', color: 'success' },
-            ].map(s => (
+            {services.map(s => (
               <div key={s.name} className="flex items-center justify-between py-2 border-b border-ink-800/30 last:border-0">
                 <span className="text-sm text-ink-200">{s.name}</span>
                 <div className="flex items-center gap-2">
-                  <span className={`status-dot ${s.color === 'success' ? 'status-online' : 'status-pending'}`} />
-                  <span className={`text-xs font-mono ${s.color === 'success' ? 'text-success-400' : 'text-gold-400'}`}>{s.status}</span>
+                  <span className={`status-dot ${s.available ? 'status-online' : 'status-pending'}`} />
+                  <span className={`text-xs font-mono ${s.available ? 'text-success-400' : 'text-gold-400'}`}>{s.status}</span>
                 </div>
               </div>
             ))}
@@ -158,11 +136,7 @@ export function AdminDashboard() {
         <div className="clay-lg p-6">
           <h3 className="font-display font-semibold text-lg text-white mb-4">Recent Activity</h3>
           <div className="space-y-3">
-            <ActivityItem text="New customer registration" time="2m ago" />
-            <ActivityItem text="Order HN-XK392F placed" time="15m ago" />
-            <ActivityItem text="ASIC unit deployed to Texas Thunder" time="1h ago" />
-            <ActivityItem text="Crypto invoice confirmed" time="2h ago" />
-            <ActivityItem text="KYC verification completed" time="3h ago" />
+            {activity.length === 0 ? <p className="text-sm text-ink-300">No recorded activity.</p> : activity.map(event => <ActivityItem key={event.id} text={event.action.replace(/_/g,' ')} time={new Date(event.createdAt).toLocaleString()} />)}
           </div>
         </div>
       </div>

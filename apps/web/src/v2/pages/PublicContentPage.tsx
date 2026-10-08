@@ -10,7 +10,7 @@ export const publicPages: Record<string, Page> = {
   marketplace: {
     label: 'PLATFORM / ASIC MARKETPLACE', title: 'Own the machine. Understand the economics.',
     intro: 'Explore Bitcoin mining hardware by hashrate, power draw and efficiency. Confirm live inventory, purchase price, warranty and delivery terms with HashNomads before paying.',
-    notice: 'Catalogue cards and example prices on the showcase are illustrative, not guaranteed inventory or binding offers.',
+    notice: 'Catalogue information does not reserve equipment. Request a written quote for confirmed pricing, stock and supplier terms.',
     embedded: 'marketplace',
     sections: [
       { title: 'Physical ownership', paragraphs: ['Our proposed ownership model ties an approved order to a particular ASIC and its serial number. Hardware must not be assigned until the payment is independently confirmed and physical availability is verified.'] },
@@ -86,7 +86,7 @@ export const publicPages: Record<string, Page> = {
       { title: 'Later · Expansion', detail: 'Additional facilities, advanced fleet analytics and enterprise integrations only after actual operational demand and independent feasibility reviews.' },
     ],
     sections: [
-      { title: 'How progress is assessed', paragraphs: ['An item is considered production-ready only after passing its functional, security, operational and compliance checks. A completed screen or sandbox demonstration is not confirmation of a real-world mining service.'] },
+      { title: 'How progress is assessed', paragraphs: ['An item is considered production-ready only after passing its functional, security, operational and compliance checks. A completed screen or screen preview is not confirmation of a real-world mining service.'] },
       { title: 'What comes next', paragraphs: ['The commercial launch depends on signed partner arrangements, payment merchant approval, live supplier inventory, KYC decisions and a proven incident/support process.'], href: '/status', linkLabel: 'Review current public status' },
     ],
   },
@@ -102,7 +102,7 @@ export const publicPages: Record<string, Page> = {
       { title: 'Hosting and service', detail: 'Written hosting agreements should define costs, responsibilities, outage procedures, repair rights and equipment retrieval.' },
     ],
     sections: [
-      { title: 'Customer guide', paragraphs: ['Start with hardware details, confirm a real hosting location and verify all written terms. Understand that estimated earnings and public product mockups cannot replace confirmed hardware or service contracts.'], href: '/how-it-works', linkLabel: 'Read the customer journey' },
+      { title: 'Customer guide', paragraphs: ['Start with hardware details, confirm a real hosting location and verify all written terms. Understand that estimated earnings and public product information cannot replace confirmed hardware or service contracts.'], href: '/how-it-works', linkLabel: 'Read the customer journey' },
       { title: 'Questions or account problems?', paragraphs: ['Signed-in customers can open support cases from the portal. General enquiries can use the public contact form.'], href: '/support', linkLabel: 'Visit support center' },
     ],
   },
@@ -112,7 +112,7 @@ export const publicPages: Record<string, Page> = {
     cards: [
       { title: 'My account', detail: 'Sign in to review your profile, account notifications and support cases.' },
       { title: 'Orders and billing', detail: 'Include an order or invoice reference, but never payment-card details, seed phrases or private credentials.' },
-      { title: 'Miner or hosting issue', detail: 'Provide the equipment or deployment reference, observed issue and time. Do not assume a demonstration miner is live inventory.' },
+      { title: 'Miner or hosting issue', detail: 'Provide the equipment or deployment reference, observed issue and time. Include the serial number and hosting agreement where available.' },
       { title: 'Wallet questions', detail: 'Support can explain public addresses and verification steps; no support representative needs your private keys.' },
     ],
     sections: [

@@ -90,6 +90,9 @@ test("private admin invitation is single-use and inbox requires MFA", async ({
     expect(
       (await page.request.get("/api/v1/operations/subscriptions")).status(),
     ).toBe(403);
+    expect(
+      (await page.request.get("/api/v1/operations/overview")).status(),
+    ).toBe(403);
     const enable = await page.request.post("/api/auth/two-factor/enable", {
       headers: { Origin: origin },
       data: { password },
@@ -105,6 +108,9 @@ test("private admin invitation is single-use and inbox requires MFA", async ({
         })
       ).status(),
     ).toBe(200);
+    const mfaProfile = await page.request.get("/api/v2/profile");
+    expect(mfaProfile.status()).toBe(200);
+    expect((await mfaProfile.json()).profile.two_factor_enabled).toBe(true);
     const enquiry = await db.siteEnquiry.create({
       data: {
         name: "Admin Inbox Validation",
@@ -122,6 +128,22 @@ test("private admin invitation is single-use and inbox requires MFA", async ({
       expect(
         (await page.request.get("/api/v1/operations/subscriptions")).status(),
       ).toBe(200);
+      const overview = await page.request.get("/api/v1/operations/overview");
+      expect(overview.status()).toBe(200);
+      expect(overview.headers()["cache-control"]).toBe("no-store");
+      const operations = await overview.json();
+      expect(operations.stats.customers).toBe(
+        await db.user.count({ where: { role: "customer" } }),
+      );
+      expect(operations.stats.asicUnits).toBe(await db.asicUnit.count());
+      expect(operations.stats.orders).toBe(await db.order.count());
+      expect(operations.stats.onlineMiners).toBeNull();
+      expect(
+        operations.services.find(
+          (service: { name: string }) => service.name === "Mining Pool",
+        ).available,
+      ).toBe(false);
+      expect(Number.isNaN(Date.parse(operations.checkedAt))).toBe(false);
       const changed = await page.request.patch("/api/v1/operations/enquiries", {
         headers: { Origin: origin },
         data: { id: enquiry.id, status: "handled" },
@@ -184,7 +206,13 @@ test("public content contains no demo language or invented prices", async ({
   await expect(
     page.getByRole("heading", { name: "Texas", exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("$0.062/kWh", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Request quote", { exact: true }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Not confirmed", { exact: true }).first(),
+  ).toBeVisible();
+  await expect(page.getByText("32,400 slots", { exact: true })).toHaveCount(0);
 });
 test("enquiry is saved, consent is required and foreign origins are rejected", async ({
   page,
@@ -224,23 +252,27 @@ test("enquiry is saved, consent is required and foreign origins are rejected", a
   });
   expect(foreign.status()).toBe(403);
 });
-test("newsletter API saves consent and supports explicit unsubscribe", async ({page}) => {
+test("newsletter API saves consent and supports explicit unsubscribe", async ({
+  page,
+}) => {
   await page.goto("/");
   const origin = new URL(page.url()).origin;
   const email = `subscription-${Date.now()}@example.com`;
   const response = await page.request.post("/api/v1/newsletter", {
     headers: { Origin: origin },
-    data: {email, consent:true, website:""},
+    data: { email, consent: true, website: "" },
   });
   expect(response.status()).toBe(200);
   const receipt = await response.json();
   expect(receipt.unsubscribeToken).toBeTruthy();
   const unsubscribed = await page.request.delete("/api/v1/newsletter", {
-    headers: {Origin:origin},
-    data: {token:receipt.unsubscribeToken},
+    headers: { Origin: origin },
+    data: { token: receipt.unsubscribeToken },
   });
   expect(unsubscribed.status()).toBe(200);
-  expect((await unsubscribed.json()).message).toBe("You have been unsubscribed.");
+  expect((await unsubscribed.json()).message).toBe(
+    "You have been unsubscribed.",
+  );
 });
 test("admin data and setup cannot be accessed without authorization", async ({
   page,

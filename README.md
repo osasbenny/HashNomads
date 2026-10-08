@@ -6,6 +6,8 @@ Customer-facing Bitcoin mining website: https://hashnomads.vercel.app
 
 ## Current release
 
+Production remediation follows the owner-approved 2026-10-08 handoff. See [execution plan](docs/18-PRODUCTION-EXECUTION-PLAN.md) and [current evidence and blockers](docs/19-EVIDENCE-AND-BLOCKERS.md) for the authoritative implementation/release status. The accepted V2 UI is integrated; older release descriptions below are historical and do not establish current live mining or checkout readiness.
+
 The site provides hardware specifications, a sourced hosting directory, an exact-money cost calculator, customer accounts, enquiry forms, newsletter consent and an administrator inbox. The commercial site uses production configuration and hosted PostgreSQL persistence. It does not generate inventory, prices, orders, payments, mining performance or earnings.
 
 The owner confirmed shared ownership with Sazmining and authorized its information as a reference. Facility locations, publicly published tariffs, advisor booking, education resources and review links identify Sazmining as their source. A HashNomads quote establishes the actual purchase terms. The owner will supply HashNomads' own checkout configuration; purchases are not redirected to another storefront.

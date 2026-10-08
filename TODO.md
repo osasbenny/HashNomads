@@ -1,5 +1,22 @@
 # HashNomads — Master TODO
 
+## Current production handoff — 2026-10-08
+
+The execution plan in document 18 and evidence register in document 19 supersede the historical checklist below. Preserve existing remote setup and V2 design; use feature branches, tested commit/push savepoints and approved releases.
+
+- [x] Establish audited-main baseline and isolated local database; capture 49 public baseline screenshots.
+- [x] Implement truthful public/admin/account states and remove unsafe financial/wallet client writes.
+- [x] Add authenticated escalation denial, cross-tenant reads and admin-MFA overview assertions.
+- [ ] Finish M0: all CI/security checks green, approved accessibility changes and reviewed visual evidence.
+- [x] Validate actual Luxor GET connectivity and owner-created `hashnomads` subaccount (HTTP 200; zero workers).
+- [ ] Obtain production least-privilege credential, approved customer payout mapping and real physical worker evidence.
+- [ ] M1: Resend/Dojah account lifecycle and compatible profile migration.
+- [ ] M2: verified stock/hosting and transactional quotes/reservations; physical contracts remain Phase 2.
+- [ ] M3: merchant-approved Cryptomus/BTCPay and authentic settlement reconciliation.
+- [ ] M4: evidence-backed ownership/deployment, Luxor telemetry and direct rewards reconciliation.
+- [ ] M5: secure wallets, billing, private documents, operational queues and Crisp.
+- [ ] M6: complete acceptance/recovery/legal evidence and owner GO decision.
+
 ## Documentation foundation
 - [x] README / project charter
 - [x] Master build prompt
@@ -92,6 +109,12 @@
 ## Rule
 Never mark an item complete because a UI mock exists. Completion requires the applicable backend/domain/persistence/authorization/error states/tests defined by the project documents.
 
+## Provider savepoint — Dojah, 2026-10-08
+
+- [x] Create a separate HashNomads app under the owner-approved business account, preserving existing provider apps and keys.
+- [x] Save an unpublished KYC draft with user details, document and liveness steps, manual review and restricted launch origin.
+- [ ] Verify global coverage and approve review/AML/retention rules, restricted credentials, server integration and authenticated callback delivery before publication. See `docs/23-DOJAH-PREFLIGHT.md`.
+
 ## Savepoint 1 — 2026-10-05
 
 - PostgreSQL migrations, idempotent seed, secure account/session library, exact-money scenario engine, permission predicates, and sandbox payment contract are implemented and tested.
@@ -129,6 +152,7 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - [x] Apply hosted production migrations and remove the old validation account.
 - [ ] Connect the owner's HashNomads checkout information.
 - [ ] Connect verified mail delivery for notifications, verification, recovery and newsletters.
+  - Resend preflight 2026-10-08: a domain slot is available after owner-authorized AuraHire removal. HashNomads domain registration and DNS access are required before sender verification; no email integration or delivery is claimed complete. See `docs/22-RESEND-PREFLIGHT.md`.
 - [ ] Integrate the native operational lifecycle described above; actual fleet/financial data is required.
 - See `docs/16-COMMERCIAL-RELEASE.md` for precise scope, sources, validation and remaining work.
 

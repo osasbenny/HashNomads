@@ -169,7 +169,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
             {isSignup && (
               <div>
                 <label className="block text-sm text-ink-200 mb-2">Country</label>
-                <select
+                <select aria-label="Country"
                   value={country}
                   onChange={e => setCountry(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl clay-inset text-white focus:outline-none focus:ring-2 focus:ring-gold-400/50 transition-all"
