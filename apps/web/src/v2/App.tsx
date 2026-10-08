@@ -60,7 +60,7 @@ export default function App() {
           ))}
 
           {/* Customer Portal */}
-          <Route path="/portal" element={<ProtectedRoute><PortalLayout title="Overview"><PortalOverview /></PortalLayout></ProtectedRoute>} />
+          <Route path="/portal" element={<ProtectedRoute><PortalOverview /></ProtectedRoute>} />
           <Route path="/portal/miners" element={<ProtectedRoute><PortalMiners /></ProtectedRoute>} />
           <Route path="/portal/earnings" element={<ProtectedRoute><PortalEarnings /></ProtectedRoute>} />
           <Route path="/portal/orders" element={<ProtectedRoute><PortalOrders /></ProtectedRoute>} />
