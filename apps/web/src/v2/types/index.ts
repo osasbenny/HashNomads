@@ -41,6 +41,7 @@ export type WalletStatus = 'active' | 'inactive' | 'pending';
 export type UserRole = 'customer' | 'support' | 'operations' | 'finance' | 'admin';
 
 export interface Profile {
+  two_factor_enabled?: boolean;
   id: string;
   email: string;
   full_name: string | null;

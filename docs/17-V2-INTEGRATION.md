@@ -1,4 +1,6 @@
 # HashNomads V2 — design adoption and integration record
+
+Update 2026-10-08: the V2 integration has merged into main at audited SHA `f7b1ca8e697cb29a19b672b316d4ff9ebdc29629`. The branch/production statements below describe the earlier integration savepoint. Current implementation and release gates are maintained in documents 18 and 19. The approved V2 design remains authoritative.
 Date: 2026-10-07
 Branch: `integration/v2-design-prisma` (draft pull request #1).
 Production branch: `main`, deliberately unchanged.

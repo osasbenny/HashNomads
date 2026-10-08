@@ -5,10 +5,10 @@ import { supabase } from '@v2/lib/supabase';
 import { useAuth } from '@v2/contexts/AuthContext';
 import { Navbar } from '@v2/components/Navbar';
 import { Footer } from '@v2/components/Footer';
-import { formatUsd, generateOrderNumber, generateBtcAddress, generateSerialNumber } from '@v2/lib/constants';
+import { formatUsd } from '@v2/lib/constants';
 import type { AsicModel, Facility, HostingPlan } from '@v2/types';
 
-type Step = 'select' | 'facility' | 'review' | 'payment' | 'confirming' | 'done';
+type Step = 'select' | 'facility' | 'review';
 
 export function PurchasePage() {
   const { user, profile } = useAuth();
@@ -22,9 +22,6 @@ export function PurchasePage() {
   const [selectedPlan, setSelectedPlan] = useState<HostingPlan | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [paymentProvider, setPaymentProvider] = useState('btcpay');
-  const [orderId, setOrderId] = useState<string | null>(null);
-  const [cryptoAddress, setCryptoAddress] = useState('');
-  const [btcAmount, setBtcAmount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -47,106 +44,6 @@ export function PurchasePage() {
   const subtotal = (selectedModel?.price_usd || 0) * quantity;
   const setupFee = (selectedPlan?.setup_fee_usd || 0) * quantity;
   const total = subtotal + setupFee;
-
-  async function handleGenerateInvoice() {
-    if (!user || !selectedModel || !selectedFacility || !selectedPlan) return;
-    setStep('confirming');
-
-    const orderNum = generateOrderNumber();
-    const { data: orderData, error: orderError } = await supabase.from('orders').insert({
-      user_id: user.id,
-      order_number: orderNum,
-      status: 'payment_pending',
-      subtotal_usd: subtotal,
-      hosting_setup_usd: setupFee,
-      total_usd: total,
-      payment_method: 'btc_onchain',
-      payment_provider: paymentProvider,
-      expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-    }).select().single();
-
-    if (orderError || !orderData) { setStep('payment'); return; }
-    const newOrderId = orderData.id;
-    setOrderId(newOrderId);
-
-    await supabase.from('order_lines').insert({
-      order_id: newOrderId,
-      asic_model_id: selectedModel.id,
-      facility_id: selectedFacility.id,
-      hosting_plan_id: selectedPlan.id,
-      quantity,
-      unit_price_usd: selectedModel.price_usd,
-      hosting_setup_usd: selectedPlan.setup_fee_usd,
-      line_total_usd: total,
-    });
-
-    // Create payment intent
-    const { data: intentData } = await supabase.from('payment_intents').insert({
-      order_id: newOrderId,
-      user_id: user.id,
-      amount_usd: total,
-      currency: 'USD',
-      provider: paymentProvider,
-      status: 'pending',
-    }).select().single();
-
-    if (intentData) {
-      const address = generateBtcAddress();
-      const btcAmt = (total / 67000) * 100000000; // satoshis
-      setCryptoAddress(address);
-      setBtcAmount(btcAmt);
-      await supabase.from('crypto_invoices').insert({
-        payment_intent_id: intentData.id,
-        invoice_id: `INV-${Date.now().toString(36).toUpperCase()}`,
-        receiving_address: address,
-        amount_crypto: btcAmt,
-        crypto_currency: 'BTC',
-        exchange_rate: 67000,
-        network: 'BTC',
-        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-        status: 'new',
-      });
-    }
-
-    setStep('done');
-  }
-
-  async function handleConfirmPayment() {
-    if (!orderId || !user) return;
-    setStep('confirming');
-
-    // Mark order as paid
-    await supabase.from('orders').update({
-      status: 'paid',
-      paid_at: new Date().toISOString(),
-    }).eq('id', orderId);
-
-    // Mark payment intent as confirmed
-    await supabase.from('payment_intents').update({ status: 'confirmed' }).eq('order_id', orderId);
-
-    // Create ASIC units and assign ownership
-    if (selectedModel) {
-      for (let i = 0; i < quantity; i++) {
-        const serial = generateSerialNumber(selectedModel.manufacturer, selectedModel.model);
-        const { data: unitData } = await supabase.from('asic_units').insert({
-          model_id: selectedModel.id,
-          serial_number: serial,
-          state: 'assigned',
-          facility_id: selectedFacility?.id || null,
-        }).select().single();
-
-        if (unitData) {
-          await supabase.from('ownership_assignments').insert({
-            user_id: user.id,
-            asic_unit_id: unitData.id,
-            order_id: orderId,
-          });
-        }
-      }
-    }
-
-    navigate('/portal/miners');
-  }
 
   if (!user) {
     return (
@@ -322,7 +219,7 @@ export function PurchasePage() {
                     {[
                       { id: 'btcpay', label: 'BTCPay Server', desc: 'Native Bitcoin on-chain payment' },
                       { id: 'cryptomus', label: 'Cryptomus', desc: 'BTC, USDT, USDC supported' },
-                      { id: 'bitpay', label: 'BitPay', desc: 'Bitcoin, Bitcoin Cash' },
+
                     ].map(p => (
                       <button key={p.id} onClick={() => setPaymentProvider(p.id)}
                         className={`w-full text-left p-4 rounded-xl transition-all ${paymentProvider === p.id ? 'clay-lg border-gradient' : 'clay-sm hover:clay'}`}>
@@ -351,57 +248,15 @@ export function PurchasePage() {
                     <span className="text-2xl font-display font-bold text-gold-400">{formatUsd(total)}</span>
                   </div>
                 </div>
-                <button onClick={handleGenerateInvoice} className="clay-button-gold w-full flex items-center justify-center gap-2">
-                  Generate Invoice <ArrowRight className="w-4 h-4" />
+                <button disabled aria-disabled="true" className="clay-button-gold w-full flex items-center justify-center gap-2">
+                  Checkout unavailable <ArrowRight className="w-4 h-4" />
                 </button>
-                <p className="text-xs text-ink-400 mt-3 text-center">Invoice expires in 60 minutes</p>
+                <p className="text-xs text-ink-400 mt-3 text-center">Contact HashNomads for a verified quote and purchase terms.</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step: Confirming */}
-        {step === 'confirming' && (
-          <div className="text-center py-20">
-            <div className="w-16 h-16 rounded-full clay-gold mx-auto mb-6 animate-spin-slow" />
-            <h2 className="font-display font-bold text-2xl text-white mb-2">Generating Invoice...</h2>
-            <p className="text-ink-300">Please wait while we create your crypto invoice.</p>
-          </div>
-        )}
-
-        {/* Step: Done - Show Invoice */}
-        {step === 'done' && (
-          <div className="max-w-2xl mx-auto">
-            <div className="clay-lg p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-success-500/10 mx-auto mb-6 flex items-center justify-center">
-                <Zap className="w-8 h-8 text-gold-400" />
-              </div>
-              <h2 className="font-display font-bold text-2xl text-white mb-2">Invoice Generated</h2>
-              <p className="text-ink-300 mb-8">Send the exact amount of BTC to the address below to complete your purchase.</p>
-
-              <div className="clay-inset p-6 mb-6">
-                <div className="text-xs font-mono text-ink-400 uppercase mb-2">Amount Due</div>
-                <div className="text-3xl font-display font-bold text-gold-400 mb-1">{(btcAmount / 100000000).toFixed(8)} BTC</div>
-                <div className="text-sm text-ink-300">≈ {formatUsd(total)}</div>
-              </div>
-
-              <div className="clay-inset p-6 mb-6">
-                <div className="text-xs font-mono text-ink-400 uppercase mb-2">Bitcoin Address</div>
-                <div className="text-sm font-mono text-white break-all">{cryptoAddress}</div>
-              </div>
-
-              <div className="flex items-center justify-center gap-2 mb-8 text-xs font-mono text-warning-500">
-                <Zap className="w-3.5 h-3.5" />
-                Invoice expires in 60 minutes
-              </div>
-
-              <button onClick={handleConfirmPayment} className="clay-button-gold w-full flex items-center justify-center gap-2">
-                <Check className="w-5 h-5" /> Confirm Payment
-              </button>
-              <p className="text-xs text-ink-400 mt-3">Payment confirmation is verified on-chain before deployment begins.</p>
-            </div>
-          </div>
-        )}
       </div>
       <Footer />
     </div>

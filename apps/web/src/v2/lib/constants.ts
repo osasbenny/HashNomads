@@ -1,6 +1,6 @@
 export const BTC_PRICE_USD = 67000;
 export const NETWORK_DIFFICULTY = 8.4e13;
-export const BLOCK_REWARD_SAT = 3125000000;
+export const BLOCK_REWARD_SAT = 312500000;
 export const BLOCKS_PER_DAY = 144;
 
 export const ENERGY_SOURCES: Record<string, { label: string; icon: string; color: string }> = {
@@ -72,34 +72,4 @@ export function timeAgo(date: string): string {
   const days = Math.floor(hours / 24);
   if (days < 30) return `${days}d ago`;
   return formatDate(date);
-}
-
-export function generateOrderNumber(): string {
-  const prefix = 'HN';
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `${prefix}-${timestamp}${random}`;
-}
-
-export function generateInvoiceNumber(): string {
-  const prefix = 'HINV';
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `${prefix}-${timestamp}${random}`;
-}
-
-export function generateBtcAddress(): string {
-  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  let addr = 'bc1q';
-  for (let i = 0; i < 38; i++) {
-    addr += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return addr;
-}
-
-export function generateSerialNumber(manufacturer: string, model: string): string {
-  const prefix = manufacturer.substring(0, 3).toUpperCase();
-  const modelCode = model.replace(/[^A-Z0-9]/gi, '').substring(0, 4).toUpperCase();
-  const random = Math.floor(Math.random() * 90000 + 10000);
-  return `${prefix}-${modelCode}-${random}`;
 }

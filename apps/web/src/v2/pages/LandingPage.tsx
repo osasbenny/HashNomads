@@ -62,9 +62,9 @@ function Hero() {
             {/* Stats ticker */}
             <div className={`grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 ${mounted ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.45s' }}>
               {[
-                { label: 'Example Hashrate', value: '1.24 EH/s' },
-                { label: 'Example Fleet', value: '3,847' },
-                { label: 'Example Energy Mix', value: '94%' },
+                { label: 'Pool Hashrate', value: '—' },
+                { label: 'Active Fleet', value: '—' },
+                { label: 'Energy Mix', value: '—' },
               ].map(stat => (
                 <div key={stat.label} className="clay-sm p-3 text-center">
                   <div className="text-lg font-display font-bold text-gradient-gold">{stat.value}</div>
@@ -110,8 +110,8 @@ function Hero() {
                 <div className="flex items-center gap-2">
                   <Bitcoin className="w-3.5 h-3.5 text-orange-400" />
                   <div>
-                    <div className="text-2xs font-mono text-ink-400">DAILY REWARD</div>
-                    <div className="text-sm font-mono font-bold text-orange-400">0.0024 BTC</div>
+                    <div className="text-2xs font-mono text-ink-400">POOL REWARDS</div>
+                    <div className="text-sm font-mono font-bold text-orange-400">Awaiting feed</div>
                   </div>
                 </div>
               </div>
@@ -132,14 +132,12 @@ function Hero() {
 // ===================== LIVE TICKER =====================
 function LiveTicker() {
   const items = [
-    { label: 'Example BTC/USD', value: '$67,420.50', change: '+2.34%', up: true },
-    { label: 'Example Difficulty', value: '84.12 T', change: '+1.12%', up: true },
-    { label: 'Example Block Reward', value: '3.125 BTC', change: '', up: null },
-    { label: 'Illustrative Halving', value: '2028', change: '', up: null },
-    { label: 'Example Pool Hashrate', value: '1.24 EH/s', change: '+0.87%', up: true },
-    { label: 'Example Workers', value: '3,847', change: '+12', up: true },
-    { label: 'Example Efficiency', value: '16.2 J/TH', change: '-0.3%', up: false },
-    { label: 'Example Renewable Mix', value: '94.2%', change: '+0.5%', up: true },
+    { label: 'BTC/USD', value: 'Awaiting source', change: '', up: null },
+    { label: 'Difficulty', value: 'Awaiting source', change: '', up: null },
+    { label: 'Block Reward', value: '3.125 BTC', change: '', up: null },
+    { label: 'Pool Hashrate', value: 'Awaiting feed', change: '', up: null },
+    { label: 'Workers', value: 'Awaiting feed', change: '', up: null },
+    { label: 'Hosting Rates', value: 'Request quote', change: '', up: null },
   ];
 
   return (
@@ -167,7 +165,7 @@ export function HowItWorks() {
   const steps = [
     { icon: Building2, num: '01', title: 'Create Account', desc: 'Sign up and complete identity verification (KYC). Your account is ready in minutes.' },
     { icon: Cpu, num: '02', title: 'Choose Your ASIC', desc: 'Browse enterprise-grade miners from Bitmain, MicroBT, and Canaan. Compare specs and pricing.' },
-    { icon: Globe, num: '03', title: 'Select a Facility', desc: 'Compare illustrative hosting scenarios across North America. Actual providers, capacity, rates and contracts require confirmation.' },
+    { icon: Globe, num: '03', title: 'Select a Facility', desc: 'Compare hosting requirements. Operators, capacity, rates and contracts require confirmation.' },
     { icon: Bitcoin, num: '04', title: 'Pay with Crypto', desc: 'A future verified BTCPay or Cryptomus invoice will be issued only when an approved live payment integration is active.' },
     { icon: HardHat, num: '05', title: 'We Deploy', desc: 'Your ASIC is assigned, deployed, and connected to our mining pool. Track the deployment timeline.' },
     { icon: Wallet, num: '06', title: 'Earn Bitcoin', desc: 'Mining rewards flow to your Bitcoin wallet. You control the payout destination — not us.' },
@@ -257,12 +255,12 @@ export function AsicMarketplace() {
   const [selected, setSelected] = useState(0);
 
   const miners = [
-    { manufacturer: 'Bitmain', model: 'Antminer S21 Pro', hashrate: '234 TH/s', power: '3510W', efficiency: '15 J/TH', price: '$8,500', color: 'gold', specs: { algorithm: 'SHA-256', chips: 'BM1370', cooling: 'Dual-fan hydro', warranty: '365 days', weight: '14.2 kg' } },
-    { manufacturer: 'Bitmain', model: 'Antminer S21 Hydro', hashrate: '335 TH/s', power: '5360W', efficiency: '16 J/TH', price: '$12,000', color: 'gold', specs: { algorithm: 'SHA-256', chips: 'BM1370', cooling: 'Liquid immersion', warranty: '365 days', weight: '15.8 kg' } },
-    { manufacturer: 'MicroBT', model: 'WhatsMiner M60S', hashrate: '190 TH/s', power: '3472W', efficiency: '18.3 J/TH', price: '$6,200', color: 'blue', specs: { algorithm: 'SHA-256', chips: 'Custom 5nm', cooling: 'Dual-fan air', warranty: '365 days', weight: '16.0 kg' } },
-    { manufacturer: 'MicroBT', model: 'WhatsMiner M63S', hashrate: '360 TH/s', power: '7215W', efficiency: '20 J/TH', price: '$14,500', color: 'blue', specs: { algorithm: 'SHA-256', chips: 'Custom 3nm', cooling: 'Immersion', warranty: '365 days', weight: '27.5 kg' } },
-    { manufacturer: 'Canaan', model: 'Avalon A1466', hashrate: '150 TH/s', power: '3230W', efficiency: '21.5 J/TH', price: '$4,500', color: 'green', specs: { algorithm: 'SHA-256', chips: 'Avalon 3nm', cooling: 'Dual-fan air', warranty: '180 days', weight: '12.6 kg' } },
-    { manufacturer: 'Bitmain', model: 'Antminer S21+', hashrate: '216 TH/s', power: '3510W', efficiency: '16.2 J/TH', price: '$7,200', color: 'gold', specs: { algorithm: 'SHA-256', chips: 'BM1370', cooling: 'Dual-fan air', warranty: '365 days', weight: '14.2 kg' } },
+    { manufacturer: 'Bitmain', model: 'Antminer S21 Pro', hashrate: '234 TH/s', power: '3510W', efficiency: '15 J/TH', price: 'Request quote', color: 'gold', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
+    { manufacturer: 'Bitmain', model: 'Antminer S21 Hydro', hashrate: '335 TH/s', power: '5360W', efficiency: '16 J/TH', price: 'Request quote', color: 'gold', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
+    { manufacturer: 'MicroBT', model: 'WhatsMiner M60S', hashrate: '190 TH/s', power: '3472W', efficiency: '18.3 J/TH', price: 'Request quote', color: 'blue', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
+    { manufacturer: 'MicroBT', model: 'WhatsMiner M63S', hashrate: '360 TH/s', power: '7215W', efficiency: '20 J/TH', price: 'Request quote', color: 'blue', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
+    { manufacturer: 'Canaan', model: 'Avalon A1466', hashrate: '150 TH/s', power: '3230W', efficiency: '21.5 J/TH', price: 'Request quote', color: 'green', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
+    { manufacturer: 'Bitmain', model: 'Antminer S21+', hashrate: '216 TH/s', power: '3510W', efficiency: '16.2 J/TH', price: 'Request quote', color: 'gold', specs: { algorithm: 'SHA-256', condition: 'Confirm in quote', cooling: 'Confirm specifications', warranty: 'Confirm supplier terms', delivery: 'Confirm in quote' } },
   ];
 
   const active = miners[selected];
@@ -277,7 +275,7 @@ export function AsicMarketplace() {
             Enterprise-Grade <span className="text-gradient-gold">Mining Hardware</span>
           </h2>
           <p className="text-lg text-ink-300 max-w-2xl mx-auto">
-            Compare illustrative ASIC specifications and pricing from major manufacturers. No units or prices are confirmed for sale yet.
+            Compare mining hardware and request confirmed specifications, pricing and availability before purchasing.
           </p>
         </div>
 
@@ -315,8 +313,8 @@ export function AsicMarketplace() {
                   <div className="mt-6 w-full">
                     <HashrateVisualization className="clay-inset p-3" />
                     <div className="flex justify-between mt-2 text-2xs font-mono text-ink-400">
-                      <span>HASHRATE — EXAMPLE</span>
-                      <span className="text-success-400">STABLE</span>
+                      <span>HASHRATE FEED</span>
+                      <span className="text-success-400">AWAITING DATA</span>
                     </div>
                   </div>
                 </div>
@@ -357,8 +355,8 @@ export function AsicMarketplace() {
                   </div>
 
                   <div className="mt-auto">
-                    <Link to="/signup" className="clay-button-gold w-full text-center flex items-center justify-center gap-2 group">
-                      Purchase & Deploy
+                    <Link to="/contact?topic=hardware" className="clay-button-gold w-full text-center flex items-center justify-center gap-2 group">
+                      Request a quote
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
@@ -376,19 +374,19 @@ export function AsicMarketplace() {
 export function Facilities() {
   const facilities = [
     {
-      name: 'Texas Thunder', location: 'Lubbock, Texas, US', capacity: '50,000 units', available: '32,400 slots',
-      energy: 'Wind & Solar', rate: '$0.042/kWh', img: IMAGES.energy.windFarm, icon: Wind, color: 'success',
-      features: ['100% Renewable', '24/7 Security', 'N+1 Power', 'OC-48 Fiber'],
+      name: 'Texas', location: 'Location subject to signed agreement', capacity: 'Not confirmed', available: 'Request quote',
+      energy: 'Confirm in agreement', rate: 'Request quote', img: IMAGES.energy.windFarm, icon: Wind, color: 'success',
+      features: ['Confirm capacity', 'Confirm custody', 'Confirm maintenance', 'Confirm tariffs'],
     },
     {
-      name: 'Alberta Ridge', location: 'Calgary, Alberta, CA', capacity: '30,000 units', available: '18,500 slots',
-      energy: 'Hydro + Natural Gas', rate: '$0.038/kWh', img: IMAGES.energy.hydro, icon: Waves, color: 'accent',
-      features: ['Hydroelectric', 'Free Cooling 8mo/yr', 'Deregulated Market', 'Tier-3'],
+      name: 'Canada', location: 'Location subject to signed agreement', capacity: 'Not confirmed', available: 'Request quote',
+      energy: 'Confirm in agreement', rate: 'Request quote', img: IMAGES.energy.hydro, icon: Waves, color: 'accent',
+      features: ['Confirm capacity', 'Confirm custody', 'Confirm maintenance', 'Confirm tariffs'],
     },
     {
-      name: 'Pacific North', location: 'Wenatchee, Washington, US', capacity: '20,000 units', available: '12,200 slots',
-      energy: 'Hydroelectric', rate: '$0.035/kWh', img: IMAGES.energy.hydroValley, icon: Flame, color: 'gold',
-      features: ['100% Hydro', 'Lowest Rates', 'River Cooling', 'Fiber Redundant'],
+      name: 'Washington', location: 'Location subject to signed agreement', capacity: 'Not confirmed', available: 'Request quote',
+      energy: 'Confirm in agreement', rate: 'Request quote', img: IMAGES.energy.hydroValley, icon: Flame, color: 'gold',
+      features: ['Confirm capacity', 'Confirm custody', 'Confirm maintenance', 'Confirm tariffs'],
     },
   ];
 
@@ -398,10 +396,10 @@ export function Facilities() {
         <div className="text-center mb-16">
           <span className="section-label mb-4"><Globe className="w-3 h-3" /> Hosting Facilities</span>
           <h2 className="font-display font-bold text-4xl lg:text-5xl text-white mb-4">
-            Renewable-Powered <span className="text-gradient-gold">Data Centers</span>
+            Professional <span className="text-gradient-gold">Data Centers</span>
           </h2>
           <p className="text-lg text-ink-300 max-w-2xl mx-auto">
-            Illustrative North American hosting locations. No named facility, power tariff or capacity has been contracted or verified.
+            Discuss hosting locations and requirements with HashNomads. Capacity, energy charges and service terms must be confirmed by a signed agreement.
           </p>
         </div>
 
@@ -455,7 +453,7 @@ export function Facilities() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="font-display font-semibold text-lg text-white">North American Footprint</h3>
-              <p className="text-sm text-ink-400">Illustrative footprint only — no operating HashNomads facilities confirmed</p>
+              <p className="text-sm text-ink-400">Regional hosting enquiries — locations and capacity require confirmation</p>
             </div>
             <div className="flex items-center gap-2">
               <span className="status-online" />
@@ -471,9 +469,9 @@ export function Facilities() {
 
             {/* Facility markers */}
             {[
-              { x: '28%', y: '45%', name: 'Texas Thunder', bg: 'bg-success-400', glow: '#34d399' },
-              { x: '22%', y: '25%', name: 'Alberta Ridge', bg: 'bg-accent-400', glow: '#60a5fa' },
-              { x: '15%', y: '30%', name: 'Pacific North', bg: 'bg-gold-400', glow: '#f7b32b' },
+              { x: '28%', y: '45%', name: 'Texas', bg: 'bg-success-400', glow: '#34d399' },
+              { x: '22%', y: '25%', name: 'Canada', bg: 'bg-accent-400', glow: '#60a5fa' },
+              { x: '15%', y: '30%', name: 'Washington', bg: 'bg-gold-400', glow: '#f7b32b' },
             ].map(fac => (
               <div key={fac.name} className="absolute flex flex-col items-center" style={{ left: fac.x, top: fac.y }}>
                 <div className={`w-3 h-3 rounded-full ${fac.bg} animate-ping absolute`} />
@@ -548,7 +546,7 @@ export function ProfitabilityCalculator() {
                   <label className="text-sm text-ink-200">Hashrate (TH/s)</label>
                   <span className="text-sm font-mono font-bold text-gold-400">{hashrate} TH/s</span>
                 </div>
-                <input type="range" min="50" max="500" value={hashrate} onChange={e => setHashrate(+e.target.value)}
+                <input aria-label="Hashrate (TH/s)" type="range" min="50" max="500" value={hashrate} onChange={e => setHashrate(+e.target.value)}
                   className="w-full accent-gold-400" />
               </div>
 
@@ -557,7 +555,7 @@ export function ProfitabilityCalculator() {
                   <label className="text-sm text-ink-200">Power Consumption (W)</label>
                   <span className="text-sm font-mono font-bold text-white">{power}W</span>
                 </div>
-                <input type="range" min="1000" max="8000" step="10" value={power} onChange={e => setPower(+e.target.value)}
+                <input aria-label="Power Consumption (W)" type="range" min="1000" max="8000" step="10" value={power} onChange={e => setPower(+e.target.value)}
                   className="w-full accent-gold-400" />
               </div>
 
@@ -566,7 +564,7 @@ export function ProfitabilityCalculator() {
                   <label className="text-sm text-ink-200">Energy Rate ($/kWh)</label>
                   <span className="text-sm font-mono font-bold text-gold-400">${energyRate.toFixed(3)}/kWh</span>
                 </div>
-                <input type="range" min="0.02" max="0.12" step="0.001" value={energyRate} onChange={e => setEnergyRate(+e.target.value)}
+                <input aria-label="Energy Rate ($/kWh)" type="range" min="0.02" max="0.12" step="0.001" value={energyRate} onChange={e => setEnergyRate(+e.target.value)}
                   className="w-full accent-gold-400" />
               </div>
 
@@ -575,7 +573,7 @@ export function ProfitabilityCalculator() {
                   <label className="text-sm text-ink-200">BTC Price (USD)</label>
                   <span className="text-sm font-mono font-bold text-gold-400">${btcPrice.toLocaleString()}</span>
                 </div>
-                <input type="range" min="30000" max="150000" step="1000" value={btcPrice} onChange={e => setBtcPrice(+e.target.value)}
+                <input aria-label="BTC Price (USD)" type="range" min="30000" max="150000" step="1000" value={btcPrice} onChange={e => setBtcPrice(+e.target.value)}
                   className="w-full accent-gold-400" />
               </div>
 
@@ -584,7 +582,7 @@ export function ProfitabilityCalculator() {
                   <label className="text-sm text-ink-200">Pool Fee (%)</label>
                   <span className="text-sm font-mono font-bold text-white">{poolFee}%</span>
                 </div>
-                <input type="range" min="0" max="3" step="0.1" value={poolFee} onChange={e => setPoolFee(+e.target.value)}
+                <input aria-label="Pool Fee (%)" type="range" min="0" max="3" step="0.1" value={poolFee} onChange={e => setPoolFee(+e.target.value)}
                   className="w-full accent-gold-400" />
               </div>
             </div>
@@ -778,12 +776,12 @@ export function SecuritySection() {
 // ===================== STATS BANNER =====================
 function StatsBanner() {
   const stats = [
-    { value: '1.24', suffix: ' EH/s', label: 'Example Hashrate' },
-    { value: '3,847', suffix: '', label: 'Illustrative Fleet' },
-    { value: '94', suffix: '%', label: 'Illustrative Energy Mix' },
-    { value: '$0.035', suffix: '/kWh', label: 'Example Energy Rate' },
-    { value: '99.7', suffix: '%', label: 'Example Uptime' },
-    { value: '6', suffix: '', label: 'Example ASIC Models' },
+    { value: '—', suffix: '', label: 'Pool Hashrate' },
+    { value: '—', suffix: '', label: 'Active Fleet' },
+    { value: '—', suffix: '', label: 'Energy Mix' },
+    { value: 'Quote', suffix: '', label: 'Energy Rate' },
+    { value: '—', suffix: '', label: 'Verified Uptime' },
+    { value: '6', suffix: '', label: 'Catalogue Models' },
   ];
 
   return (
@@ -809,18 +807,18 @@ function StatsBanner() {
 // ===================== TESTIMONIALS =====================
 function Testimonials() {
   const testimonials = [
-    { quote: "Example journey: customers would see independently verified hardware, a written hosting contract, and their real pool telemetry in the dashboard.", author: 'Scenario 1', role: 'Illustrative process', location: 'Not a customer review' },
-    { quote: "Example journey: only a server-verified crypto settlement could advance an order toward physical miner assignment and deployment.", author: 'Scenario 2', role: 'Illustrative process', location: 'Not a customer review' },
-    { quote: "Example journey: customers provide a verified public payout address so an approved mining pool can pay BTC directly to a wallet they control.", author: 'Scenario 3', role: 'Illustrative process', location: 'Not a customer review' },
+    { quote: "Confirm the hardware specification, serial-number assignment and written hosting terms before committing to a purchase.", author: 'Hardware ownership', role: 'Equipment', location: 'Written agreements' },
+    { quote: "Payment settlement must be verified by the payment provider before an order can advance to physical miner assignment.", author: 'Verified settlement', role: 'Payments', location: 'Provider verification' },
+    { quote: "Mining rewards are intended to go directly from the pool to your verified public wallet address. Never share private keys or recovery phrases.", author: 'Your Bitcoin wallet', role: 'Rewards', location: 'Customer control' },
   ];
 
   return (
     <section className="py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-label mb-4"><Quote className="w-3 h-3" /> Illustrative Customer Scenarios</span>
+          <span className="section-label mb-4"><Quote className="w-3 h-3" /> Ownership Principles</span>
           <h2 className="font-display font-bold text-4xl lg:text-5xl text-white mb-4">
-            How It Could <span className="text-gradient-gold">Work for You</span>
+            Built Around <span className="text-gradient-gold">Your Ownership</span>
           </h2>
         </div>
 
@@ -828,7 +826,7 @@ function Testimonials() {
           {testimonials.map((t, i) => (
             <div key={i} className="clay-lg p-8">
               <Quote className="w-8 h-8 text-gold-400/30 mb-4" />
-              <p className="text-ink-100 leading-relaxed mb-6">"{t.quote}"</p>
+              <p className="text-ink-100 leading-relaxed mb-6">{t.quote}</p>
               <div className="flex items-center gap-3 pt-4 border-t border-ink-700/40">
                 <div className="w-10 h-10 rounded-xl bg-gold-gradient flex items-center justify-center text-ink-950 font-bold">
                   {t.author.charAt(0)}
@@ -852,7 +850,7 @@ function FAQ() {
   const faqs = [
     { q: 'Does HashNomads custody my Bitcoin?', a: 'The intended model is pool-to-customer wallet payments without HashNomads custody of mining rewards. The pool payout integration is not yet live; never share private keys or recovery phrases.' },
     { q: 'What payment methods do you accept?', a: 'Live crypto checkout is not enabled yet. BTCPay Server and Cryptomus are planned after merchant approval, signed webhook verification, settlement testing and confirmed inventory.' },
-    { q: 'Where are the mining facilities located?', a: 'Texas, Alberta and Washington are illustrative hosting scenarios, not confirmed HashNomads-owned or contracted facilities. Supplier and hosting terms are pending.' },
+    { q: 'Where are the mining facilities located?', a: 'Contact info@hashnomads.com for regional hosting enquiries. Facility availability, operator identity, custody responsibilities and energy tariffs require confirmation in your hosting agreement.' },
     { q: 'Is this a real production platform?', a: 'The public website and account platform can run in production. Live inventory, paid ASIC orders, hosting assignments, pool telemetry and Bitcoin rewards remain integration and verification milestones.' },
     { q: 'What happens after I purchase an ASIC?', a: 'After confirmed inventory and contract terms, a verified crypto settlement can authorize a serial-numbered ASIC assignment, hosting deployment and pool-linked customer telemetry. That workflow is not yet live.' },
     { q: 'How are hosting fees billed?', a: 'The planned service will issue itemized hosting invoices for contracted facilities, backed by metered energy and verified payment records. This billing service is not yet active.' },
@@ -906,7 +904,7 @@ function CTASection() {
               Ready to Start <span className="text-gradient-gold">Mining Bitcoin?</span>
             </h2>
             <p className="text-lg text-ink-300 max-w-xl mx-auto mb-8">
-              Create your account, choose your ASIC, select a facility, and deploy in minutes. The entire lifecycle — from purchase to mining rewards — in one platform.
+              Create your account and discuss hardware and hosting with HashNomads. Deployment timelines and service terms are confirmed in your agreement.
             </p>
             <Link to={user ? "/portal" : "/signup"} className="clay-button-gold text-lg px-8 py-4 inline-flex items-center gap-2 group">
               {user ? 'Go to Dashboard' : 'Create Your Account'}

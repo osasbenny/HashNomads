@@ -19,6 +19,7 @@ export function PortalSupport() {
   const [message, setMessage] = useState('');
   const [category, setCategory] = useState('general');
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -32,7 +33,7 @@ export function PortalSupport() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!user || !subject.trim() || !message.trim()) return;
-    await supabase.from('support_cases').insert({
+    const result = await supabase.from('support_cases').insert({
       user_id: user.id,
       subject: subject.trim(),
       message: message.trim(),
@@ -40,7 +41,8 @@ export function PortalSupport() {
       priority: 'normal',
       status: 'open',
     });
-    setSubject(''); setMessage(''); setShowForm(false); setSuccess(true);
+    if (result.error) { setSubmitError(result.error.message); return; }
+    setSubmitError(null); setSubject(''); setMessage(''); setShowForm(false); setSuccess(true);
     const { data } = await supabase.from('support_cases').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
     setCases((data as unknown as SupportCase[]) || []);
   }
@@ -56,6 +58,7 @@ export function PortalSupport() {
         </button>
       </div>
 
+      {submitError && <p role="alert" className="text-error-400 mb-4">{submitError}</p>}
       {success && (
         <div className="clay-sm p-4 mb-4 flex items-center gap-3 border border-success-500/30">
           <CheckCircle2 className="w-5 h-5 text-success-400" />
@@ -243,7 +246,7 @@ export function PortalProfile() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-ink-300">Password</span>
-                <span className="text-success-400 text-xs">Set</span>
+                <Link to="/account" className="text-success-400 text-xs">Manage</Link>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-ink-300">Session</span>
@@ -251,7 +254,7 @@ export function PortalProfile() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-ink-300">2FA</span>
-                <span className="text-ink-400 text-xs">Not enabled</span>
+                <span className="text-ink-400 text-xs">{profile ? profile.two_factor_enabled === true ? 'Enabled' : 'Not enabled' : 'Unavailable'}</span>
               </div>
             </div>
           </div>
@@ -263,42 +266,13 @@ export function PortalProfile() {
 
 // ===================== DOCUMENTS =====================
 export function PortalDocuments() {
-  const docs = [
-    { name: 'ASIC Purchase Agreement', type: 'PDF', date: '2026-10-01', icon: FileCheck },
-    { name: 'Hosting Service Terms', type: 'PDF', date: '2026-10-01', icon: FileText },
-    { name: 'KYC Verification Record', type: 'PDF', date: '2026-10-02', icon: Shield },
-    { name: 'Risk Disclosure Statement', type: 'PDF', date: '2026-10-01', icon: AlertCircle },
-  ];
+
 
   return (
     <PortalLayout title="Documents">
       <div className="clay-lg p-6">
         <h3 className="font-display font-semibold text-lg text-white mb-4">Your Documents</h3>
-        {docs.length === 0 ? (
-          <div className="text-center py-12">
-            <FileText className="w-12 h-12 text-ink-600 mx-auto mb-4" />
-            <p className="text-ink-300">No documents available yet</p>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-4">
-            {docs.map((doc, i) => (
-              <div key={i} className="clay-sm p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg clay-inset flex items-center justify-center">
-                    <doc.icon className="w-5 h-5 text-gold-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-white">{doc.name}</div>
-                    <div className="text-xs text-ink-400">{doc.type} — {doc.date}</div>
-                  </div>
-                </div>
-                <button className="text-gold-400 hover:text-gold-300">
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="text-center py-12"><FileText className="w-12 h-12 text-ink-600 mx-auto mb-4" /><p className="text-ink-300">Documents will appear here when issued to your account.</p></div>
       </div>
     </PortalLayout>
   );
@@ -306,28 +280,32 @@ export function PortalDocuments() {
 
 // ===================== NOTIFICATIONS =====================
 export function PortalNotifications() {
-  const notifications = [
-    { id: 1, title: 'Welcome to HashNomads', body: 'Your account has been created. Complete KYC to start mining.', time: '2 hours ago', read: false, icon: BellRing },
-    { id: 2, title: 'System Maintenance', body: 'Scheduled maintenance on Oct 10, 2026 from 02:00-04:00 UTC.', time: '1 day ago', read: false, icon: AlertCircle },
-    { id: 3, title: 'New ASIC Available', body: 'Bitmain Antminer S21 Pro is now available in the marketplace.', time: '3 days ago', read: true, icon: MessageSquare },
-  ];
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<{id:string;kind:string;message:string;is_read:boolean;created_at:string}[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  useEffect(() => { if (!user) return; let active=true;
+    supabase.from('notifications').select('*').order('created_at', {ascending:false}).then(result=>{
+      if (!active) return; setError(Boolean(result.error)); setNotifications(result.data || []); setLoading(false);
+    });return()=>{active=false}; }, [user]);
 
   return (
     <PortalLayout title="Notifications">
       <div className="space-y-3">
+        {loading ? <div className="skeleton h-48" /> : error ? <p role="alert" className="text-ink-300">Unable to load notifications. Please try again.</p> : notifications.length===0 ? <div className="clay-lg p-12 text-center"><Bell className="w-12 h-12 text-ink-600 mx-auto mb-4" /><p className="text-ink-300">No notifications yet.</p></div> : null}
         {notifications.map(n => (
-          <div key={n.id} className={`clay-lg p-5 ${!n.read ? 'border-gradient' : ''}`}>
+          <div key={n.id} className={`clay-lg p-5 ${!n.is_read ? 'border-gradient' : ''}`}>
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl clay-sm flex items-center justify-center shrink-0">
-                <n.icon className="w-5 h-5 text-gold-400" />
+                <Bell className="w-5 h-5 text-gold-400" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-medium text-white">{n.title}</h4>
-                  {!n.read && <span className="w-2 h-2 rounded-full bg-gold-400" />}
+                  <h4 className="font-medium text-white">{n.kind.replace(/_/g, ' ')}</h4>
+                  {!n.is_read && <span className="w-2 h-2 rounded-full bg-gold-400" />}
                 </div>
-                <p className="text-sm text-ink-300 mb-2">{n.body}</p>
-                <span className="text-xs text-ink-400">{n.time}</span>
+                <p className="text-sm text-ink-300 mb-2">{n.message}</p>
+                <span className="text-xs text-ink-400">{new Date(n.created_at).toLocaleString()}</span>
               </div>
             </div>
           </div>

@@ -62,7 +62,7 @@ export function Asic3DMiner({ size = 200, className = '' }: Asic3DProps) {
           {/* Status LED */}
           <div className="absolute bottom-4 right-4 flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full bg-success-500 animate-pulse" style={{ boxShadow: '0 0 8px #10b981' }} />
-            <span className="text-2xs font-mono text-success-400">ONLINE</span>
+            <span className="text-2xs font-mono text-success-400">ASIC</span>
           </div>
         </div>
 
@@ -282,19 +282,10 @@ interface HashrateVisualizationProps {
   className?: string;
 }
 
-export function HashrateVisualization({ active = true, className = '' }: HashrateVisualizationProps) {
-  const [bars, setBars] = useState<number[]>(Array.from({ length: 40 }, () => Math.random() * 0.6 + 0.2));
-
-  useEffect(() => {
-    if (!active) return;
-    const interval = setInterval(() => {
-      setBars(prev => [...prev.slice(1), Math.random() * 0.7 + 0.3]);
-    }, 200);
-    return () => clearInterval(interval);
-  }, [active]);
-
+export function HashrateVisualization({ className = '' }: HashrateVisualizationProps) {
+  const bars = Array.from({ length: 40 }, () => 0);
   return (
-    <div className={`flex items-end gap-0.5 h-16 ${className}`}>
+    <div role="img" aria-label="Hashrate data unavailable" className={`flex items-end gap-0.5 h-16 ${className}`}>
       {bars.map((h, i) => (
         <div
           key={i}

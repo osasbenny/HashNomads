@@ -37,6 +37,7 @@
     "vitest": "^4.0.18"
   },
   "overrides": {
-    "deepmerge-ts": "8.0.0"
+    "deepmerge-ts": "8.0.0",
+    "postcss-selector-parser": "7.1.6"
   }
 }

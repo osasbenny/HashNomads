@@ -59,7 +59,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3">
               {[Twitter, Github, Linkedin, Mail].map((Icon, i) => (
-                <a key={i} href="/#" className="w-9 h-9 rounded-lg clay-sm flex items-center justify-center text-ink-300 hover:text-gold-400 transition-colors">
+                <a key={i} href={['/contact', 'https://github.com/osasbenny/HashNomads', '/contact', 'mailto:info@hashnomads.com'][i]} aria-label={['Contact HashNomads about social updates', 'HashNomads on GitHub', 'Contact HashNomads about company updates', 'Email HashNomads'][i]} className="w-9 h-9 rounded-lg clay-sm flex items-center justify-center text-ink-300 hover:text-gold-400 transition-colors">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}

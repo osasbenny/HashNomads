@@ -29,58 +29,9 @@ export function PortalWallets() {
 
   useEffect(() => { loadWallets(); }, [user]);
 
-  async function handleAdd(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    if (!label.trim() || !address.trim()) {
-      setError('Label and address are required');
-      return;
-    }
-    if (address.length < 26 || !address.startsWith('bc1') && !address.startsWith('1') && !address.startsWith('3')) {
-      setError('Please enter a valid Bitcoin address (bc1..., 1..., or 3...)');
-      return;
-    }
-
-    // Deactivate other wallets if this will be active
-    const { data, error: insertError } = await supabase
-      .from('wallet_destinations')
-      .insert({
-        user_id: user!.id,
-        label: label.trim(),
-        btc_address: address.trim(),
-        is_active: wallets.length === 0,
-        is_verified: true,
-        activated_at: wallets.length === 0 ? new Date().toISOString() : null,
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      setError(insertError.message);
-      return;
-    }
-
-    setSuccess('Wallet destination added successfully');
-    setLabel('');
-    setAddress('');
-    setShowAdd(false);
-    loadWallets();
-  }
-
-  async function setActive(walletId: string) {
-    if (!user) return;
-    // Deactivate all, then activate selected
-    await supabase.from('wallet_destinations').update({ is_active: false, deactivated_at: new Date().toISOString() }).eq('user_id', user.id);
-    await supabase.from('wallet_destinations').update({ is_active: true, activated_at: new Date().toISOString(), deactivated_at: null }).eq('id', walletId);
-    loadWallets();
-  }
-
-  async function deleteWallet(walletId: string) {
-    await supabase.from('wallet_destinations').delete().eq('id', walletId);
-    loadWallets();
-  }
+  function handleAdd(e: React.FormEvent) { e.preventDefault(); setError('Wallet changes require a secure verification workflow. Contact support for assistance.'); }
+  function setActive(_walletId: string) { setError('Wallet activation requires verified authorization. Contact support for assistance.'); }
+  function deleteWallet(_walletId: string) { setError('Wallet changes require verified authorization. Contact support for assistance.'); }
 
   if (loading) return <PortalLayout title="Wallets"><div className="skeleton h-96" /></PortalLayout>;
 

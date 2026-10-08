@@ -1,5 +1,21 @@
 # HashNomads — Master TODO
 
+## Current production handoff — 2026-10-08
+
+The execution plan in document 18 and evidence register in document 19 supersede the historical checklist below. Preserve existing remote setup and V2 design; use feature branches, tested commit/push savepoints and approved releases.
+
+- [x] Establish audited-main baseline and isolated local database; capture 49 public baseline screenshots.
+- [x] Implement truthful public/admin/account states and remove unsafe financial/wallet client writes.
+- [x] Add authenticated escalation denial, cross-tenant reads and admin-MFA overview assertions.
+- [ ] Finish M0: all CI/security checks green, approved accessibility changes and reviewed visual evidence.
+- [ ] Validate Luxor read-only capabilities with actual account access.
+- [ ] M1: Resend/Dojah account lifecycle and compatible profile migration.
+- [ ] M2: verified stock/hosting and transactional quotes/reservations; physical contracts remain Phase 2.
+- [ ] M3: merchant-approved Cryptomus/BTCPay and authentic settlement reconciliation.
+- [ ] M4: evidence-backed ownership/deployment, Luxor telemetry and direct rewards reconciliation.
+- [ ] M5: secure wallets, billing, private documents, operational queues and Crisp.
+- [ ] M6: complete acceptance/recovery/legal evidence and owner GO decision.
+
 ## Documentation foundation
 - [x] README / project charter
 - [x] Master build prompt
