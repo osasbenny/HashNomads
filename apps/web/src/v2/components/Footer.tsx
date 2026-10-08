@@ -81,7 +81,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-ink-800/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-ink-400 font-mono">
-            Production Network — Live Bitcoin mining infrastructure.
+            Public platform — Mining integrations in progress.
           </p>
           <div className="text-xs text-ink-400 font-mono text-center md:text-right">
             <p className="text-ink-400">Copyright © {new Date().getFullYear()} HashNomads. All Rights Reserved.</p>

@@ -86,7 +86,7 @@ export function PortalLayout({ children, title }: { children: ReactNode; title: 
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden sm:flex items-center gap-1.5 text-xs font-mono text-ink-400">
-              <span className="status-online" /> LIVE
+              <span className="status-online" /> PLATFORM ONLINE
             </span>
           </div>
         </header>

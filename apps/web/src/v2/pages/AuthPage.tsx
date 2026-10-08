@@ -199,7 +199,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
           </p>
 
           <p className="mt-6 text-center text-xs text-ink-500 font-mono">
-            Production Network — Live Bitcoin mining infrastructure.
+            Public platform — Mining integrations in progress.
           </p>
         </div>
       </div>

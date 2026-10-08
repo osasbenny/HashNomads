@@ -34,7 +34,7 @@ function Hero() {
           <div className="text-center lg:text-left">
             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full clay-sm mb-6 ${mounted ? 'animate-fade-in-down' : 'opacity-0'}`}>
               <span className="status-online" />
-              <span className="text-xs font-mono text-ink-200 tracking-wider">LIVE NETWORK — PRODUCTION</span>
+              <span className="text-xs font-mono text-ink-200 tracking-wider">PUBLIC PLATFORM — INTEGRATIONS IN PROGRESS</span>
               <span className="text-gold-400 text-xs font-mono">US & CA</span>
             </div>
 
@@ -45,7 +45,7 @@ function Hero() {
             </h1>
 
             <p className={`text-lg text-ink-200 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed ${mounted ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.15s' }}>
-              HashNomads is a global Bitcoin mining infrastructure platform. Purchase enterprise-grade ASIC miners, deploy them in our renewable-energy facilities, and track real-time telemetry — all from one dashboard.
+              Explore enterprise-grade Bitcoin mining hardware, hosting scenarios, and the HashNomads customer dashboard. Live checkout, facility contracts, and mining telemetry are being connected.
             </p>
 
             <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-10 ${mounted ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.3s' }}>
@@ -62,9 +62,9 @@ function Hero() {
             {/* Stats ticker */}
             <div className={`grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 ${mounted ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '0.45s' }}>
               {[
-                { label: 'Total Hashrate', value: '1.24 EH/s' },
-                { label: 'Miners Online', value: '3,847' },
-                { label: 'Renewable Energy', value: '94%' },
+                { label: 'Example Hashrate', value: '1.24 EH/s' },
+                { label: 'Example Fleet', value: '3,847' },
+                { label: 'Example Energy Mix', value: '94%' },
               ].map(stat => (
                 <div key={stat.label} className="clay-sm p-3 text-center">
                   <div className="text-lg font-display font-bold text-gradient-gold">{stat.value}</div>
@@ -132,14 +132,14 @@ function Hero() {
 // ===================== LIVE TICKER =====================
 function LiveTicker() {
   const items = [
-    { label: 'BTC/USD', value: '$67,420.50', change: '+2.34%', up: true },
-    { label: 'Network Difficulty', value: '84.12 T', change: '+1.12%', up: true },
-    { label: 'Block Reward', value: '3.125 BTC', change: '', up: null },
-    { label: 'Next Halving', value: '2028', change: '', up: null },
-    { label: 'Pool Hashrate', value: '1.24 EH/s', change: '+0.87%', up: true },
-    { label: 'Active Workers', value: '3,847', change: '+12', up: true },
-    { label: 'Avg Efficiency', value: '16.2 J/TH', change: '-0.3%', up: false },
-    { label: 'Energy Renewable', value: '94.2%', change: '+0.5%', up: true },
+    { label: 'Example BTC/USD', value: '$67,420.50', change: '+2.34%', up: true },
+    { label: 'Example Difficulty', value: '84.12 T', change: '+1.12%', up: true },
+    { label: 'Example Block Reward', value: '3.125 BTC', change: '', up: null },
+    { label: 'Illustrative Halving', value: '2028', change: '', up: null },
+    { label: 'Example Pool Hashrate', value: '1.24 EH/s', change: '+0.87%', up: true },
+    { label: 'Example Workers', value: '3,847', change: '+12', up: true },
+    { label: 'Example Efficiency', value: '16.2 J/TH', change: '-0.3%', up: false },
+    { label: 'Example Renewable Mix', value: '94.2%', change: '+0.5%', up: true },
   ];
 
   return (
@@ -167,8 +167,8 @@ export function HowItWorks() {
   const steps = [
     { icon: Building2, num: '01', title: 'Create Account', desc: 'Sign up and complete identity verification (KYC). Your account is ready in minutes.' },
     { icon: Cpu, num: '02', title: 'Choose Your ASIC', desc: 'Browse enterprise-grade miners from Bitmain, MicroBT, and Canaan. Compare specs and pricing.' },
-    { icon: Globe, num: '03', title: 'Select a Facility', desc: 'Pick from our renewable-energy hosting facilities across the US and Canada. Compare energy rates.' },
-    { icon: Bitcoin, num: '04', title: 'Pay with Crypto', desc: 'Generate a BTC invoice via BTCPay. Your payment is verified on-chain and your order is confirmed.' },
+    { icon: Globe, num: '03', title: 'Select a Facility', desc: 'Compare illustrative hosting scenarios across North America. Actual providers, capacity, rates and contracts require confirmation.' },
+    { icon: Bitcoin, num: '04', title: 'Pay with Crypto', desc: 'A future verified BTCPay or Cryptomus invoice will be issued only when an approved live payment integration is active.' },
     { icon: HardHat, num: '05', title: 'We Deploy', desc: 'Your ASIC is assigned, deployed, and connected to our mining pool. Track the deployment timeline.' },
     { icon: Wallet, num: '06', title: 'Earn Bitcoin', desc: 'Mining rewards flow to your Bitcoin wallet. You control the payout destination — not us.' },
   ];
@@ -213,12 +213,12 @@ export function HowItWorks() {
 // ===================== PLATFORM FEATURES =====================
 function PlatformFeatures() {
   const features = [
-    { icon: Activity, title: 'Real-Time Telemetry', desc: 'Monitor hashrate, uptime, worker status, and pool-reported earnings with live data feeds and historical charts.' },
-    { icon: Bitcoin, title: 'Crypto-Native Payments', desc: 'Pay with BTC via BTCPay Server. On-chain invoices, exchange-rate locking, automatic confirmation tracking.' },
+    { icon: Activity, title: 'Real-Time Telemetry', desc: 'Designed to monitor verified hashrate, worker status and pool-reported earnings when live provider feeds are connected.' },
+    { icon: Bitcoin, title: 'Crypto-Native Payments', desc: 'Planned BTCPay and Cryptomus checkout with server-verified invoices, network confirmations and reconciled settlement.' },
     { icon: Wallet, title: 'Self-Custody Wallets', desc: 'Register your Bitcoin payout address. We never custody your mined Bitcoin. You hold the keys, always.' },
     { icon: Shield, title: 'Enterprise Security', desc: 'Row-level database isolation, RBAC, audit trails, webhook signature verification, and session security.' },
-    { icon: BarChart3, title: 'Profitability Engine', desc: 'Model your mining revenue with real-time network difficulty, energy costs, and hardware efficiency inputs.' },
-    { icon: Globe, title: 'Global Infrastructure', desc: 'Facilities across North America with renewable energy sources — hydro, wind, and solar powered operations.' },
+    { icon: BarChart3, title: 'Profitability Engine', desc: 'Explore hypothetical mining scenarios using editable network, energy, hardware and BTC price assumptions.' },
+    { icon: Globe, title: 'Global Infrastructure', desc: 'North American facility scenarios showing how energy source, climate, power pricing and operations affect hosting.' },
     { icon: Factory, title: 'Managed Deployments', desc: 'From inventory to online — we handle racking, configuration, pool connection, and ongoing maintenance.' },
     { icon: Gauge, title: 'Hosting Billing', desc: 'Transparent monthly invoices for electricity and hosting. Pay with crypto. See exactly what you are paying for.' },
   ];
@@ -277,7 +277,7 @@ export function AsicMarketplace() {
             Enterprise-Grade <span className="text-gradient-gold">Mining Hardware</span>
           </h2>
           <p className="text-lg text-ink-300 max-w-2xl mx-auto">
-            Industry-leading ASIC miners from Bitmain, MicroBT, and Canaan. Compare, configure, and deploy in minutes.
+            Compare illustrative ASIC specifications and pricing from major manufacturers. No units or prices are confirmed for sale yet.
           </p>
         </div>
 
@@ -315,7 +315,7 @@ export function AsicMarketplace() {
                   <div className="mt-6 w-full">
                     <HashrateVisualization className="clay-inset p-3" />
                     <div className="flex justify-between mt-2 text-2xs font-mono text-ink-400">
-                      <span>HASHRATE — LIVE</span>
+                      <span>HASHRATE — EXAMPLE</span>
                       <span className="text-success-400">STABLE</span>
                     </div>
                   </div>
@@ -401,7 +401,7 @@ export function Facilities() {
             Renewable-Powered <span className="text-gradient-gold">Data Centers</span>
           </h2>
           <p className="text-lg text-ink-300 max-w-2xl mx-auto">
-            Strategic locations across North America with access to cheap, clean energy and cool climates.
+            Illustrative North American hosting locations. No named facility, power tariff or capacity has been contracted or verified.
           </p>
         </div>
 
@@ -455,11 +455,11 @@ export function Facilities() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="font-display font-semibold text-lg text-white">North American Footprint</h3>
-              <p className="text-sm text-ink-400">Live operations across three facilities with 94% renewable energy</p>
+              <p className="text-sm text-ink-400">Illustrative footprint only — no operating HashNomads facilities confirmed</p>
             </div>
             <div className="flex items-center gap-2">
               <span className="status-online" />
-              <span className="text-xs font-mono text-ink-300">ALL FACILITIES OPERATIONAL</span>
+              <span className="text-xs font-mono text-ink-300">HOSTING PARTNERS NOT YET CONFIRMED</span>
             </div>
           </div>
           <div className="relative h-64 rounded-2xl clay-inset overflow-hidden bg-grid-pattern bg-grid-lg">
@@ -533,7 +533,7 @@ export function ProfitabilityCalculator() {
             Model Your <span className="text-gradient-gold">Mining Revenue</span>
           </h2>
           <p className="text-lg text-ink-300 max-w-2xl mx-auto">
-            Adjust the inputs to see real-time profitability projections. Uses current network difficulty and BTC price.
+            Explore illustrative profitability scenarios. Inputs are assumptions, not live BTC price or network-difficulty feeds.
           </p>
         </div>
 
@@ -778,12 +778,12 @@ export function SecuritySection() {
 // ===================== STATS BANNER =====================
 function StatsBanner() {
   const stats = [
-    { value: '1.24', suffix: ' EH/s', label: 'Total Network Hashrate' },
-    { value: '3,847', suffix: '', label: 'Active Mining Units' },
-    { value: '94', suffix: '%', label: 'Renewable Energy' },
-    { value: '$0.035', suffix: '/kWh', label: 'Lowest Energy Rate' },
-    { value: '99.7', suffix: '%', label: 'Average Uptime' },
-    { value: '6', suffix: '', label: 'ASIC Models Available' },
+    { value: '1.24', suffix: ' EH/s', label: 'Example Hashrate' },
+    { value: '3,847', suffix: '', label: 'Illustrative Fleet' },
+    { value: '94', suffix: '%', label: 'Illustrative Energy Mix' },
+    { value: '$0.035', suffix: '/kWh', label: 'Example Energy Rate' },
+    { value: '99.7', suffix: '%', label: 'Example Uptime' },
+    { value: '6', suffix: '', label: 'Example ASIC Models' },
   ];
 
   return (
@@ -809,18 +809,18 @@ function StatsBanner() {
 // ===================== TESTIMONIALS =====================
 function Testimonials() {
   const testimonials = [
-    { quote: "HashNomads let me start mining without worrying about hardware setup or electricity contracts. The dashboard shows me exactly what my miners are doing.", author: 'Sarah K.', role: 'Individual Investor', location: 'Austin, TX' },
-    { quote: "The crypto-native payment flow is seamless. I paid with BTC, got my confirmation, and my miners were online within the week. This is how it should work.", author: 'Marcus T.', role: 'Small Business Owner', location: 'Calgary, AB' },
-    { quote: "As someone who values self-custody, the fact that HashNomads sends mining rewards directly to my own wallet is exactly what I was looking for.", author: 'Diana R.', role: 'Crypto Enthusiast', location: 'Seattle, WA' },
+    { quote: "Example journey: customers would see independently verified hardware, a written hosting contract, and their real pool telemetry in the dashboard.", author: 'Scenario 1', role: 'Illustrative process', location: 'Not a customer review' },
+    { quote: "Example journey: only a server-verified crypto settlement could advance an order toward physical miner assignment and deployment.", author: 'Scenario 2', role: 'Illustrative process', location: 'Not a customer review' },
+    { quote: "Example journey: customers provide a verified public payout address so an approved mining pool can pay BTC directly to a wallet they control.", author: 'Scenario 3', role: 'Illustrative process', location: 'Not a customer review' },
   ];
 
   return (
     <section className="py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="section-label mb-4"><Quote className="w-3 h-3" /> Testimonials</span>
+          <span className="section-label mb-4"><Quote className="w-3 h-3" /> Illustrative Customer Scenarios</span>
           <h2 className="font-display font-bold text-4xl lg:text-5xl text-white mb-4">
-            Trusted by <span className="text-gradient-gold">Bitcoin Miners</span>
+            How It Could <span className="text-gradient-gold">Work for You</span>
           </h2>
         </div>
 
@@ -850,12 +850,12 @@ function Testimonials() {
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   const faqs = [
-    { q: 'Does HashNomads custody my Bitcoin?', a: 'No. HashNomads manages miners, not your Bitcoin. Mining rewards are sent directly to your Bitcoin wallet address. We never ask for or store private keys, seed phrases, or recovery phrases.' },
-    { q: 'What payment methods do you accept?', a: 'We support Bitcoin on-chain payments via BTCPay Server, our preferred native Bitcoin infrastructure. We also support BTC, USDT, and USDC through Cryptomus. All payments are crypto-native.' },
-    { q: 'Where are the mining facilities located?', a: 'Our facilities span three locations: Texas (wind & solar), Alberta (hydro + natural gas), and Washington State (hydroelectric). All use renewable or clean energy sources with competitive electricity rates.' },
-    { q: 'Is this a real production platform?', a: 'Yes. HashNomads is a production Bitcoin mining infrastructure platform. The entire lifecycle — from account creation to mining rewards — runs with real telemetry data and live crypto payment processing.' },
-    { q: 'What happens after I purchase an ASIC?', a: 'Your order is confirmed via crypto payment, the ASIC is assigned to you, deployed in your chosen facility, connected to our mining pool, and begins generating rewards. You can track the entire deployment timeline in your dashboard.' },
-    { q: 'How are hosting fees billed?', a: 'You receive monthly hosting invoices covering electricity and facility costs. Invoices are transparent with per-line breakdowns. You pay them through the same crypto checkout system.' },
+    { q: 'Does HashNomads custody my Bitcoin?', a: 'The intended model is pool-to-customer wallet payments without HashNomads custody of mining rewards. The pool payout integration is not yet live; never share private keys or recovery phrases.' },
+    { q: 'What payment methods do you accept?', a: 'Live crypto checkout is not enabled yet. BTCPay Server and Cryptomus are planned after merchant approval, signed webhook verification, settlement testing and confirmed inventory.' },
+    { q: 'Where are the mining facilities located?', a: 'Texas, Alberta and Washington are illustrative hosting scenarios, not confirmed HashNomads-owned or contracted facilities. Supplier and hosting terms are pending.' },
+    { q: 'Is this a real production platform?', a: 'The public website and account platform can run in production. Live inventory, paid ASIC orders, hosting assignments, pool telemetry and Bitcoin rewards remain integration and verification milestones.' },
+    { q: 'What happens after I purchase an ASIC?', a: 'After confirmed inventory and contract terms, a verified crypto settlement can authorize a serial-numbered ASIC assignment, hosting deployment and pool-linked customer telemetry. That workflow is not yet live.' },
+    { q: 'How are hosting fees billed?', a: 'The planned service will issue itemized hosting invoices for contracted facilities, backed by metered energy and verified payment records. This billing service is not yet active.' },
   ];
 
   return (
