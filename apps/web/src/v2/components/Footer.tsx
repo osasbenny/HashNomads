@@ -26,7 +26,7 @@ export function Footer() {
       title: 'Resources',
       links: [
         { label: 'Documentation', href: '/documentation' },
-        { label: 'Support Center', href: '/portal/support' },
+        { label: 'Support Center', href: '/support' },
         { label: 'API Reference', href: '/api-reference' },
         { label: 'Status Page', href: '/status' },
       ],
