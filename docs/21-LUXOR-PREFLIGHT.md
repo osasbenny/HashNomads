@@ -8,12 +8,13 @@ The selected Bitcoin mining view reports no subaccounts, no selected subaccount 
 
 The API Keys page contains an existing `HashNomads` key with Read & Write access and expiry on 28 November 2026. Its value has not been revealed or retrieved. It has not been changed or deleted.
 
-A separate key creation form has been prepared, but not submitted:
+A separate key creation form was prepared for owner review. The owner subsequently created the key; the updated API Keys list confirms its name and expiry:
 
 - Name: `HashNomads-Telemetry-ReadOnly`.
 - Custom permissions: Mining Pool Read Only; Derivatives, Hardware, Energy and Commander No Access.
 - Expiration: 31 October 2026.
-- Owner confirmation requested before credential creation and private local storage. Browser security rules require confirmation at the access-grant step.
+- The owner completed creation. The list labels its permissions `Custom`; the prepared form had Mining Pool Read Only and all other products No Access. Effective scope still requires API verification.
+- The success secret is no longer shown on the current page. Its private saved location has been requested; no credential has been read, copied, logged, committed or configured in Vercel.
 
 ## Current official API contract
 
@@ -32,8 +33,8 @@ Both key and workspace token-bucket limits can return HTTP 429. The adapter must
 
 ## Next steps
 
-1. Obtain action-time approval for the prepared restricted key; preserve the existing key.
-2. Save any approved credential outside version control and logs. Read-only backend preflight must use the official endpoint contract; record only redacted results.
+1. Preserve both existing keys; obtain the newly created secret from the owner's private saved file or explicitly authorized clipboard. Do not recreate or revoke a key merely because its value is absent from the list.
+2. Save the credential outside version control and logs. Read-only backend preflight must use the official endpoint contract; record only redacted results.
 3. Validate accessible workspace/mining resources and denial of unrelated products. An empty resource list is a valid account result, not mining integration completion.
 4. Confirm subaccount and customer payout architecture before provisioning or changing financial settings. Physical miners, supplier/custody agreements and hosting remain Phase 2.
 5. Implement worker mapping/ingestion and reward reconciliation only after actual provider and physical evidence is available. Keep M0 release gates separate from this capability preflight.
