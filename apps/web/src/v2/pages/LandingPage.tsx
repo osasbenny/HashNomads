@@ -163,7 +163,7 @@ function LiveTicker() {
 }
 
 // ===================== HOW IT WORKS =====================
-function HowItWorks() {
+export function HowItWorks() {
   const steps = [
     { icon: Building2, num: '01', title: 'Create Account', desc: 'Sign up and complete identity verification (KYC). Your account is ready in minutes.' },
     { icon: Cpu, num: '02', title: 'Choose Your ASIC', desc: 'Browse enterprise-grade miners from Bitmain, MicroBT, and Canaan. Compare specs and pricing.' },
@@ -253,7 +253,7 @@ function PlatformFeatures() {
 }
 
 // ===================== ASIC MARKETPLACE =====================
-function AsicMarketplace() {
+export function AsicMarketplace() {
   const [selected, setSelected] = useState(0);
 
   const miners = [
@@ -373,7 +373,7 @@ function AsicMarketplace() {
 }
 
 // ===================== FACILITIES =====================
-function Facilities() {
+export function Facilities() {
   const facilities = [
     {
       name: 'Texas Thunder', location: 'Lubbock, Texas, US', capacity: '50,000 units', available: '32,400 slots',
@@ -502,7 +502,7 @@ function Facilities() {
 }
 
 // ===================== PROFITABILITY CALCULATOR =====================
-function ProfitabilityCalculator() {
+export function ProfitabilityCalculator() {
   const [hashrate, setHashrate] = useState(234);
   const [power, setPower] = useState(3510);
   const [energyRate, setEnergyRate] = useState(0.042);
@@ -678,7 +678,7 @@ function ProfitabilityCalculator() {
 }
 
 // ===================== SECURITY =====================
-function SecuritySection() {
+export function SecuritySection() {
   const items = [
     { icon: Lock, title: 'Non-Custodial', desc: 'We never hold your Bitcoin. Mining rewards go directly to your wallet.' },
     { icon: Shield, title: 'Row-Level Security', desc: 'Database-level isolation ensures customers can only access their own data.' },
