@@ -146,6 +146,7 @@ Never mark an item complete because a UI mock exists. Completion requires the ap
 - [x] Apply hosted production migrations and remove the old validation account.
 - [ ] Connect the owner's HashNomads checkout information.
 - [ ] Connect verified mail delivery for notifications, verification, recovery and newsletters.
+  - Resend preflight 2026-10-08: a domain slot is available after owner-authorized AuraHire removal. HashNomads domain registration and DNS access are required before sender verification; no email integration or delivery is claimed complete. See `docs/22-RESEND-PREFLIGHT.md`.
 - [ ] Integrate the native operational lifecycle described above; actual fleet/financial data is required.
 - See `docs/16-COMMERCIAL-RELEASE.md` for precise scope, sources, validation and remaining work.
 
