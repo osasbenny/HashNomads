@@ -30,6 +30,8 @@ The following changes are implemented locally and are not yet production-verifie
 - Captured 49 post-change screenshots in workspace `outputs/M0-after`, plus refreshed current/proposed muted-text previews. Public content changes account for expected visual differences; layout/tokens/fonts/navigation/illustrations remain the accepted source. Owner visual acceptance is still open. Axe identified a prohibited ARIA attribute on the empty hash-rate graphic; its explicit image role was corrected without changing appearance.
 - Full accessibility tests remain enabled; no failed test deleted or weakened. Legacy commercial assertions now check absence of fabricated slots/tariffs and truthful quote availability.
 - Source and route changes have not been deployed. Passing local tests are not production verification or proof of live mining.
+- Savepoint `61a1a74ed8951a598c816388f659073bf92c5dab` committed and pushed; draft PR https://github.com/osasbenny/HashNomads/pull/2. GitHub validation run `37759847061` started; its final result is not yet verified.
+- Final optimized rebuild passed. Repeated seven-route axe scan after the graph's ARIA repair reports only colour-contrast violations (home 23 nodes; signup/login/marketplace/about 3 each; facilities 10; calculator 11). No new non-contrast accessibility violation remains in that scan. Final local working tree was clean after the implementation savepoint.
 
 ## Open gates
 
