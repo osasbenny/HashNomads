@@ -13,5 +13,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/legal",
     "/contact",
     "/resources",
+    "/security",
+    "/roadmap",
+    "/documentation",
+    "/support",
+    "/api-reference",
+    "/status",
+    "/terms",
+    "/privacy",
+    "/risk-disclosure",
+    "/kyc-requirements",
   ].map((path) => ({ url: `https://hashnomads.vercel.app${path}` }));
 }

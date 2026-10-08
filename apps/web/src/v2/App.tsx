@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from '@v2/contexts/AuthContext';
 import { Navbar } from '@v2/components/Navbar';
 import { Footer } from '@v2/components/Footer';
 import { LandingPage } from '@v2/pages/LandingPage';
+import { PublicContentPage, publicPages } from '@v2/pages/PublicContentPage';
 import { AuthPage } from '@v2/pages/AuthPage';
 import { PurchasePage } from '@v2/pages/PurchasePage';
 import { PortalLayout } from '@v2/pages/portal/PortalLayout';
@@ -44,6 +45,11 @@ export default function App() {
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/signup" element={<AuthPage mode="signup" />} />
           <Route path="/purchase" element={<PurchasePage />} />
+
+          {/* Dedicated footer information pages with the approved V2 shell */}
+          {Object.keys(publicPages).map(slug => (
+            <Route key={slug} path={`/${slug}`} element={<PublicPage><PublicContentPage slug={slug} /></PublicPage>} />
+          ))}
 
           {/* Customer Portal */}
           <Route path="/portal" element={<ProtectedRoute><PortalLayout title="Overview"><PortalOverview /></PortalLayout></ProtectedRoute>} />

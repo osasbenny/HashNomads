@@ -7,37 +7,37 @@ export function Footer() {
     {
       title: 'Platform',
       links: [
-        { label: 'ASIC Marketplace', href: '/#miners' },
-        { label: 'Hosting Facilities', href: '/#facilities' },
-        { label: 'Profitability Calculator', href: '/#profitability' },
+        { label: 'ASIC Marketplace', href: '/marketplace' },
+        { label: 'Hosting Facilities', href: '/facilities' },
+        { label: 'Profitability Calculator', href: '/calculator' },
         { label: 'Customer Portal', href: '/portal' },
       ],
     },
     {
       title: 'Company',
       links: [
-        { label: 'About HashNomads', href: '/#about' },
-        { label: 'Security & Compliance', href: '/#security' },
-        { label: 'How It Works', href: '/#how-it-works' },
-        { label: 'Roadmap', href: '/#roadmap' },
+        { label: 'About HashNomads', href: '/about' },
+        { label: 'Security & Compliance', href: '/security' },
+        { label: 'How It Works', href: '/how-it-works' },
+        { label: 'Roadmap', href: '/roadmap' },
       ],
     },
     {
       title: 'Resources',
       links: [
-        { label: 'Documentation', href: '/#faq' },
+        { label: 'Documentation', href: '/documentation' },
         { label: 'Support Center', href: '/portal/support' },
-        { label: 'API Reference', href: '/#faq' },
-        { label: 'Status Page', href: '/#platform' },
+        { label: 'API Reference', href: '/api-reference' },
+        { label: 'Status Page', href: '/status' },
       ],
     },
     {
       title: 'Legal',
       links: [
-        { label: 'Terms of Service', href: '/#faq' },
-        { label: 'Privacy Policy', href: '/#faq' },
-        { label: 'Risk Disclosure', href: '/#faq' },
-        { label: 'KYC Requirements', href: '/#faq' },
+        { label: 'Terms of Service', href: '/terms' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Risk Disclosure', href: '/risk-disclosure' },
+        { label: 'KYC Requirements', href: '/kyc-requirements' },
       ],
     },
   ];
