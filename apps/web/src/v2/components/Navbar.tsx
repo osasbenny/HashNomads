@@ -103,17 +103,26 @@ export function Navbar() {
             )}
           </div>
 
-          <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden w-10 h-10 rounded-xl clay-button-dark flex items-center justify-center">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <button
+            type="button"
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="hashnomads-mobile-menu"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden w-10 h-10 rounded-xl clay-button-dark !p-0 flex items-center justify-center"
+          >
+            {mobileOpen
+              ? <X className="w-5 h-5 shrink-0 text-ink-100" aria-hidden="true" />
+              : <Menu className="w-5 h-5 shrink-0 text-ink-100" aria-hidden="true" />}
           </button>
         </div>
       </nav>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden bg-ink-950/95 backdrop-blur-xl pt-20 px-6 animate-fade-in">
+        <div id="hashnomads-mobile-menu" className="fixed inset-0 z-40 lg:hidden bg-ink-950/95 backdrop-blur-xl pt-20 px-6 animate-fade-in">
           <div className="flex flex-col gap-2">
             {navLinks.map(link => (
-              <a key={link.href} href={link.href} className="px-4 py-3 text-lg font-medium text-ink-100 hover:text-gold-400 transition-colors border-b border-ink-800/50">
+              <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="px-4 py-3 text-lg font-medium text-ink-100 hover:text-gold-400 transition-colors border-b border-ink-800/50">
                 {link.label}
               </a>
             ))}
