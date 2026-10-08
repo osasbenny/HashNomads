@@ -25,6 +25,14 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+function AdminRoute({ children }: { children: ReactNode }) {
+  const { user, profile, loading } = useAuth();
+  if (loading) return <div className="min-h-screen bg-ink-950 flex items-center justify-center"><div className="w-10 h-10 rounded-full clay-gold animate-spin-slow" /></div>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (profile?.role !== 'admin') return <Navigate to="/portal" replace />;
+  return <>{children}</>;
+}
+
 function PublicPage({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-ink-950">
@@ -65,15 +73,15 @@ export default function App() {
           <Route path="/portal/notifications" element={<ProtectedRoute><PortalNotifications /></ProtectedRoute>} />
 
           {/* Admin Console */}
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomers /></ProtectedRoute>} />
-          <Route path="/admin/inventory" element={<ProtectedRoute><AdminInventory /></ProtectedRoute>} />
-          <Route path="/admin/orders" element={<ProtectedRoute><AdminPlaceholder title="Orders" /></ProtectedRoute>} />
-          <Route path="/admin/fleet" element={<ProtectedRoute><AdminPlaceholder title="Mining Fleet" /></ProtectedRoute>} />
-          <Route path="/admin/facilities" element={<ProtectedRoute><AdminPlaceholder title="Facilities" /></ProtectedRoute>} />
-          <Route path="/admin/incidents" element={<ProtectedRoute><AdminPlaceholder title="Incidents" /></ProtectedRoute>} />
-          <Route path="/admin/support" element={<ProtectedRoute><AdminPlaceholder title="Support" /></ProtectedRoute>} />
-          <Route path="/admin/audit" element={<ProtectedRoute><AdminPlaceholder title="Audit Log" /></ProtectedRoute>} />
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/customers" element={<AdminRoute><AdminCustomers /></AdminRoute>} />
+          <Route path="/admin/inventory" element={<AdminRoute><AdminInventory /></AdminRoute>} />
+          <Route path="/admin/orders" element={<AdminRoute><AdminPlaceholder title="Orders" /></AdminRoute>} />
+          <Route path="/admin/fleet" element={<AdminRoute><AdminPlaceholder title="Mining Fleet" /></AdminRoute>} />
+          <Route path="/admin/facilities" element={<AdminRoute><AdminPlaceholder title="Facilities" /></AdminRoute>} />
+          <Route path="/admin/incidents" element={<AdminRoute><AdminPlaceholder title="Incidents" /></AdminRoute>} />
+          <Route path="/admin/support" element={<AdminRoute><AdminPlaceholder title="Support" /></AdminRoute>} />
+          <Route path="/admin/audit" element={<AdminRoute><AdminPlaceholder title="Audit Log" /></AdminRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
