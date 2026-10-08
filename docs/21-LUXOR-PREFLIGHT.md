@@ -25,29 +25,29 @@ Keys are workspace-associated. The [workspace documentation](https://docs.luxor.
 
 Both key and workspace token-bucket limits can return HTTP 429. The adapter must distinguish unauthorized/forbidden, rate-limited and unavailable responses; use bounded retries, timeouts, source timestamps and stale-data handling. No provider response should become an operational status just because a credential exists.
 
-## Not yet verified
-
 ## Authenticated backend preflight
 
 On 2026-10-08 the owner saved the existing credential privately outside the repository. Authenticated `GET /api/v2/pool/subaccounts` returned HTTP 200 with zero records, total count zero and no next page. This verifies backend read authentication to the pool resources; it does not verify mining operation or least-privilege write denial.
 
 An initial Bitcoin workers request returned HTTP 400: Luxor requires one or more subaccount names or a site ID. The reference lists these query parameters as optional, but the actual service validates that one is supplied. The checker now derives query names only from verified subaccount records and skips worker reads explicitly when no subaccount exists. Rerun passed its authentication check with `workerReadVerified: false`, `noSubaccountsAvailable: true`, and physical deployment/payout/write-permission verification all false.
 
-The owner subsequently authorized subaccount/setup creation. Inspect and prepare the actual setup UI; do not infer customer payout addresses, worker IDs, custody evidence or signed agreements.
+The owner subsequently authorized subaccount/setup creation. The actual Add Subaccount form is prepared with `hashnomads`; final creation is handed to the owner under the browser policy for financial-account creation. Luxor describes subaccounts as accounts where mining rewards are credited. No payout destination, worker ID, custody evidence or signed agreement is inferred.
 
 The read-only checker `scripts/luxor-preflight.mjs` uses only the official [subaccounts GET](https://docs.luxor.tech/platform/api/mining-pool/subaccounts/get-subaccounts) and [Bitcoin workers GET](https://docs.luxor.tech/platform/api/mining-pool/reporting/get-workers) contracts. It emits status, timestamp, record counts and pagination presence only; never raw bodies, workspace identifiers or secrets. Redirects are rejected so a credential cannot follow a redirect to another host. A failed request or unexpected response shape remains unverified.
 
 Run with Node.js 24 from the repository root using `node --env-file=../work/.env.luxor scripts/luxor-preflight.mjs`. The private file contains `LUXOR_API_KEY`, not customer wallet material. The checker does not load database credentials or mutate Luxor/HashNomads state. Successful reads do not prove effective write denial, physical deployment or pool payouts.
 
-- Actual authenticated backend REST request and least-privilege scope enforcement.
+## Not yet verified
+
+- Effective least-privilege scope enforcement; the existing credential is Read & Write, used for GET requests only.
 - HashNomads subaccount/worker identifiers and physical ASIC mapping.
 - Per-customer direct payout-address rules, schedule/thresholds and wallet-change approval requirements.
 - Actual worker telemetry, reward statements, fees or payout transaction reconciliation.
 
 ## Next steps
 
-1. Preserve both existing keys; obtain the newly created secret from the owner's private saved file or explicitly authorized clipboard. Do not recreate or revoke a key merely because its value is absent from the list.
-2. Save the credential outside version control and logs. Read-only backend preflight must use the official endpoint contract; record only redacted results.
-3. Validate accessible workspace/mining resources and denial of unrelated products. An empty resource list is a valid account result, not mining integration completion.
+1. Owner completes the prepared subaccount's final Create step; verify its actual provider record before selecting it for worker reads.
+2. Preserve existing keys and private credential storage. For production ingestion, obtain a securely retained Mining Pool read-only credential; do not recreate or revoke keys without specific authorization.
+3. Validate actual Bitcoin worker reads and effective least privilege. An empty resource list is a valid account result, not mining integration completion.
 4. Confirm subaccount and customer payout architecture before provisioning or changing financial settings. Physical miners, supplier/custody agreements and hosting remain Phase 2.
 5. Implement worker mapping/ingestion and reward reconciliation only after actual provider and physical evidence is available. Keep M0 release gates separate from this capability preflight.
