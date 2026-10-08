@@ -83,15 +83,15 @@ export function Footer() {
           <p className="text-xs text-ink-400 font-mono">
             Production Network — Live Bitcoin mining infrastructure.
           </p>
-          <div className="text-xs text-ink-400 text-center md:text-right">
-            <p>Copyright © {new Date().getFullYear()} HashNomads. All Rights Reserved.</p>
-            <p className="mt-1">
+          <div className="text-xs text-ink-400 font-mono text-center md:text-right">
+            <p className="text-ink-400">Copyright © {new Date().getFullYear()} HashNomads. All Rights Reserved.</p>
+            <p className="mt-1 text-ink-400">
               Designed &amp; Developed By{' '}
               <a
                 href="https://cactusdigitalmedia.ng"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ink-300 hover:text-gold-400 transition-colors"
+                className="text-ink-400 hover:text-gold-400 transition-colors"
               >
                 Cactus Digital Media
               </a>
