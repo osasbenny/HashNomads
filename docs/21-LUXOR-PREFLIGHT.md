@@ -27,6 +27,14 @@ Both key and workspace token-bucket limits can return HTTP 429. The adapter must
 
 ## Not yet verified
 
+## Authenticated backend preflight
+
+On 2026-10-08 the owner saved the existing credential privately outside the repository. Authenticated `GET /api/v2/pool/subaccounts` returned HTTP 200 with zero records, total count zero and no next page. This verifies backend read authentication to the pool resources; it does not verify mining operation or least-privilege write denial.
+
+An initial Bitcoin workers request returned HTTP 400: Luxor requires one or more subaccount names or a site ID. The reference lists these query parameters as optional, but the actual service validates that one is supplied. The checker now derives query names only from verified subaccount records and skips worker reads explicitly when no subaccount exists. Rerun passed its authentication check with `workerReadVerified: false`, `noSubaccountsAvailable: true`, and physical deployment/payout/write-permission verification all false.
+
+The owner subsequently authorized subaccount/setup creation. Inspect and prepare the actual setup UI; do not infer customer payout addresses, worker IDs, custody evidence or signed agreements.
+
 The read-only checker `scripts/luxor-preflight.mjs` uses only the official [subaccounts GET](https://docs.luxor.tech/platform/api/mining-pool/subaccounts/get-subaccounts) and [Bitcoin workers GET](https://docs.luxor.tech/platform/api/mining-pool/reporting/get-workers) contracts. It emits status, timestamp, record counts and pagination presence only; never raw bodies, workspace identifiers or secrets. Redirects are rejected so a credential cannot follow a redirect to another host. A failed request or unexpected response shape remains unverified.
 
 Run with Node.js 24 from the repository root using `node --env-file=../work/.env.luxor scripts/luxor-preflight.mjs`. The private file contains `LUXOR_API_KEY`, not customer wallet material. The checker does not load database credentials or mutate Luxor/HashNomads state. Successful reads do not prove effective write denial, physical deployment or pool payouts.

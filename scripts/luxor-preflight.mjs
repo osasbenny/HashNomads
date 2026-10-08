@@ -23,10 +23,43 @@ const checks = [
 ];
 
 let verified = true;
+let authenticatedPoolReadVerified = false;
+let workerReadVerified = false;
+let noSubaccountsAvailable = false;
+let subaccountNames = [];
 for (const check of checks) {
   const observedAt = new Date().toISOString();
+  if (check.name === "bitcoinWorkers" && !authenticatedPoolReadVerified) {
+    console.log(
+      JSON.stringify({
+        check: check.name,
+        observedAt,
+        result: "skipped",
+        reason: "subaccount_read_not_verified",
+      }),
+    );
+    continue;
+  }
+  if (check.name === "bitcoinWorkers" && noSubaccountsAvailable) {
+    console.log(
+      JSON.stringify({
+        check: check.name,
+        observedAt,
+        result: "skipped",
+        reason: "no_subaccounts_available",
+      }),
+    );
+    continue;
+  }
   try {
-    const response = await fetch(new URL(check.path, base), {
+    const url = new URL(check.path, base);
+    if (check.name === "bitcoinWorkers") {
+      // Luxor requires a subaccount or site even though the reference marks
+      // these query parameters optional. Use names from the verified read only.
+      for (const name of subaccountNames)
+        url.searchParams.append("subaccount_names", name);
+    }
+    const response = await fetch(url, {
       method: "GET",
       headers: { Authorization: key, Accept: "application/json" },
       redirect: "error",
@@ -47,7 +80,9 @@ for (const check of checks) {
                 ? "forbidden"
                 : response.status === 429
                   ? "rate_limited"
-                  : "unavailable",
+                  : response.status === 400
+                    ? "invalid_request"
+                    : "unavailable",
         }),
       );
       await response.body?.cancel();
@@ -67,6 +102,31 @@ for (const check of checks) {
       );
       continue;
     }
+    if (check.name === "subaccounts") {
+      if (
+        records.some(
+          (record) => typeof record?.name !== "string" || !record.name.trim(),
+        )
+      ) {
+        verified = false;
+        console.log(
+          JSON.stringify({
+            check: check.name,
+            observedAt,
+            result: "unexpected_response_shape",
+          }),
+        );
+        continue;
+      }
+      authenticatedPoolReadVerified = true;
+      subaccountNames = records.map((record) => record.name);
+      noSubaccountsAvailable =
+        records.length === 0 && !body.pagination?.next_page_url;
+      if (!subaccountNames.length && !noSubaccountsAvailable) {
+        authenticatedPoolReadVerified = false;
+        verified = false;
+      }
+    } else workerReadVerified = true;
     const total = body.pagination?.item_count;
     console.log(
       JSON.stringify({
@@ -93,7 +153,9 @@ for (const check of checks) {
 }
 console.log(
   JSON.stringify({
-    apiReadVerified: verified,
+    authenticatedPoolReadVerified,
+    workerReadVerified,
+    noSubaccountsAvailable,
     physicalDeploymentVerified: false,
     payoutVerified: false,
     effectiveWritePermissionsVerified: false,
