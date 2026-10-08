@@ -23,3 +23,6 @@ apps/web/v2-tailwind.config.js
 tests/e2e/public.test.ts
 tests/e2e/site-controls.test.ts
 tests/e2e/commercial.test.ts
+
+# V2 footer navigation acceptance fixture
+tests/e2e/footer-pages.test.ts
