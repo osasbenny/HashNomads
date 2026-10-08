@@ -19,9 +19,9 @@ export function AuthProvider({children}: {children:ReactNode}) {
   const reload=async()=>{
     // A direct, uncached read avoids stale client session state immediately
     // after the Better Auth sign-up and sign-in responses set cookies.
-    const response=await fetch("/api/auth/get-session",{credentials:"same-origin",cache:"no-store"});
-    if(!response.ok)throw new Error("Unable to confirm the current session");
-    const result=await response.json() as {user?:Viewer|null};
+    const sessionResponse=await fetch("/api/auth/get-session",{credentials:"same-origin",cache:"no-store"});
+    if(!sessionResponse.ok)throw new Error("Unable to confirm the current session");
+    const result=await sessionResponse.json() as {user?:Viewer|null};
     const current=result.user;
     if (!current) {setSession(null);setUser(null);setProfile(null);return;}
     const viewer={id:current.id,email:current.email};
